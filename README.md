@@ -11,7 +11,7 @@ Based on experience using other background job tools, I want a tool that is as s
 
 ## What I need now
 
-* [ ] Enqueue and run jobs using one worker for all jobs that can only run one job at a time.
+* [ ] Enqueue and run jobs for different workers, but only one at a time for each.
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
 * [ ] Will only mark a job as done if it exits successfully.
   - [ ] A failed job will be automatically retried with a delay between each.
