@@ -5,6 +5,8 @@ Exqueue
 
 Simple and failsafe background job library for Elixir.
 
+Uses redis to persist jobs. Jobs are serialized using erlang serialization so that you can pass almost anything to jobs.
+
 Based on experience using other background job tools, I want a tool that is as simple as possible and designed for safety first. Less admin overhead that way.
 
 ## What I need now
