@@ -9,6 +9,7 @@ Simple, reliable and deterministic background job library for Elixir.
 
 This job queue is designed to be able to:
 
+* Be very easy to use
 * Limit concurrency on jobs doing API calls to other apps
 * Retry jobs that fail automatically to avoid admin overhead
 * Be notified if jobs fail too many times (by `Logger` errors), which can then be sent to services like [honeybadger](github.com/joakimk/honeybadger)
