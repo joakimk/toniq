@@ -7,7 +7,16 @@ Exqueue
 
 Simple, reliable and deterministic background job library for Elixir.
 
-Primary focus is on concurrency control, reliability and failure handling. Performance and horizonal scaling are secondary concerns.
+This job queue is designed to be able to:
+
+* Limit concurrency on jobs doing API calls to other apps
+* Retry jobs that fail automatically to avoid admin overhead
+* Be notified if jobs fail too many times (by `Logger` errors), which can then be sent to services like [honeybadger](github.com/joakimk/honeybadger)
+* Be able to retry or delete jobs that failed too many times manually
+* Handle app server restarts or crashes without loosing job data
+* Store just enough extra information in redis to make it possible to see the status like currently running jobs (iex for now, possible UI in the future)
+
+Currently limited to running jobs within a single erlang VM for simplicity, though there is no reason it has to work that way in the future.
 
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
