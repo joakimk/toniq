@@ -3,14 +3,34 @@
 Exqueue
 =======
 
-Simple and reliable background job library for Elixir.
+Simple and reliable and deterministic background job library for Elixir.
 
-Uses redis to persist jobs. Jobs are serialized using erlang serialization so that you can pass almost anything to jobs.
+Uses redis to persist jobs (though it could probably use any data store).
 
-Based on experience using other background job tools, I want a tool that is as simple as possible and designed for reliablity first. Less admin overhead that way.
+How it works:
+
+* When a job is enqueued
+  - It's persisted before anything is run
+  - Only runs as many jobs in parallel as you have started worker processes for them.
+    - Ex: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers.
+* When a job succeeds
+  - It's removed from persistance
+* When a job fails the first 5 times it is retried, waiting 30 seconds between each time
+* When a job still won't run after retrying
+  - It's persisted in a way so that it won't be run again
+  - Can only be deleted is by manual interaction, e.g. the queue will never automatically forget about a job.
+* When the app starts
+  - Restores waiting jobs from redis if they exist
+
+Good to know:
+
+* Jobs are serialized using erlang serialization so that you can pass almost anything to jobs.
+  - This is mostly so that you can pass e.g. atoms and basic lists without having to deal with json conversion issues.
+  - Just passing basic types is probably a good idea for compatibility with future code changes.
 
 ## What I need now
 
+* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Enqueue and run jobs for different workers, but only one at a time for each.
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [ ] Make persistance abstract, don't assume redis
