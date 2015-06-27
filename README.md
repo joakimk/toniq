@@ -48,13 +48,19 @@ Jobs are serialized using erlang serialization. This means you can pass almost a
 
 ## Can jobs be run on multiple computers at the same time?
 
-No. For implementation simplicty and to guarantee the number of active workers per job type, only one erlang vm will run jobs at a time. You can however run multiple erlang vms at once.
+**Short answer:**
+
+No, but running multiple erlang vms on the same or different computers talking to the same redis server does not cause any unexpected behavior.
+
+**Long answer:**
+
+For implementation simplicty and to guarantee the number of active workers per job type, only one erlang vm will run jobs at a time.
 
 This is handled using locks in redis. If a vm goes missing, another running vm will take over as soon as possible.
 
-Not having this feature would be risky. During deploy you may have two versions of an app running, when debugging an issue you may have a iex prompt running in addition to a web server, etc.
+Even if you think you only run one erlang VM at once, that is probably not true. During deploy you may have two versions of an app running for a short while, when debugging an issue you may have a iex prompt running in addition to a web server, etc.
 
-More advanced setups could be implemented in the future but one erlang VM can do a lot of work, and this basic implementation does support failover.
+More advanced setups could be implemented in the future but at the same time, one erlang VM can do a lot of work, and this basic implementation does support failover.
 
 ## Gotchas
 
