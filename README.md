@@ -45,13 +45,13 @@ Somewhere in your app code:
 
 * When a job is enqueued
   - `Exqueue.enqueue` will only persist the job
+* When a job is run
   - Jobs are always read from redis before they are run so that multiple erlang vms can enqueue jobs
-  - It only runs as many jobs in parallel as you have started worker processes for them
-    - Example: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers for that type of job using the `concurrency:` option.
+  - It only runs as many jobs in parallel as specified with the `concurrent:` option per job type
     - A job type is defined by the worker name, ex. `SendEmailWorker`
 * When a job succeeds
   - It's removed from persistance so that it won't be run again
-* When a job fails the first 5 times it is retried, waiting 30 seconds between each time
+* When a job fails the first 5 times it is retried, waiting 10 seconds between each time
 * When a job still won't run after retrying
   - It's persisted in a way so that it won't be run again
   - It's reported as an error-level entry in the Elixir `Logger`
