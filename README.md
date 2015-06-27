@@ -20,6 +20,7 @@ How it works:
 * When a job still won't run after retrying
   - It's persisted in a way so that it won't be run again
   - Can only be deleted is by manual interaction, e.g. the queue will never automatically forget about a job
+  - Can be manually re-queued as a new job so that it's retried
 * When the app starts
   - Restores waiting jobs from redis if they exist
 
