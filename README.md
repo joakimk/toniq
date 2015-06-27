@@ -60,12 +60,21 @@ Somewhere in your app code:
 * When the app starts
   - It restores waiting jobs from redis if they exist
 
+## The jobs are assumed to be reentrant!
+
+You must ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)).
+
+* Jobs will be run again if they fail as part of the retries feature
+* The erlang process could be killed in the middle of running a job
+* The redis connection could be lost when we need to report a job as finished
+* etc...
+
 ## Will jobs be run in order?
 
-* This is a first-in-first-out queue, so mostly yes but not guaranteed
-* If you have 5 workers for a job type, then it will process the 5 oldest jobs at a time
-  - if the jobs take different amounts of time to run (which they will), they will eventually be very much out of order
-* If you have 1 worker for a job type, it will run in order as long as a job does not fail all retries
+* This is a first-in-first-out queue, so mostly yes, but not guaranteed
+* If you have 5 as concurrency for a job type, then it will process the 5 oldest jobs at a time
+  - If the jobs take different amounts of time to run (which they will), they will eventually be very much out of order
+* If you have 1 as concurrency for a job type (the default), it will run in order as long as a job does not fail all retries
   - Keeping order would require stopping the queue and waiting for manual intervention. This is a potential future feature.
 * Jobs of different types does not affect eachother, there is no ordering between them
 
@@ -88,12 +97,6 @@ This is handled using locks in redis. If a vm goes missing, another running vm w
 Even if you think you only run one erlang VM at once, that is probably not true. During deploy you may have two versions of an app running for a short while, when debugging an issue you may have a iex prompt running in addition to a web server, etc.
 
 One erlang VM can do a lot of work, and this basic implementation also supports failover. More advanced setups could be implemented in the future if needed.
-
-## Gotchas
-
-* If a job is running when the erlang process is killed, it will be run again when the app starts again. Ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)), or otherwise handles this.
-  - You could in theory have some at\_exit hook to allow a job to finish, but that won't help you during a power outage or if the process is killed by a `KILL` signal, e.g. `kill -9`.
-* A job can be retried more times than specified if the erlang process is stopped before it's done retying. Starting the app and re-queueing the job from redis will restart he retry count from 1 again.
 
 ## TODO: basic version
 
