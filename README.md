@@ -69,6 +69,8 @@ You must ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentran
 * The redis connection could be lost when we need to report a job as finished
 * etc...
 
+In actual use most of the non-retry cases are very rare. It's probably okay if you send two emails if the redis connection was lost after the first time the job was run if that happens once a year.
+
 ## Will jobs be run in order?
 
 * This is a first-in-first-out queue, so mostly yes, but not guaranteed
