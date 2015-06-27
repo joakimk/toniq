@@ -9,7 +9,7 @@ Uses redis to persist jobs (though it could probably use any data store).
 
 If anything is unclear about the lifecycle of a job that's considered a bug, please file an issue! :)
 
-How it works:
+## How it works
 
 * When a job is enqueued
   - It's persisted before anything is run
@@ -26,7 +26,7 @@ How it works:
 * When the app starts
   - It restores waiting jobs from redis if they exist
 
-Good to know:
+## Good to know
 
 * Jobs are serialized using erlang serialization
   - This means you can pass almost anything to jobs
