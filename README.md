@@ -5,9 +5,11 @@ Exqueue
 
 Simple, reliable and deterministic background job library for Elixir.
 
-Uses redis to persist jobs (though it could probably use any data store).
+Based on years of experience working with background job queues and handling errors.
 
-If **anything is unclear** about the lifecycle of a job or how to use this library **that's considered a bug**, please file an issue!
+Uses redis to persist jobs.
+
+If **anything is unclear** about the lifecycle of a job or how to use this library **that's considered a bug**, please file an issue (or a pull request)!
 
 ## How it works
 
@@ -28,14 +30,16 @@ If **anything is unclear** about the lifecycle of a job or how to use this libra
 * When the app starts
   - It restores waiting jobs from redis if they exist
 
-## Good to know
+## How jobs are serialized
 
-* Jobs are serialized using erlang serialization
-  - This means you can pass almost anything to jobs
-  - Just passing basic types is probably a good idea for compatibility with future code changes
-* Having just one worker for a job type won't ensure jobs are run in order
-  - Doing so would require stopping the queue if a job fails all retries and that's not a behavior you want to have by default
-    - It is however a potential future feature
+Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
+
+## Will jobs be run in order?
+
+* Mostly yes, this is a first-in-first-out queue
+* If you have 5 workers for a job type, then it will process the 5 oldest jobs at a time
+* If you have 1 worker for a job type, it will run in order as long as a job does not fail all retries
+  - Keeping order would require stopping the queue and waiting for manual intervention. This is potential future feature.
 
 ## What I need now
 
