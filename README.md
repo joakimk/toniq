@@ -7,7 +7,7 @@ Exqueue
 
 Simple, reliable and deterministic background job library for Elixir.
 
-This job queue is designed to be able to:
+This job queue is designed to:
 
 * Be very easy to use
 * Limit concurrency on jobs doing API calls to other apps
