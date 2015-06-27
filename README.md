@@ -7,13 +7,11 @@ Exqueue
 
 Simple, reliable and deterministic background job library for Elixir.
 
-Based on years of experience working with background job queues and handling errors.
+Primary focus is on concurrency control, reliability and failure handling. Performance and horizonal scaling are secondary concerns.
 
-Uses redis to persist jobs.
+Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
 If **anything is unclear** about the lifecycle of a job or how to use this library **that's considered a bug**, please file an issue (or a pull request)!
-
-This is **not** a resque/sidekiq compatible queue, but it might fulfill the same role if you don't need the interoperability. If you need resque/sidekiq compatibility, then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
 ## Usage
 
