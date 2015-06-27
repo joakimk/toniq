@@ -11,7 +11,7 @@ How it works:
 
 * When a job is enqueued
   - It's persisted before anything is run
-  - Only runs as many jobs in parallel as you have started worker processes for them.
+  - It only runs as many jobs in parallel as you have started worker processes for them.
     - Ex: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers
 * When a job succeeds
   - It's removed from persistance
