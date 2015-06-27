@@ -96,7 +96,7 @@ One erlang VM can do a lot of work, and this basic implementation also supports 
   - You could in theory have some at\_exit hook to allow a job to finish, but that won't help you during a power outage or if the process is killed by a `KILL` signal, e.g. `kill -9`.
 * A job can be retried more times than specified if the erlang process is stopped before it's done retying. Starting the app and re-queueing the job from redis will restart he retry count from 1 again.
 
-## What I need now
+## TODO: basic version
 
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
 * [ ] Enqueue and run jobs for different workers, but only one at a time for each.
@@ -109,7 +109,7 @@ One erlang VM can do a lot of work, and this basic implementation also supports 
 * [ ] Errors will only be reported if retries fail.
 * [ ] Licence and pull request instructions
 
-## What I would want eventually
+## TODO: Later
 
 * [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Can run multiple workers of the same type at the same time.
