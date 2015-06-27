@@ -54,6 +54,12 @@ Not having this feature would be risky. During deploy you may have two versions 
 
 More advanced setups could be implemented in the future but one erlang VM can do a lot of work, and this basic implementation does support failover.
 
+## Gotchas
+
+* If a job is running when the erlang process is killed, it will be run again when the app starts again. Ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)), or otherwise handles this.
+  - You could in theory have some at\_exit hook to allow a job to finish, but that won't help you during a power outage or if the process is killed by a `KILL` signal, e.g. `kill -9`.
+* A job can be retried more times than specified if the erlang process is stopped before it's done retying. Starting the app and re-queueing the job from redis will restart he retry count from 1 again.
+
 ## What I need now
 
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
@@ -75,8 +81,3 @@ More advanced setups could be implemented in the future but one erlang VM can do
   - [ ] If configured to be serial it will not advance to the next job until the current one succeeds. This is useful when there are dependencies between jobs, like when registering an invoice, and then registering a payment on that invoice.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
 
-## Gotchas
-
-* If a job is running when the erlang process is killed, it will be run again when the app starts again. Ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)), or otherwise handles this.
-  - You could in theory have some at\_exit hook to allow a job to finish, but that won't help you during a power outage or if the process is killed by a `KILL` signal, e.g. `kill -9`.
-* A job can be retried more times than specified if the erlang process is stopped before it's done retying. Starting the app and re-queueing the job from redis will restart he retry count from 1 again.
