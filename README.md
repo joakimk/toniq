@@ -28,15 +28,12 @@ Define a worker:
 When starting the app, start workers:
 
 ```elixir
+    # One worker
     Exqueue.start_worker(SendEmailWorker)
     
-    # If you want to process more than one job at a time, start more worker processes.
-    #
-    # For example, if you are hitting an external API it's often a really good idea to
-    # limit the number of concurrent connections.
-    #
+    # Or 10 concurrent workers?
     # Exqueue.start_worker(SendEmailWorker, concurrency: 10)
-```    
+```
 
 Somewhere in your app code:
 
