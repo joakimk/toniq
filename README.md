@@ -7,9 +7,9 @@ Simple and reliable and deterministic background job library for Elixir.
 
 Uses redis to persist jobs (though it could probably use any data store).
 
-## How it works
+If **anything is unclear** about the lifecycle of a job or how to use this library **that's considered a bug**, please file an issue!
 
-NOTE: If anything is unclear about the lifecycle of a job or how to use this library that's considered a bug, please file an issue! :)
+## How it works
 
 * When a job is enqueued
   - It's persisted before anything is run
