@@ -3,13 +3,16 @@ defmodule Exqueue do
 
   alias Exqueue.Queue
 
-  def add_worker(worker_module) do
+  def start_worker(worker_module) do
     # start manager process and attach that to a supervisor
     # Worker.add(worker_module)
+    #WorkerWatcher
+    #Worker
   end
 
   def enqueue(worker_module, opts) do
-    Queue.register_job(worker_module, opts)
+    worker_module.perform(opts)
+    #Queue.register_job(worker_module, opts)
   end
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
