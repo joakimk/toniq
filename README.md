@@ -13,6 +13,8 @@ Based on experience using other background job tools, I want a tool that is as s
 
 * [ ] Enqueue and run jobs for different workers, but only one at a time for each.
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
+  - [ ] Make persistance abstract, don't assume redis
+  - [ ] Use in-memory persistance in tests?
 * [ ] Will only mark a job as done if it exits successfully.
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
