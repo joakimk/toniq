@@ -36,6 +36,7 @@ If **anything is unclear** about the lifecycle of a job or how to use this libra
 * If you have 5 workers for a job type, then it will process the 5 oldest jobs at a time
 * If you have 1 worker for a job type, it will run in order as long as a job does not fail all retries
   - Keeping order would require stopping the queue and waiting for manual intervention. This is potential future feature.
+* Jobs of different types does not affect eachother, there is no ordering between them
 
 ## How jobs are serialized
 
