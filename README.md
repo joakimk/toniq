@@ -22,8 +22,9 @@ If **anything is unclear** about the lifecycle of a job or how to use this libra
 * When a job fails the first 5 times it is retried, waiting 30 seconds between each time
 * When a job still won't run after retrying
   - It's persisted in a way so that it won't be run again
+  - It's reported as an error with the Elixir `Logger`
   - It can only be deleted by manual interaction, e.g. the queue will never automatically forget about a job
-  - It can be manually re-queued as a new job so that it's retried
+  - It can be manually re-queued as a new job
 * When the app starts
   - It restores waiting jobs from redis if they exist
 
