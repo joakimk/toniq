@@ -1,4 +1,6 @@
-# NOTE: Readme driven development below, not sure if this idea will pan out, or if I find something that fullfills my goals somewhere else before then.
+# NOTE: Readme driven development below, this means this tool does not nessesaraly do what it says below yet. Using this to think though the design on a high level before coding.
+
+Also, not sure if this idea will pan out, or if I find something that fullfills my goals somewhere else before then.
 
 Exqueue
 =======
