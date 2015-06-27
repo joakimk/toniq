@@ -19,22 +19,28 @@ This is **not** a resque/sidekiq compatible queue, if you want something like th
 
 Define a worker:
 
+```elixir
     defmodule SendEmailWorker do
       def perform(to: to, title: title, text: text)
         # do work
       end
     end
+```
 
 When starting the app, start workers:
 
+```elixir
     Exqueue.start_worker(SendEmailWorker)
     
     # if you want to process more than one job at a time, start more worker processes
     # Exqueue.start_worker(SendEmailWorker)
-    
-In your app code:
-    
+```    
+
+Somewhere in your app code:
+
+```elixir    
     Exqueue.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
+```
 
 ## How it works
 
