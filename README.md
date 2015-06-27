@@ -45,11 +45,12 @@ Somewhere in your app code:
 ## How it works
 
 * When a job is enqueued
-  - It's persisted before anything is run
-  - It will fail right away without persisting if there is no worker started for that job type
-    - A job type is defined by the worker name, ex. `SyncToTranslationServiceWorker`
+  - `Exqueue.enqueue` will only persist the job
+    - It will fail right away without persisting if there is no worker started for that job type
+    - A job type is defined by the worker name, ex. `SendEmailWorker`
+  - Jobs are always read from redis before they are run so that multiple erlang vms can enqueue jobs
   - It only runs as many jobs in parallel as you have started worker processes for them
-    - Ex: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers for that type of job
+    - Example: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers for that type of job
 * When a job succeeds
   - It's removed from persistance so that it won't be run again
 * When a job fails the first 5 times it is retried, waiting 30 seconds between each time
@@ -98,7 +99,7 @@ One erlang VM can do a lot of work, and this basic implementation also supports 
 
 ## TODO: basic version
 
-* [ ] Handle jobs enqueued by other erlang vms, or document clearly that we don't support that now
+* [ ] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
 * [ ] Enqueue and run jobs for different workers, but only one at a time for each.
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
