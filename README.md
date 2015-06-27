@@ -26,3 +26,8 @@ Based on experience using other background job tools, I want a tool that is as s
 * [ ] If you only start one worker process for a job type, only one job will run at a time.
   - [ ] If configured to be serial it will not advance to the next job until the current one succeeds. This is useful when there are dependencies between jobs, like when registering an invoice, and then registering a payment on that invoice.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
+
+## Gotchas
+
+* If a job is running when the erlang process is killed, it will be run again. Ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)), or otherwise handles this.
+  - You could in theory have some at\_exit hook to allow a job to finish, but that won't help you during a power outage or if the process is killed by a `KILL` signal, e.g. `kill -9`.
