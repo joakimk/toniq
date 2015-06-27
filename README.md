@@ -15,6 +15,27 @@ If **anything is unclear** about the lifecycle of a job or how to use this libra
 
 This is **not** a resque/sidekiq compatible queue, if you want something like that I'd recommend you look at [Exq](https://github.com/akira/exq).
 
+## Usage
+
+Define a worker:
+
+    defmodule SendEmailWorker do
+      def perform(to: to, title: title, text: text)
+        # do work
+      end
+    end
+
+When starting the app, start workers:
+
+    Exqueue.start_worker(SendEmailWorker)
+    
+    # if you want to process more than one job at a time, start more worker processes
+    # Exqueue.start_worker(SendEmailWorker)
+    
+In your app code:
+    
+    Exqueue.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
+
 ## How it works
 
 * When a job is enqueued
