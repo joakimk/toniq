@@ -72,7 +72,7 @@ Somewhere in your app code:
 
 ## The jobs are assumed to be reentrant!
 
-You must ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)). This means they must be runnable more than once without any undesired sideeffects.
+You must ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)), in order words they must be runnable more than once without any undesired sideeffects.
 
 * Jobs will be run again if they fail as part of the retries feature
 * The erlang process could be killed in the middle of running a job
