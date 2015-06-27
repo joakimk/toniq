@@ -33,6 +33,9 @@ If **anything is unclear** about the lifecycle of a job or how to use this libra
 * Jobs are serialized using erlang serialization
   - This means you can pass almost anything to jobs
   - Just passing basic types is probably a good idea for compatibility with future code changes
+* Having just one worker for a job type won't ensure jobs are run in order
+  - Doing so would require stopping the queue if a job fails all retries and that's not a behavior you want to have by default
+    - It is however a potential future feature
 
 ## What I need now
 
