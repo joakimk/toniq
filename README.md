@@ -98,6 +98,7 @@ One erlang VM can do a lot of work, and this basic implementation also supports 
 
 ## TODO: basic version
 
+* [ ] Handle jobs enqueued by other erlang vms, or document clearly that we don't support that now
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
 * [ ] Enqueue and run jobs for different workers, but only one at a time for each.
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
