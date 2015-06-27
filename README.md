@@ -13,9 +13,10 @@ If **anything is unclear** about the lifecycle of a job or how to use this libra
 
 * When a job is enqueued
   - It's persisted before anything is run
+  - It will fail right away without persisting if there is no worker started for that job type
+    - A job type is defined by the worker name, ex. `SyncToTranslationServiceWorker`
   - It only runs as many jobs in parallel as you have started worker processes for them
     - Ex: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers for that type of job
-      - A type of job is defined by the worker name, ex. `SyncToTranslationServiceWorker`
 * When a job succeeds
   - It's removed from persistance so that it won't be run again
 * When a job fails the first 5 times it is retried, waiting 30 seconds between each time
