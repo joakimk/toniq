@@ -12,13 +12,13 @@ How it works:
 * When a job is enqueued
   - It's persisted before anything is run
   - Only runs as many jobs in parallel as you have started worker processes for them.
-    - Ex: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers.
+    - Ex: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers
 * When a job succeeds
   - It's removed from persistance
 * When a job fails the first 5 times it is retried, waiting 30 seconds between each time
 * When a job still won't run after retrying
   - It's persisted in a way so that it won't be run again
-  - Can only be deleted is by manual interaction, e.g. the queue will never automatically forget about a job.
+  - Can only be deleted is by manual interaction, e.g. the queue will never automatically forget about a job
 * When the app starts
   - Restores waiting jobs from redis if they exist
 
