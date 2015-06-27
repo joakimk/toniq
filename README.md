@@ -15,7 +15,7 @@ How it works:
     - Ex: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers for that type of job
       - A type of job is defined by the worker name, ex. `SyncToTranslationServiceWorker`
 * When a job succeeds
-  - It's removed from persistance
+  - It's removed from persistance so that it won't be run again
 * When a job fails the first 5 times it is retried, waiting 30 seconds between each time
 * When a job still won't run after retrying
   - It's persisted in a way so that it won't be run again
