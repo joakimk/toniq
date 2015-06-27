@@ -47,7 +47,7 @@ Somewhere in your app code:
   - `Exqueue.enqueue` will only persist the job
   - Jobs are always read from redis before they are run so that multiple erlang vms can enqueue jobs
   - It only runs as many jobs in parallel as you have started worker processes for them
-    - Example: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers for that type of job
+    - Example: If you want max 5 outgoing requests to an API at one time, then you can start just 5 workers for that type of job using the `concurrency:` option.
     - A job type is defined by the worker name, ex. `SendEmailWorker`
 * When a job succeeds
   - It's removed from persistance so that it won't be run again
