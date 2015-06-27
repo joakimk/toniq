@@ -19,10 +19,10 @@ How it works:
 * When a job fails the first 5 times it is retried, waiting 30 seconds between each time
 * When a job still won't run after retrying
   - It's persisted in a way so that it won't be run again
-  - Can only be deleted is by manual interaction, e.g. the queue will never automatically forget about a job
-  - Can be manually re-queued as a new job so that it's retried
+  - It can only be deleted by manual interaction, e.g. the queue will never automatically forget about a job
+  - It can be manually re-queued as a new job so that it's retried
 * When the app starts
-  - Restores waiting jobs from redis if they exist
+  - It restores waiting jobs from redis if they exist
 
 Good to know:
 
