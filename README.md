@@ -63,7 +63,6 @@ More advanced setups could be implemented in the future but one erlang VM can do
 ## What I need now
 
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
-* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Enqueue and run jobs for different workers, but only one at a time for each.
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [ ] Make persistance abstract, don't assume redis
@@ -76,6 +75,7 @@ More advanced setups could be implemented in the future but one erlang VM can do
 
 ## What I would want eventually
 
+* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Can run multiple workers of the same type at the same time.
 * [ ] If you only start one worker process for a job type, only one job will run at a time.
   - [ ] If configured to be serial it will not advance to the next job until the current one succeeds. This is useful when there are dependencies between jobs, like when registering an invoice, and then registering a payment on that invoice.
