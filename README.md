@@ -13,7 +13,7 @@ Uses redis to persist jobs.
 
 If **anything is unclear** about the lifecycle of a job or how to use this library **that's considered a bug**, please file an issue (or a pull request)!
 
-This is **not** a resque/sidekiq compatible queue, if you want something like that I'd recommend you look at [Exq](https://github.com/akira/exq).
+This is **not** a resque/sidekiq compatible queue, but it might fulfill the same role if you don't need the interoperability. If you do, then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
 ## Usage
 
