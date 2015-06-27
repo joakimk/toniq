@@ -21,7 +21,7 @@ Currently limited to running jobs within a single erlang VM for simplicity, thou
 
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
-If **anything is unclear** about the lifecycle of a job or how to use this library **that's considered a bug**, please file an issue (or a pull request)!
+If **anything is unclear** about how this library works **that's considered a bug**, please file an issue (or a pull request)!
 
 ## Usage
 
