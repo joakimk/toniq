@@ -60,7 +60,7 @@ This is handled using locks in redis. If a vm goes missing, another running vm w
 
 Even if you think you only run one erlang VM at once, that is probably not true. During deploy you may have two versions of an app running for a short while, when debugging an issue you may have a iex prompt running in addition to a web server, etc.
 
-More advanced setups could be implemented in the future but at the same time, one erlang VM can do a lot of work, and this basic implementation does support failover.
+One erlang VM can do a lot of work, and this basic implementation also supports failover. More advanced setups could be implemented in the future if needed.
 
 ## Gotchas
 
