@@ -54,7 +54,7 @@ Somewhere in your app code:
 ## How it works
 
 * When a job is enqueued
-  - `Exqueue.enqueue` will only persist the job
+  - `Exqueue.enqueue` will persist the job and publish an event for job subscribers
 * When a job is run
   - Jobs are always read from redis before they are run so that multiple erlang vms can enqueue jobs
   - It only runs as many jobs in parallel as specified with the `concurrent:` option per job type
