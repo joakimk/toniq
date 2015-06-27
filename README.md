@@ -5,7 +5,7 @@ Also, not sure if this idea will pan out, or if I find something that fullfills 
 Exqueue
 =======
 
-Simple, reliable and deterministic background job library for Elixir.
+Simple and reliable background job library for [Elixir](http://elixir-lang.org/).
 
 This job queue is designed to:
 
