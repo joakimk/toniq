@@ -40,12 +40,23 @@ This is **not** a resque/sidekiq compatible queue, if you want something like th
   - Keeping order would require stopping the queue and waiting for manual intervention. This is potential future feature.
 * Jobs of different types does not affect eachother, there is no ordering between them
 
-## How jobs are serialized
+## How are jobs serialized?
 
 Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
 
+## Can jobs be run on multiple computers at the same time?
+
+No. For implementation simplicty and to guarantee the number of active workers per job type, only one erlang vm will run jobs at a time. You can however run multiple erlang vms at once.
+
+This is handled using locks in redis. If a vm goes missing, another running vm will take over as soon as possible.
+
+Not having this feature would be risky. During deploy you may have two versions of an app running, when debugging an issue you may have a iex prompt running in addition to a web server, etc.
+
+More advanced setups could be implemented in the future but one erlang VM can do a lot of work, and this basic implementation does support failover.
+
 ## What I need now
 
+* [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
 * [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Enqueue and run jobs for different workers, but only one at a time for each.
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
