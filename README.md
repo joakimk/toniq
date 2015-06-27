@@ -26,9 +26,9 @@ How it works:
 
 Good to know:
 
-* Jobs are serialized using erlang serialization so that you can pass almost anything to jobs.
-  - This is mostly so that you can pass e.g. atoms and basic lists without having to deal with json conversion issues.
-  - Just passing basic types is probably a good idea for compatibility with future code changes.
+* Jobs are serialized using erlang serialization
+  - This means you can pass almost anything to jobs
+  - Just passing basic types is probably a good idea for compatibility with future code changes
 
 ## What I need now
 
