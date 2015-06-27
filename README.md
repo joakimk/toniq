@@ -36,8 +36,9 @@ This is **not** a resque/sidekiq compatible queue, if you want something like th
 
 ## Will jobs be run in order?
 
-* Mostly yes, this is a first-in-first-out queue
+* Mostly yes, this is a first-in-first-out queue, but not guaranteed
 * If you have 5 workers for a job type, then it will process the 5 oldest jobs at a time
+  - if the jobs take different amounts of time to run (which they will), they will eventually be very much out of order
 * If you have 1 worker for a job type, it will run in order as long as a job does not fail all retries
   - Keeping order would require stopping the queue and waiting for manual intervention. This is potential future feature.
 * Jobs of different types does not affect eachother, there is no ordering between them
