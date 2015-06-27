@@ -30,16 +30,16 @@ If **anything is unclear** about the lifecycle of a job or how to use this libra
 * When the app starts
   - It restores waiting jobs from redis if they exist
 
-## How jobs are serialized
-
-Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
-
 ## Will jobs be run in order?
 
 * Mostly yes, this is a first-in-first-out queue
 * If you have 5 workers for a job type, then it will process the 5 oldest jobs at a time
 * If you have 1 worker for a job type, it will run in order as long as a job does not fail all retries
   - Keeping order would require stopping the queue and waiting for manual intervention. This is potential future feature.
+
+## How jobs are serialized
+
+Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
 
 ## What I need now
 
