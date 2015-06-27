@@ -48,7 +48,6 @@ Somewhere in your app code:
 
 * When a job is enqueued
   - `Exqueue.enqueue` will only persist the job
-    - It will fail right away without persisting if there is no worker started for that job type
     - A job type is defined by the worker name, ex. `SendEmailWorker`
   - Jobs are always read from redis before they are run so that multiple erlang vms can enqueue jobs
   - It only runs as many jobs in parallel as you have started worker processes for them
