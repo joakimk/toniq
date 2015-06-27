@@ -3,7 +3,7 @@
 Exqueue
 =======
 
-Simple and reliable and deterministic background job library for Elixir.
+Simple, reliable and deterministic background job library for Elixir.
 
 Uses redis to persist jobs (though it could probably use any data store).
 
