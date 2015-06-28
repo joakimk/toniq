@@ -83,10 +83,10 @@ In actual use most of the non-retry cases are very rare. It's probably okay if y
 
 ## Will jobs be run in order?
 
-* This is a first-in-first-out queue, so mostly yes, but not guaranteed
+* This is a first-in-first-out queue but due to retries and concurrency ordering can not be guaranteed
 * If you have 5 as concurrency for a job type, then it will process the 5 oldest jobs at a time
   - If the jobs take different amounts of time to run (which they will), they will eventually be very much out of order
-* If you have 1 as concurrency for a job type (the default), it will run in order as long as a job does not fail all retries
+* If you have 1 as concurrency for a job type, it will run in order as long as a job does not fail all retries
   - Keeping order would require stopping the queue and waiting for manual intervention. This is a potential future feature.
 * Jobs of different types does not affect eachother, there is no ordering between them
 
