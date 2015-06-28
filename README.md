@@ -70,9 +70,11 @@ Somewhere in your app code:
 * When the app starts
   - It restores waiting jobs from redis if they exist
 
-## The jobs are assumed to be reentrant!
+## Jobs are assumed to be runnable more than once
 
-You must ensure your jobs are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)), in order words they must be runnable more than once without any undesired sideeffects.
+This job queue fails on the side of running a job twice rather than forgetting to run a job.
+
+You must ensure your jobs can be run more than once without any undesired sideeffects. E.g. that they are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)).
 
 * Jobs will be run again if they fail as part of the retries feature
 * The erlang process could be killed in the middle of running a job
