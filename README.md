@@ -69,11 +69,11 @@ If the VM that runs jobs is killed, another one will try to take over.
 
 ## TODO
 
-### basic version
+### 1.0
 
 * [ ] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
-* [ ] Enqueue and run jobs for different workers, but only one at a time for each.
+* [ ] Enqueue and run jobs for different workers
 * [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [ ] Make persistance abstract, don't assume redis
   - [ ] Use in-memory persistance in tests?
@@ -82,12 +82,9 @@ If the VM that runs jobs is killed, another one will try to take over.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
 * [ ] Errors will only be reported if retries fail.
 * [ ] Licence and pull request instructions
+* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 
 ### Later
 
-* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
-* [ ] Can run multiple workers of the same type at the same time.
-* [ ] If you only start one worker process for a job type, only one job will run at a time.
-  - [ ] If configured to be serial it will not advance to the next job until the current one succeeds. This is useful when there are dependencies between jobs, like when registering an invoice, and then registering a payment on that invoice.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
 
