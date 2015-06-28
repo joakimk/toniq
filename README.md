@@ -10,14 +10,13 @@ Simple and reliable background job library for [Elixir](http://elixir-lang.org/)
 This job queue is designed to:
 
 * Be very easy to use
-* Limit concurrency on jobs that need it (like when doing API calls to other apps)
-* Retry jobs that fail automatically to avoid admin overhead
-* Be notified if jobs fail too many times (by `Logger` errors, which can then be sent to services like [honeybadger](github.com/joakimk/honeybadger))
-* Be able to retry or delete jobs that failed too many times manually
+* Limit concurrency when needed (for e.g. API calls)
+* Automatically retry jobs a few times
+* Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](github.com/joakimk/honeybadger))
+* Retry or delete jobs manually
 * Handle app server restarts or crashes without loosing job data
-* Store just enough extra information in redis to make it possible to see status like currently running jobs (iex for now, possible UI in the future)
+* Store enough extra info in redis to see status like currently running jobs (iex for now, possible UI in the future)
 * Fail on the side of running a job too many times rather than not at all (jobs are assumed to be [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)))
-* Gracefully handle failover if one of many erlang vms is killed
 
 Currently limited to running jobs within a single erlang VM at a time for simplicity, though there is no reason it has to work that way in the future.
 
