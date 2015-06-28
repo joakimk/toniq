@@ -16,8 +16,10 @@ This job queue is designed to:
 * Be able to retry or delete jobs that failed too many times manually
 * Handle app server restarts or crashes without loosing job data
 * Store just enough extra information in redis to make it possible to see status like currently running jobs (iex for now, possible UI in the future)
+* Fail on the side of running a job too many times rather than not at all (jobs are assumed to be [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)))
+* Gracefully handle failover if one of many erlang vms is killed
 
-Currently limited to running jobs within a single erlang VM for simplicity, though there is no reason it has to work that way in the future.
+Currently limited to running jobs within a single erlang VM at a time for simplicity, though there is no reason it has to work that way in the future.
 
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
@@ -51,46 +53,9 @@ Somewhere in your app code:
     Exqueue.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
 ```
 
-## How it works
-
-* When a job is enqueued
-  - `Exqueue.enqueue` will persist the job and publish an event for job subscribers
-* When a job is run
-  - Jobs are always read from redis before they are run so that multiple erlang vms can enqueue jobs
-  - It only runs as many jobs in parallel as specified with the `concurrent:` option per job type
-    - A job type is defined by the worker name, ex. `SendEmailWorker`
-* When a job succeeds
-  - It's removed from persistance so that it won't be run again
-* When a job fails the first 5 times it is retried, waiting 10 seconds between each time
-* When a job still won't run after retrying
-  - It's persisted in a way so that it won't be run again
-  - It's reported as an error-level entry in the Elixir `Logger`
-  - It can only be deleted by manual interaction, e.g. the queue will never automatically forget about a job
-  - It can be manually re-queued as a new job
-* When the app starts
-  - It restores waiting jobs from redis if they exist
-
-## Jobs are assumed to be runnable more than once
-
-This job queue fails on the side of running a job twice rather than forgetting to run a job.
-
-You must ensure your jobs can be run more than once without any undesired sideeffects. E.g. that they are [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)).
-
-* Jobs will be run again if they fail as part of the retries feature
-* The erlang process could be killed in the middle of running a job
-* The redis connection could be lost when we need to report a job as finished
-* etc...
-
-In actual use most of the non-retry cases are very rare. It's probably okay if you send two emails if the redis connection was lost after the first time the job was run if that happens once a year.
-
 ## Will jobs be run in order?
 
-* This is a first-in-first-out queue but due to retries and concurrency ordering can not be guaranteed
-* If you have 5 as concurrency for a job type, then it will process the 5 oldest jobs at a time
-  - If the jobs take different amounts of time to run (which they will), they will eventually be very much out of order
-* If you have 1 as concurrency for a job type, it will run in order as long as a job does not fail all retries
-  - Keeping order would require stopping the queue and waiting for manual intervention. This is a potential future feature.
-* Jobs of different types does not affect eachother, there is no ordering between them
+This is a first-in-first-out queue but due to retries and concurrency, ordering can not be guaranteed.
 
 ## How are jobs serialized?
 
@@ -98,19 +63,9 @@ Jobs are serialized using erlang serialization. This means you can pass almost a
 
 ## Can jobs be run on multiple computers at the same time?
 
-**Short answer:**
-
 No, but running multiple erlang vms on the same or different computers talking to the same redis server does not cause any unexpected behavior.
 
-**Long answer:**
-
-For implementation simplicty and to guarantee the number of active workers per job type, only one erlang vm will run jobs at a time.
-
-This is handled using locks in redis. If a vm goes missing, another running vm will take over as soon as possible.
-
-Even if you think you only run one erlang VM at once, that is probably not true. During deploy you may have two versions of an app running for a short while, when debugging an issue you may have a iex prompt running in addition to a web server, etc.
-
-One erlang VM can do a lot of work, and this basic implementation also supports failover. More advanced setups could be implemented in the future if needed.
+If the VM that runs jobs is killed, another one will try to take over.
 
 ## TODO: basic version
 
