@@ -67,7 +67,9 @@ No, but running multiple erlang vms on the same or different computers talking t
 
 If the VM that runs jobs is killed, another one will try to take over.
 
-## TODO: basic version
+## TODO
+
+### basic version
 
 * [ ] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
@@ -81,7 +83,7 @@ If the VM that runs jobs is killed, another one will try to take over.
 * [ ] Errors will only be reported if retries fail.
 * [ ] Licence and pull request instructions
 
-## TODO: Later
+### Later
 
 * [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Can run multiple workers of the same type at the same time.
