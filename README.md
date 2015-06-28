@@ -39,7 +39,7 @@ Define a worker:
     end
 ```
 
-Somewhere in your app code:
+Enqueue jobs somewhere in your app code:
 
 ```elixir    
     Exqueue.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
