@@ -30,9 +30,8 @@ Define a worker:
 
 ```elixir
     defmodule SendEmailWorker do
-      # Set concurrency. For API calls it's often useful to limit it.
-      def concurrency, do: 10
-      # def concurrency, do: :infinite
+      # concurrency: infinite by default. For API calls it's often useful to limit it.
+      use Exqueue.Worker, concurrency: 10
       
       def perform(to: to, title: title, text: text)
         # do work
@@ -80,4 +79,3 @@ If the VM that runs jobs is killed, another one will try to take over.
 ### Later
 
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
-* [ ] Introduce some kind of `use ExQueue.Worker` to avoid having to specify concurrency or other options by default
