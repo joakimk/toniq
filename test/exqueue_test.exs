@@ -4,8 +4,8 @@ defmodule ExqueueTest do
   defmodule TestWorker do
     use Exqueue.Worker
 
-    def perform(arg) do
-      send :exqueue_test, { :job_has_been_run, arg_was: arg }
+    def perform(data: number) do
+      send :exqueue_test, { :job_has_been_run, number_was: number }
     end
   end
 
@@ -15,13 +15,16 @@ defmodule ExqueueTest do
   #  end
   #end
 
-  test "running jobs" do
-    Process.register(self, :exqueue_test)
+  #test "running jobs" do
+  #  Process.register(self, :exqueue_test)
 
-    Exqueue.enqueue(TestWorker, 10)
+  #  Exqueue.enqueue(TestWorker, data: 10)
 
-    assert_receive { :job_has_been_run, arg_was: 10 }
-  end
+  #  assert_receive { :job_has_been_run, number_was: 10 }
+  #end
+
+  #test "can enqueue job without arguments"
+  #test "can pick up jobs previosly stored in redis"
 
   # how the error appears and when depends on how jobs are run
   #test "a job can fail" do
