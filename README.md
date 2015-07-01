@@ -12,7 +12,7 @@ This job queue is designed to:
 * Be very easy to use
 * Automatically retry jobs a few times if they fail
 * Limit concurrency when needed (for e.g. API calls)
-* Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](github.com/joakimk/honeybadger))
+* Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](https://github.com/joakimk/honeybadger))
 * Be able to retry or delete jobs manually
 * Be able to see status by checking redis (iex for now, possible UI in the future)
 * Handle app server restarts or crashes without loosing job data
