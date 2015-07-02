@@ -1,4 +1,4 @@
-defmodule Exqueue.QueuePeristance do
+defmodule Exqueue.Peristance do
   use Exredis.Api
 
   @doc """

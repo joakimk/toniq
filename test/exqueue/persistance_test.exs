@@ -1,4 +1,4 @@
-defmodule Exredis.QueuePeristanceTest do
+defmodule Exredis.PeristanceTest do
   use ExUnit.Case
 
   def setup do
@@ -12,17 +12,17 @@ defmodule Exredis.QueuePeristanceTest do
     # as we rely on exact numbers here, let's clean out redis
     Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
 
-    Exqueue.QueuePeristance.enqueue(SomeWorker, some: "data")
-    Exqueue.QueuePeristance.enqueue(SomeWorker, other: "data")
+    Exqueue.Peristance.enqueue(SomeWorker, some: "data")
+    Exqueue.Peristance.enqueue(SomeWorker, other: "data")
 
-    assert Exqueue.QueuePeristance.jobs == [
+    assert Exqueue.Peristance.jobs == [
       %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] },
       %{ id: 2, worker: SomeWorker, opts: [ other: "data" ] }
     ]
 
-    Exqueue.QueuePeristance.mark_as_finished(2)
+    Exqueue.Peristance.mark_as_finished(2)
 
-    assert Exqueue.QueuePeristance.jobs == [
+    assert Exqueue.Peristance.jobs == [
       %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] }
     ]
   end

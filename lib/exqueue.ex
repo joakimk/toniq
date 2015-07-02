@@ -1,7 +1,7 @@
 defmodule Exqueue do
   use Application
 
-  alias Exqueue.QueuePeristance
+  alias Exqueue.Peristance
 
   def start_worker(worker_module) do
     # start manager process and attach that to a supervisor
@@ -11,7 +11,7 @@ defmodule Exqueue do
   end
 
   def enqueue(worker_module, opts) do
-    QueuePeristance.enqueue(worker_module, opts)
+    Peristance.enqueue(worker_module, opts)
   end
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
