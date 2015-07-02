@@ -8,12 +8,12 @@ defmodule Exredis.PeristanceTest do
   defmodule SomeWorker do
   end
 
-  test "can enqueue a job" do
+  test "can store, fetch and mark a job as finished" do
     # as we rely on exact numbers here, let's clean out redis
     Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
 
-    Exqueue.Peristance.enqueue(SomeWorker, some: "data")
-    Exqueue.Peristance.enqueue(SomeWorker, other: "data")
+    Exqueue.Peristance.store_job(SomeWorker, some: "data")
+    Exqueue.Peristance.store_job(SomeWorker, other: "data")
 
     assert Exqueue.Peristance.jobs == [
       %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] },

@@ -11,7 +11,7 @@ defmodule Exqueue do
   end
 
   def enqueue(worker_module, opts) do
-    Peristance.enqueue(worker_module, opts)
+    Peristance.store_job(worker_module, opts)
   end
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html

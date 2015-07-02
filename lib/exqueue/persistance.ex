@@ -4,7 +4,7 @@ defmodule Exqueue.Peristance do
   @doc """
   Stores a job in redis. If it does not succeed it will fail right away.
   """
-  def enqueue(worker_module, opts) do
+  def store_job(worker_module, opts) do
     job_id = redis |> incr(:last_job_id)
 
     redis
