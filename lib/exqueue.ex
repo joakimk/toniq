@@ -19,6 +19,10 @@ defmodule Exqueue do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+    # Not supervising exredis seems like it could work as :eredis reconnects if needed,
+    # but will look into this more later.
+    #
+    # https://github.com/wooga/eredis#reconnecting-on-redis-down--network-failure--timeout--etc
     Application.get_env(:exqueue, :redis_url)
     |> Exredis.start_using_connection_string
     |> Process.register(:redis)
