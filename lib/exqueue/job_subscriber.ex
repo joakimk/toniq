@@ -18,7 +18,8 @@ defmodule Exqueue.JobSubscriber do
   defp subscribe_to_new_jobs do
     Exqueue.Peristance.subscribe_to_new_jobs
 
-    # TODO: handle incomming messages somehow
+    # TODO: handle incomming messages somehow, maybe spawn_link,
+    # receive the messages, pass them on using genserver calls?
   end
 
   defp start_polling_for_jobs do
