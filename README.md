@@ -80,4 +80,5 @@ If the VM that runs jobs is killed, another one will try to take over.
 
 ### Later
 
+* [ ] See if the pubsub can be made cleaner. Also support database numbers.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.

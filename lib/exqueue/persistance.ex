@@ -9,6 +9,8 @@ defmodule Exqueue.Peristance do
 
     redis
     |> hset(:jobs, job_id, :erlang.term_to_binary(%{ worker: worker_module, opts: opts }))
+
+    Exqueue.PubSub.publish
   end
 
   @doc """
@@ -30,6 +32,13 @@ defmodule Exqueue.Peristance do
   def mark_as_finished(job_id) do
     redis
     |> hdel(:jobs, job_id)
+  end
+
+  @doc """
+  Subscribes to added jobs. The current process will receive :job_added when a job is added.
+  """
+  def subscribe_to_new_jobs do
+    Exqueue.PubSub.subscribe
   end
 
   defp redis do

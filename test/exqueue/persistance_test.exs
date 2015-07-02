@@ -26,4 +26,17 @@ defmodule Exredis.PeristanceTest do
       %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] }
     ]
   end
+
+  test "publishing and subscribing to events" do
+    Exqueue.Peristance.subscribe_to_new_jobs
+
+    # run out of the receiving process to ensure that works as well
+    spawn_link fn ->
+      Exqueue.Peristance.store_job(SomeWorker, some: "data")
+      Exqueue.Peristance.store_job(SomeWorker, some: "data")
+    end
+
+    assert_receive :job_added
+    assert_receive :job_added
+  end
 end
