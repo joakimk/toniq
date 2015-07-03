@@ -96,18 +96,17 @@ This library was initially built to support what was needed in [content_translat
 
 ### 1.0
 
+* [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
+* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
+* [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
+* [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Custom and infinite max_concurrency
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
-* [ ] Verify that enqueue worked, it may return a no connection error
-* [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
-  - [ ] Use in-memory persistance in tests?
 * [x] Errors will only be reported if retries fail.
-* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
-* [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
 * [ ] Add CI
 
 ### Later
