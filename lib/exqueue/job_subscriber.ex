@@ -15,11 +15,6 @@ defmodule Exqueue.JobSubscriber do
     {:ok, []}
   end
 
-  def handle_cast(:job_added, state) do
-    look_for_new_jobs
-    {:noreply, state}
-  end
-
   defp start_subscribing_for_jobs do
     spawn_link fn ->
       Exqueue.Peristance.subscribe_to_new_jobs
@@ -39,6 +34,11 @@ defmodule Exqueue.JobSubscriber do
     end
 
     wait_for_new_jobs
+  end
+
+  def handle_cast(:job_added, state) do
+    look_for_new_jobs
+    {:noreply, state}
   end
 
   defp poll_for_jobs do
