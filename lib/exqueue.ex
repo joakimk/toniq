@@ -27,10 +27,6 @@ defmodule Exqueue do
     |> Exredis.start_using_connection_string
     |> Process.register(:redis)
 
-    Application.get_env(:exqueue, :redis_url)
-    |> Exredis.start_using_connection_string
-    |> Process.register(:publish_redis)
-
     config = Application.get_env(:exqueue, :redis_url) |> Exredis.ConnectionString.parse
     { :ok, pid } = :eredis_sub.start_link(String.to_char_list(config.host), config.port, String.to_char_list(config.password))
     Process.register(pid, :subscribe_redis)

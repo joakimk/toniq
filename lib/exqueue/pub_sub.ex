@@ -1,6 +1,6 @@
 defmodule Exqueue.PubSub do
   def publish do
-    Process.whereis(:publish_redis)
+    Process.whereis(:redis)
     |> Exredis.query([ "publish", "job_added", "1" ])
   end
 
