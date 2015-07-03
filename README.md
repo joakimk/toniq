@@ -1,5 +1,7 @@
 # NOTE: Readme driven development below, this means this tool does not nessesaraly do what it says below yet.
 
+**Status**: The core parts are there, but it has major bugs and missing features. See the todo list.
+
 Exqueue
 =======
 
