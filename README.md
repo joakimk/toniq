@@ -63,6 +63,8 @@ If the VM that runs jobs is killed, another one will try to take over.
 
 ### Enough to replace what's currently in content\_translator
 
+This library was initially built to support what was needed in [content_translator](https://github.com/barsoom/content_translator).
+
 * [x] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [x] Implement pubsub
 * [x] Implement job subscriber
