@@ -48,6 +48,7 @@ defmodule Exqueue.JobSubscriber do
   end
 
   defp look_for_new_jobs do
-    IO.inspect "TODO: look for new jobs"
+    Exqueue.Peristance.jobs
+    |> Enum.each &Exqueue.WorkerWatcher.register_job/1
   end
 end
