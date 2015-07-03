@@ -61,14 +61,18 @@ If the VM that runs jobs is killed, another one will try to take over.
 
 ## TODO
 
-### Enough to replace what's currently in content\_translator
-
-This library was initially built to support what was needed in [content_translator](https://github.com/barsoom/content_translator).
+### Enough to run jobs with no safety what so ever :)
 
 * [x] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [x] Implement pubsub
 * [x] Implement job subscriber
 * [x] Find out why killing any process kills the entire app even if the supervisor ought to restart that part.
+* [x] Just run jobs in worker watcher
+
+### Enough to replace what's currently in content\_translator
+
+This library was initially built to support what was needed in [content_translator](https://github.com/barsoom/content_translator).
+
 * [ ] Implement worker watcher processes
 * [ ] Implement job runners
   - [ ] Limit concurrency to 1 by default

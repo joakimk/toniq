@@ -9,20 +9,22 @@ defmodule ExqueueTest do
     end
   end
 
-  #defmodule TestErrorWorker do
-  #  def perform(arg) do
-  #    raise "fail"
-  #  end
-  #end
+  defmodule TestErrorWorker do
+    def perform(arg) do
+      raise "fail"
+    end
+  end
 
   test "running jobs" do
     Process.register(self, :exqueue_test)
 
     Exqueue.enqueue(TestWorker, data: 10)
 
-    IO.inspect "expected to fail, pending test"
     assert_receive { :job_has_been_run, number_was: 10 }
   end
+
+  #test "failing jobs are removed from the regular job list and stored in a failed jobs list" do
+  #end
 
   #test "can enqueue job without arguments"
   #test "can pick up jobs previosly stored in redis"
