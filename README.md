@@ -61,26 +61,33 @@ If the VM that runs jobs is killed, another one will try to take over.
 
 ## TODO
 
-### 1.0
+### Enough to replace what's currently in content\_translator
 
 * [x] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [x] Implement pubsub
 * [x] Implement job subscriber
 * [ ] Implement worker watcher processes
 * [ ] Implement job runners
+  - [ ] Limit concurrency to 1 by default
 * [ ] Enqueue and run jobs for different workers
+* [ ] Will only mark a job as done if it exits successfully
+* [ ] Licence and pull request instructions
+
+### 1.0
+
+* Custom of infinite concurrency
+* Retries
+  - [ ] A failed job will be automatically retried with a delay between each.
+  - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
   - [ ] Use in-memory persistance in tests?
-* [ ] Will only mark a job as done if it exits successfully.
-  - [ ] A failed job will be automatically retried with a delay between each.
-  - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
 * [ ] Errors will only be reported if retries fail.
-* [ ] Licence and pull request instructions
 * [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
+* [ ] Add CI
 
 ### Later
 
