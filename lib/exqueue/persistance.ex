@@ -8,7 +8,7 @@ defmodule Exqueue.Peristance do
     job_id = redis |> incr(:last_job_id)
 
     redis
-    |> hset(:jobs, job_id, :erlang.term_to_binary(%{ worker: worker_module, opts: opts }))
+    |> hset(jobs_key, job_id, :erlang.term_to_binary(%{ worker: worker_module, opts: opts }))
 
     Exqueue.PubSub.publish
   end
@@ -18,7 +18,7 @@ defmodule Exqueue.Peristance do
   """
   def jobs do
     redis
-    |> hgetall(:jobs)
+    |> hgetall(jobs_key)
     |> Enum.map fn({ key, data }) ->
       { job_id, _remainder_of_string } = Integer.parse(key)
       :erlang.binary_to_term(data)
@@ -31,7 +31,7 @@ defmodule Exqueue.Peristance do
   """
   def mark_as_finished(job_id) do
     redis
-    |> hdel(:jobs, job_id)
+    |> hdel(jobs_key, job_id)
   end
 
   @doc """
@@ -39,6 +39,10 @@ defmodule Exqueue.Peristance do
   """
   def subscribe_to_new_jobs do
     Exqueue.PubSub.subscribe
+  end
+
+  defp jobs_key do
+    "exqueue_jobs"
   end
 
   defp redis do
