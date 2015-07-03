@@ -68,7 +68,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [x] Implement pubsub
 * [x] Implement job subscriber
-* [ ] Find out why killing any process kills the entire app even if the supervisor ought to restart that part.
+* [x] Find out why killing any process kills the entire app even if the supervisor ought to restart that part.
 * [ ] Implement worker watcher processes
 * [ ] Implement job runners
   - [ ] Limit concurrency to 1 by default
@@ -96,3 +96,4 @@ This library was initially built to support what was needed in [content_translat
 
 * [ ] See if the pubsub can be made cleaner. Also support database numbers.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
+* [ ] Find out why :eredis_sub.controlling_process makes the entire app shutdown when killed (or any part of it's linked processes dies). "[info]  Application exqueue exited: shutdown". Would allow us to keep it linked.

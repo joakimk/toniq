@@ -7,7 +7,9 @@ defmodule Exqueue.PubSub do
   def subscribe do
     subscribing_process = self
 
-    Spawn.spawn_link_with_name :wait_for_redis_messages, fn ->
+    # NOTE: Don't use spawn_link, there is some problem with :eredis_sub.controlling_process that causes
+    #       the entire app to shutdown instead of the process tree being restarted. See the README todo list.
+    spawn fn ->
       :eredis_sub.controlling_process(subscribe_redis)
       :eredis_sub.subscribe(subscribe_redis, ['job_added'])
       receiver(subscribing_process)
