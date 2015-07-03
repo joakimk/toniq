@@ -1,8 +1,9 @@
 defmodule Exredis.PeristanceTest do
   use ExUnit.Case
 
-  def setup do
+  setup do
     Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
+    :ok
   end
 
   defmodule SomeWorker do

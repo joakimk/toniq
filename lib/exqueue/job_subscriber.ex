@@ -49,6 +49,6 @@ defmodule Exqueue.JobSubscriber do
 
   defp look_for_new_jobs do
     Exqueue.Peristance.jobs
-    |> Enum.each &Exqueue.WorkerWatcher.register_job/1
+    |> Enum.each &Exqueue.JobRunner.register_job/1
   end
 end

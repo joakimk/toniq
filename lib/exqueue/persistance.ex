@@ -35,6 +35,14 @@ defmodule Exqueue.Peristance do
   end
 
   @doc """
+  Marks a job as finished. This means that it's deleted from redis.
+  """
+  def mark_as_failed(job) do
+    #redis
+    #|> hdel(jobs_key, job.id)
+  end
+
+  @doc """
   Subscribes to added jobs. The current process will receive :job_added when a job is added.
   """
   def subscribe_to_new_jobs do

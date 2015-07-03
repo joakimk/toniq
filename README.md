@@ -1,6 +1,4 @@
-# NOTE: Readme driven development below, this means this tool does not nessesaraly do what it says below yet. Using this to think though the design on a high level before coding.
-
-Also, not sure if this idea will pan out, or if I find something that fullfills my goals somewhere else before then.
+# NOTE: Readme driven development below, this means this tool does not nessesaraly do what it says below yet.
 
 Exqueue
 =======
@@ -73,11 +71,12 @@ If the VM that runs jobs is killed, another one will try to take over.
 
 This library was initially built to support what was needed in [content_translator](https://github.com/barsoom/content_translator).
 
-* [ ] Implement worker watcher processes
-* [ ] Implement job runners
-  - [ ] Limit concurrency to 1 by default
-* [ ] Enqueue and run jobs for different workers
-* [ ] Will only mark a job as done if it exits successfully
+* [x] Implement job runner and monitor
+* [x] Enqueue and run jobs for different workers
+* [x] Will only mark a job as done if it exits successfully
+* [ ] Be able to mark jobs as failed
+* [ ] Limit concurrency to 1 by default
+* [ ] Avoid running duplicate jobs due to pulling and current setup
 * [ ] Licence and pull request instructions
 
 ### 1.0
