@@ -5,7 +5,7 @@ defmodule Exqueue.Peristance do
   Stores a job in redis. If it does not succeed it will fail right away.
   """
   def store_job(worker_module, opts) do
-    job_id = redis |> incr(:last_job_id)
+    job_id = redis |> incr(counter_key)
 
     redis
     |> hset(jobs_key, job_id, :erlang.term_to_binary(%{ worker: worker_module, opts: opts }))
@@ -50,7 +50,11 @@ defmodule Exqueue.Peristance do
   end
 
   defp jobs_key do
-    "exqueue_jobs"
+    :exqueue_jobs
+  end
+
+  def counter_key do
+    :exqueue_last_job_id
   end
 
   defp redis do
