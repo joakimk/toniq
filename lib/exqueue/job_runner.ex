@@ -34,8 +34,7 @@ defmodule Exqueue.JobRunner do
   end
 
   defp process_result({:mark_as_finished, job}) do
-    # TODO: make this API take a job
-    Exqueue.Peristance.mark_as_finished(job.id)
+    Exqueue.Peristance.mark_as_finished(job)
   end
 
   defp process_result({:mark_as_failed, job}) do

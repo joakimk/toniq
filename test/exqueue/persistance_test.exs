@@ -16,16 +16,14 @@ defmodule Exredis.PeristanceTest do
     Exqueue.Peristance.store_job(SomeWorker, some: "data")
     Exqueue.Peristance.store_job(SomeWorker, other: "data")
 
-    assert Exqueue.Peristance.jobs == [
-      %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] },
-      %{ id: 2, worker: SomeWorker, opts: [ other: "data" ] }
-    ]
+    job1 = %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] }
+    job2 = %{ id: 2, worker: SomeWorker, opts: [ other: "data" ] }
 
-    Exqueue.Peristance.mark_as_finished(2)
+    assert Exqueue.Peristance.jobs == [ job1, job2 ]
 
-    assert Exqueue.Peristance.jobs == [
-      %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] }
-    ]
+    Exqueue.Peristance.mark_as_finished(job2)
+
+    assert Exqueue.Peristance.jobs == [ job1 ]
   end
 
   test "publishing and subscribing to events" do
