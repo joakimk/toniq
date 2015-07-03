@@ -103,7 +103,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
   - [ ] Use in-memory persistance in tests?
-* [ ] Errors will only be reported if retries fail.
+* [x] Errors will only be reported if retries fail.
 * [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
 * [ ] Add CI
