@@ -20,6 +20,7 @@ defmodule ExqueueTest do
 
     Exqueue.enqueue(TestWorker, data: 10)
 
+    IO.inspect "expected to fail, pending test"
     assert_receive { :job_has_been_run, number_was: 10 }
   end
 
