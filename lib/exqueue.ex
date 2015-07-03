@@ -19,6 +19,19 @@ defmodule Exqueue do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+    set_up_redis
+
+    children = [
+      worker(Exqueue.JobSubscriber, [])
+    ]
+
+    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: Exqueue.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+
+  defp set_up_redis do
     # Not supervising exredis seems like it could work as :eredis reconnects if needed,
     # but will look into this more later.
     #
@@ -35,16 +48,5 @@ defmodule Exqueue do
     if Mix.env == :test do
       Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
     end
-
-    children = [
-      # Define workers and child supervisors to be supervised
-      # worker(Exqueue.Worker, [arg1, arg2, arg3])
-      worker(Exqueue.JobSubscriber, [])
-    ]
-
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Exqueue.Supervisor]
-    Supervisor.start_link(children, opts)
   end
 end
