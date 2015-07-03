@@ -75,7 +75,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Enqueue and run jobs for different workers
 * [x] Will only mark a job as done if it exits successfully
 * [ ] Be able to mark jobs as failed
-* [ ] Limit concurrency to 1 by default
+* [x] Limit concurrency to 1 by default
 * [ ] Avoid running duplicate jobs due to polling and current setup
 * [ ] Review the code one more time
 * [ ] Licence and pull request instructions

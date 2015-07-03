@@ -31,6 +31,12 @@ defmodule ExqueueTest do
     assert Exqueue.Peristance.jobs == []
   end
 
+  # regression test to ignore gen_cast events in JobRunner
+  test "enqueuing multiple jobs at once does not raise errors" do
+    Exqueue.enqueue(TestWorker, data: 10)
+    Exqueue.enqueue(TestWorker, data: 10)
+  end
+
   test "failing jobs are removed from the regular job list and stored in a failed jobs list" do
     Exqueue.enqueue(TestErrorWorker, data: 10)
 

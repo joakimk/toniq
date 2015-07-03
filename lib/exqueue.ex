@@ -22,7 +22,8 @@ defmodule Exqueue do
     set_up_redis
 
     children = [
-      worker(Exqueue.JobSubscriber, [])
+      worker(Exqueue.JobSubscriber, []),
+      worker(Exqueue.JobRunner, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

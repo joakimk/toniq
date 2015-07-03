@@ -1,10 +1,24 @@
 defmodule Exqueue.JobRunner do
+  use GenServer
+
+  def start_link do
+    GenServer.start_link(__MODULE__, [], name: :job_runner)
+  end
+
   def register_job(job) do
-    spawn_link fn ->
+    Process.whereis(:job_runner)
+    |> GenServer.cast({:register_job, job})
+  end
+
+  def handle_cast({:register_job, job}, state) do
+    # NOTE: Run jobs concurrently later
+    #spawn_link fn ->
       job
       |> run_job
       |> process_result
-    end
+    #end
+
+    {:noreply, state}
   end
 
   def run_job(job) do
@@ -50,8 +64,10 @@ defmodule Exqueue.JobRunner do
         :failed
       {:failed_because_of_an_error, _error} ->
         :failed
+      {:"$gen_cast", _} -> # Don't listen to GenServer events here
+        wait_for_result
       other ->
-        raise "The job running process sent an unknown message: #{other}"
+        raise "The job running process sent an unknown message: #{inspect(other)}"
     end
   end
 end
