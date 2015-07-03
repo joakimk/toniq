@@ -1,7 +1,7 @@
 defmodule Exqueue.PubSub do
   def publish do
     Process.whereis(:redis)
-    |> Exredis.query([ "publish", "job_added", "1" ])
+    |> Exredis.query(["publish", redis_key, "1"])
   end
 
   def subscribe do
@@ -11,14 +11,14 @@ defmodule Exqueue.PubSub do
     #       the entire app to shutdown instead of the process tree being restarted. See the README todo list.
     spawn fn ->
       :eredis_sub.controlling_process(subscribe_redis)
-      :eredis_sub.subscribe(subscribe_redis, ['job_added'])
+      :eredis_sub.subscribe(subscribe_redis, [String.to_char_list(redis_key)])
       receiver(subscribing_process)
     end
   end
 
   defp receiver(subscribing_process) do
     receive do
-      {:message, "job_added", _, _} ->
+      {:message, redis_key, _, _} ->
         send subscribing_process, :job_added
       _other ->
         nil
@@ -27,6 +27,10 @@ defmodule Exqueue.PubSub do
     :eredis_sub.ack_message(subscribe_redis)
 
     receiver(subscribing_process)
+  end
+
+  defp redis_key do
+    "exqueue_job_added"
   end
 
   defp subscribe_redis do
