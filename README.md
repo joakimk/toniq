@@ -68,6 +68,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [x] Implement pubsub
 * [x] Implement job subscriber
+* [ ] Find out why killing any process kills the entire app even if the supervisor ought to restart that part.
 * [ ] Implement worker watcher processes
 * [ ] Implement job runners
   - [ ] Limit concurrency to 1 by default
