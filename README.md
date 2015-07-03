@@ -14,8 +14,7 @@ This job queue is designed to:
 * Be able to retry or delete jobs manually
 * Be able to see status by checking redis (iex for now, possible UI in the future)
 * Handle app server restarts or crashes without loosing job data
-* Fail on the side of running a job too many times rather than not at all.
-  - Running too many times is not supposed to happen often, but try and make your jobs [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)) whenever possible, or implement your own locking to ensure it's only ever run once.
+* Fail on the side of running a job too many times rather than not at all. See more info below.
 
 Currently limited to running jobs within a single erlang VM at a time for simplicity, though there is no reason it has to work that way in the future.
 
@@ -57,6 +56,18 @@ Jobs are serialized using erlang serialization. This means you can pass almost a
 No, but running multiple erlang vms on the same or different computers talking to the same redis server does not cause any unexpected behavior.
 
 If the VM that runs jobs is killed, another one will try to take over.
+
+## Why will jobs be run more than once in rare cases?
+
+If something really unexpected happens and a job can't be marked as finished after being run, this library prefers to run it twice (or more) rather than not at all.
+
+Unexpected things include something killing the erlang VM, an unexpected crash within the job runner, or problems with the redis connection at the wrong time.
+
+You can solve this in two ways:
+* Go with the flow: make your jobs runnable more than once without any bad sideeffects. Also known as [Reentrancy](https://en.wikipedia.org/wiki/Reentrancy_(computing)).
+* Implement your own locking, or contribute some such thing to this library.
+
+I tend to prefer the first alternative in whenever possible.
 
 ## TODO
 
