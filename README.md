@@ -15,7 +15,7 @@ This job queue is designed to:
 * Be able to see status by checking redis (iex for now, possible UI in the future)
 * Handle app server restarts or crashes without loosing job data
 * Fail on the side of running a job too many times rather than not at all.
-  - Running too many times is not supposed to happen often, but do try and make your jobs [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)) whenever possible.
+  - Running too many times is not supposed to happen often, but try and make your jobs [reentrant](https://en.wikipedia.org/wiki/Reentrancy_(computing)) whenever possible, or implement your own locking to ensure it's only ever run once.
 
 Currently limited to running jobs within a single erlang VM at a time for simplicity, though there is no reason it has to work that way in the future.
 
