@@ -94,6 +94,7 @@ This library was initially built to support what was needed in [content_translat
 
 ### Later
 
+* [ ] More complete testing of JobSubscriber
 * [ ] See if the pubsub can be made cleaner. Also support database numbers.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
 * [ ] Find out why :eredis_sub.controlling_process makes the entire app shutdown when killed (or any part of it's linked processes dies). "[info]  Application exqueue exited: shutdown". Would allow us to keep it linked.
