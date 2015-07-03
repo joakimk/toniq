@@ -32,7 +32,7 @@ Define a worker:
     defmodule SendEmailWorker do
       # concurrency: infinite by default. For API calls it's often useful to limit it.
       use Exqueue.Worker, concurrency: 10
-      
+
       def perform(to: to, title: title, text: text)
         # do work
       end
@@ -41,7 +41,7 @@ Define a worker:
 
 Enqueue jobs somewhere in your app code:
 
-```elixir    
+```elixir
     Exqueue.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
 ```
 
