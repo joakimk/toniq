@@ -29,7 +29,7 @@ Define a worker:
 ```elixir
     defmodule SendEmailWorker do
       # concurrency: infinite by default. For API calls it's often useful to limit it.
-      use Exqueue.Worker, concurrency: 10
+      use Exqueue.Worker, max_concurrency: 10
 
       def perform(to: to, title: title, text: text)
         # do work
