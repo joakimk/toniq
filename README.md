@@ -88,7 +88,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Implement job runner and monitor
 * [x] Enqueue and run jobs for different workers
 * [x] Will only mark a job as done if it exits successfully
-* [ ] Be able to mark jobs as failed
+* [x] Be able to mark jobs as failed
 * [x] Limit concurrency to 1 by default
 * [ ] Avoid running duplicate jobs due to polling and current setup
 * [ ] Review the code one more time
@@ -96,6 +96,7 @@ This library was initially built to support what was needed in [content_translat
 
 ### 1.0
 
+* [ ] Make the tests reliable.
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
 * [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
@@ -107,6 +108,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
 * [x] Errors will only be reported if retries fail.
+* [ ] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [ ] Add CI
 * [ ] Hex package
 

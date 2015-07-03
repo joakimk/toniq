@@ -12,6 +12,7 @@ defmodule Exqueue do
 
   def enqueue(worker_module, opts) do
     Peristance.store_job(worker_module, opts)
+    Exqueue.PubSub.publish
   end
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html

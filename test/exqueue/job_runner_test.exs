@@ -4,18 +4,18 @@ defmodule Exqueue.JobRunnerTest do
   defmodule TestSuccessWorker do
     use Exqueue.Worker
 
-    def perform(opts) do
+    def perform(_opts) do
     end
   end
 
   defmodule TestErrorWorker do
-    def perform(arg) do
+    def perform(_opts) do
       raise "fail"
     end
   end
 
   defmodule TestCrashWorker do
-    def perform(arg) do
+    def perform(_opts) do
       Process.exit(self, "simulate an unknown error")
     end
   end

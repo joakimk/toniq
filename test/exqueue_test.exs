@@ -10,7 +10,7 @@ defmodule ExqueueTest do
   end
 
   defmodule TestErrorWorker do
-    def perform(arg) do
+    def perform(_arg) do
       raise "fail"
     end
   end
@@ -40,12 +40,10 @@ defmodule ExqueueTest do
   test "failing jobs are removed from the regular job list and stored in a failed jobs list" do
     Exqueue.enqueue(TestErrorWorker, data: 10)
 
-    raise "This is a pending test"
-
     wait_for_persistance_update
     assert Exqueue.Peristance.jobs == []
-    assert Enum.length(Exqueue.Peristance.failed_jobs) == 1
-    assert (Exqueue.Peristance.failed_jobs |> hd).first.worker == TestErrorWorker
+    assert Enum.count(Exqueue.Peristance.failed_jobs) == 1
+    assert (Exqueue.Peristance.failed_jobs |> hd).worker == TestErrorWorker
   end
 
   defp wait_for_persistance_update do
@@ -58,12 +56,4 @@ defmodule ExqueueTest do
 
   #test "can enqueue job without arguments"
   #test "can pick up jobs previosly stored in redis"
-
-  # how the error appears and when depends on how jobs are run
-  #test "a job can fail" do
-  #  Process.register(self, :exqueue_test)
-  #  Exqueue.enqueue(TestErrorWorker, 10)
-  #end
-
-  #test "failing when there is no running workers"
 end
