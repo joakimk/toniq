@@ -65,13 +65,14 @@ If the VM that runs jobs is killed, another one will try to take over.
 
 * [x] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
 * [x] Implement pubsub
-* [ ] Implement job subscriber
-* [ ] Implement worker watcher processes and job runners
+* [x] Implement job subscriber
+* [ ] Implement worker watcher processes
+* [ ] Implement job runners
+* [ ] Enqueue and run jobs for different workers
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
-* [ ] Enqueue and run jobs for different workers
-* [ ] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
-  - [ ] Make persistance abstract, don't assume redis
+* [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
+  - [x] Make persistance abstract, don't assume redis
   - [ ] Use in-memory persistance in tests?
 * [ ] Will only mark a job as done if it exits successfully.
   - [ ] A failed job will be automatically retried with a delay between each.

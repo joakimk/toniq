@@ -15,13 +15,13 @@ defmodule ExqueueTest do
   #  end
   #end
 
-  #test "running jobs" do
-  #  Process.register(self, :exqueue_test)
+  test "running jobs" do
+    Process.register(self, :exqueue_test)
 
-  #  Exqueue.enqueue(TestWorker, data: 10)
+    Exqueue.enqueue(TestWorker, data: 10)
 
-  #  assert_receive { :job_has_been_run, number_was: 10 }
-  #end
+    assert_receive { :job_has_been_run, number_was: 10 }
+  end
 
   #test "can enqueue job without arguments"
   #test "can pick up jobs previosly stored in redis"
