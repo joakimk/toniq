@@ -108,6 +108,7 @@ This library was initially built to support what was needed in [content_translat
   - [x] Make persistance abstract, don't assume redis
 * [x] Errors will only be reported if retries fail.
 * [ ] Add CI
+* [ ] Hex package
 
 ### Later
 
