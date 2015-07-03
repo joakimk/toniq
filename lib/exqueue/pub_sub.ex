@@ -7,7 +7,7 @@ defmodule Exqueue.PubSub do
   def subscribe do
     subscribing_process = self
 
-    spawn_link fn ->
+    Spawn.spawn_link_with_name :wait_for_redis_messages, fn ->
       :eredis_sub.controlling_process(subscribe_redis)
       :eredis_sub.subscribe(subscribe_redis, ['job_added'])
       receiver(subscribing_process)

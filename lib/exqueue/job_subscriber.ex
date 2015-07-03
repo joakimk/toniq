@@ -16,14 +16,14 @@ defmodule Exqueue.JobSubscriber do
   end
 
   defp start_subscribing_for_jobs do
-    spawn_link fn ->
+    Spawn.spawn_link_with_name :wait_for_new_jobs, fn ->
       Exqueue.Peristance.subscribe_to_new_jobs
       wait_for_new_jobs
     end
   end
 
   defp start_polling_for_jobs do
-    spawn_link &poll_for_jobs/0
+    Spawn.spawn_link_with_name :poll_for_jobs, &poll_for_jobs/0
   end
 
   defp wait_for_new_jobs do
