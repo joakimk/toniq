@@ -15,14 +15,14 @@ This job queue is designed to:
   - Unlike many other libraries, there is no separate workers and no JSON conversion of arguments.
 * Play to Erlang's strengths
   - One job is one Erlang process. 100k+ concurrent processes on one computer is not unusual.
-  - Run jobs within the VM that enqueued it (for speed and simplicity)
+* Run jobs within the VM that enqueued it
 * Automatically retry jobs a few times if they fail
 * Limit concurrency when needed (for e.g. API calls)
 * Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](https://github.com/joakimk/honeybadger))
 * Be able to disable persistance on a case-by-case basis if needed for speed (at the cost of reliability)
 * Use redis sparingly
   - To handle Erlang VM restarts and crashes without loosing jobs
-  - To record failed jobs to be able to do manual retries or deletion
+  - To record failed jobs and be able to do manual retries or deletion
   - To be able to see status (iex for now, possible UI in the future)
 * Fail on the side of running a job too many times rather than not at all. See more info below.
 
