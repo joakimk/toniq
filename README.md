@@ -105,9 +105,8 @@ This library was initially built to support what was needed in [content_translat
 
 ### 1.0
 
+* [ ] Support takeover of jobs from a stopped VM.
 * [ ] Make the tests reliable.
-* [ ] Keep a single-vm-lock in redis with a timeout, release it on exit. Support takeover for killed vms.
-* [ ] Explore if a serialized erlang struct can be used by a codebase that does not have that module?
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Custom and infinite max_concurrency
