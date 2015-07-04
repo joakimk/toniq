@@ -93,6 +93,7 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Avoid running duplicate jobs due to polling and current setup
 * [ ] Review the code one more time
 * [ ] Licence and pull request instructions
+* [ ] Errors are reported
 
 ### 1.0
 
