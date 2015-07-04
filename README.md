@@ -89,7 +89,7 @@ As an example, say you wanted to record page hits in redis. By doing so in a bac
 Alternatively you can specify this for induvidual enqueue's:
 
 ```elixir
-    Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "user@example.com"], persist: false)
+    Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
 ```
 
 ## Will jobs be run in order?
