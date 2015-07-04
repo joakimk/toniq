@@ -24,7 +24,7 @@ Designed to:
   - To handle Erlang VM restarts and crashes without loosing jobs
   - To record failed jobs and be able to do manual retries or deletion
   - To be able to see status (iex for now, possible UI in the future)
-* Fail on the side of running a job too many times rather than not at all. See more info below.
+* Fail on the side of running a job too many times rather than not at all. See more on this below.
 
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
