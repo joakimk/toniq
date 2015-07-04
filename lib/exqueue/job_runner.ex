@@ -26,10 +26,12 @@ defmodule Exqueue.JobRunner do
 
   defp process_result({:job_was_successful, job}) do
     Exqueue.Peristance.mark_as_successful(job)
+    Exqueue.JobEvent.finished(job)
   end
 
   defp process_result({:job_has_failed, job, error}) do
     Exqueue.Peristance.mark_as_failed(job)
     Logger.error "Job ##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.opts)}) failed with error: #{inspect(error)}"
+    Exqueue.JobEvent.failed(job)
   end
 end

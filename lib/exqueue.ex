@@ -24,7 +24,8 @@ defmodule Exqueue do
 
     children = [
       worker(Exqueue.JobSubscriber, []),
-      worker(Exqueue.JobRunner, [])
+      worker(Exqueue.JobRunner, []),
+      worker(Exqueue.JobEvent, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

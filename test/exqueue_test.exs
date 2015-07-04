@@ -1,17 +1,6 @@
 defmodule ExqueueTest do
   use ExUnit.Case
-  import  ExUnit.CaptureIO
-
-  # Borrowed from elixir test helper, is built into elixir in master
-  def capture_log(level \\ :debug, fun) do
-    Logger.configure(level: level)
-    capture_io(:user, fn ->
-      fun.()
-      Logger.flush()
-    end)
-  after
-    Logger.configure(level: :debug)
-  end
+  import CaptureLog
 
   defmodule TestWorker do
     use Exqueue.Worker
@@ -22,9 +11,16 @@ defmodule ExqueueTest do
   end
 
   defmodule TestErrorWorker do
+    use Exqueue.Worker
+
     def perform(_arg) do
       raise "fail"
     end
+  end
+
+  setup do
+    Exqueue.JobEvent.subscribe
+    on_exit &Exqueue.JobEvent.unsubscribe/0
   end
 
   setup do
@@ -38,8 +34,8 @@ defmodule ExqueueTest do
     Exqueue.enqueue(TestWorker, data: 10)
 
     assert_receive { :job_has_been_run, number_was: 10 }, 1000
+    assert_receive { :finished, job }
 
-    wait_for_persistance_update
     assert Exqueue.Peristance.jobs == []
   end
 
@@ -53,7 +49,7 @@ defmodule ExqueueTest do
     logs = capture_log fn ->
       Exqueue.enqueue(TestErrorWorker, data: 10)
 
-      wait_for_persistance_update
+      assert_receive { :failed, job }
       assert Exqueue.Peristance.jobs == []
       assert Enum.count(Exqueue.Peristance.failed_jobs) == 1
       assert (Exqueue.Peristance.failed_jobs |> hd).worker == TestErrorWorker
@@ -61,14 +57,6 @@ defmodule ExqueueTest do
 
     assert logs =~ ~r/Job #\d: ExqueueTest.TestErrorWorker.perform\(\[data: 10\]\) failed with error: %RuntimeError{message: "fail"}/
   end
-
-  defp wait_for_persistance_update do
-    # Need to wait for the job to be marked as processed
-    # TODO: see if there is any way to know when a job fully processed
-    :timer.sleep 50
-  end
-
-  # TODO: avoid running duplicate jobs since the polling will continue to re-add them?
 
   #test "can enqueue job without arguments"
   #test "can pick up jobs previosly stored in redis"

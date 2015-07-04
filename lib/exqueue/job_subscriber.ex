@@ -48,6 +48,9 @@ defmodule Exqueue.JobSubscriber do
   end
 
   defp look_for_new_jobs do
+    # This is slightly inefficient if you get lots of unprocessed jobs queued up,
+    # but we'll fix that if it ever becomes an issue, until then we don't need to
+    # spend time on any challenges and issues that change would introduce.
     Exqueue.Peristance.jobs
     |> Enum.each &Exqueue.JobRunner.register_job/1
   end
