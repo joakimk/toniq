@@ -19,7 +19,7 @@ Designed to:
 * Automatically retry jobs a few times if they fail
 * Limit concurrency when needed (for e.g. API calls)
 * Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](https://github.com/joakimk/honeybadger))
-* Be able to disable persistance on a case-by-case basis if needed for speed (at the cost of reliability)
+* Disable persistance on a case-by-case basis if needed for speed (at the cost of reliability)
 * Use redis sparingly
   - To handle Erlang VM restarts and crashes without loosing jobs
   - To record failed jobs and be able to do manual retries or deletion
@@ -120,6 +120,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [ ] Add CI
 * [ ] Hex package
+* [ ] Update README to reflect what exists and remove readme-driven-development tag.
 
 ### Later
 
