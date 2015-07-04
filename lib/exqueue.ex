@@ -3,13 +3,6 @@ defmodule Exqueue do
 
   alias Exqueue.Peristance
 
-  def start_worker(worker_module) do
-    # start manager process and attach that to a supervisor
-    # Worker.add(worker_module)
-    #WorkerWatcher
-    #Worker
-  end
-
   def enqueue(worker_module, opts) do
     Peristance.store_job(worker_module, opts)
     Exqueue.PubSub.publish
