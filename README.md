@@ -85,7 +85,7 @@ You can set this by specifying the `persist` option on a worker.
 ```
 
 ```elixir
-      Toniq.enqueue(RecordPageHitWorker)
+    Toniq.enqueue(RecordPageHitWorker)
 ```
 
 Alternatively you can specify this for induvidual enqueue's:
