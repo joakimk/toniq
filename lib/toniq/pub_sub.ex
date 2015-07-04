@@ -1,4 +1,4 @@
-defmodule Exqueue.PubSub do
+defmodule Toniq.PubSub do
   def publish do
     Process.whereis(:redis)
     |> Exredis.query(["publish", redis_key, "1"])
@@ -30,7 +30,7 @@ defmodule Exqueue.PubSub do
   end
 
   defp redis_key do
-    "exqueue_job_added"
+    "toniq_job_added"
   end
 
   defp subscribe_redis do

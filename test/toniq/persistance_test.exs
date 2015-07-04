@@ -13,20 +13,20 @@ defmodule Exredis.PeristanceTest do
     # as we rely on exact numbers here, let's clean out redis
     Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
 
-    Exqueue.Peristance.store_job(SomeWorker, some: "data")
-    Exqueue.Peristance.store_job(SomeWorker, other: "data")
+    Toniq.Peristance.store_job(SomeWorker, some: "data")
+    Toniq.Peristance.store_job(SomeWorker, other: "data")
 
     job1 = %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] }
     job2 = %{ id: 2, worker: SomeWorker, opts: [ other: "data" ] }
 
-    assert Exqueue.Peristance.jobs == [job1, job2]
+    assert Toniq.Peristance.jobs == [job1, job2]
 
-    Exqueue.Peristance.mark_as_successful(job2)
+    Toniq.Peristance.mark_as_successful(job2)
 
-    assert Exqueue.Peristance.jobs == [job1]
+    assert Toniq.Peristance.jobs == [job1]
 
-    Exqueue.Peristance.mark_as_failed(job1)
-    assert Exqueue.Peristance.jobs == []
-    assert Exqueue.Peristance.failed_jobs == [job1]
+    Toniq.Peristance.mark_as_failed(job1)
+    assert Toniq.Peristance.jobs == []
+    assert Toniq.Peristance.failed_jobs == [job1]
   end
 end

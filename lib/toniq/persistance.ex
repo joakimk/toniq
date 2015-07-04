@@ -1,4 +1,4 @@
-defmodule Exqueue.Peristance do
+defmodule Toniq.Peristance do
   use Exredis.Api
 
   @doc """
@@ -47,7 +47,7 @@ defmodule Exqueue.Peristance do
   Subscribes to added jobs. The current process will receive :job_added when a job is added.
   """
   def subscribe_to_new_jobs do
-    Exqueue.PubSub.subscribe
+    Toniq.PubSub.subscribe
   end
 
   defp load_jobs(redis_key) do
@@ -62,15 +62,15 @@ defmodule Exqueue.Peristance do
   end
 
   defp jobs_key do
-    :exqueue_jobs
+    :toniq_jobs
   end
 
   defp failed_jobs_key do
-    :exqueue_failed_jobs
+    :toniq_failed_jobs
   end
 
   def counter_key do
-    :exqueue_last_job_id
+    :toniq_last_job_id
   end
 
   defp redis do

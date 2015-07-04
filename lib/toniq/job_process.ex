@@ -1,4 +1,4 @@
-defmodule Exqueue.JobProcess do
+defmodule Toniq.JobProcess do
   def run(job) do
     run_job_in_background(job)
 

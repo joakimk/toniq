@@ -2,7 +2,7 @@
 
 # TODO: not entierly sure how to test this yet besides the full integration test
 
-defmodule Exqueue.JobSubscriber do
+defmodule Toniq.JobSubscriber do
   use GenServer
 
   def start_link do
@@ -17,7 +17,7 @@ defmodule Exqueue.JobSubscriber do
 
   defp start_subscribing_for_jobs do
     Spawn.spawn_link_with_name :wait_for_new_jobs, fn ->
-      Exqueue.Peristance.subscribe_to_new_jobs
+      Toniq.Peristance.subscribe_to_new_jobs
       wait_for_new_jobs
     end
   end
@@ -50,7 +50,7 @@ defmodule Exqueue.JobSubscriber do
     # This is slightly inefficient if you get lots of unprocessed jobs queued up,
     # but we'll fix that if it ever becomes an issue, until then we don't need to
     # spend time on any challenges and issues that change would introduce.
-    Exqueue.Peristance.jobs
-    |> Enum.each &Exqueue.JobRunner.register_job/1
+    Toniq.Peristance.jobs
+    |> Enum.each &Toniq.JobRunner.register_job/1
   end
 end

@@ -1,4 +1,4 @@
-defmodule Exqueue.Worker do
+defmodule Toniq.Worker do
   defmacro __using__(opts \\ []) do
   end
 end

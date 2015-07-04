@@ -1,4 +1,4 @@
-defmodule Exqueue.JobEvent do
+defmodule Toniq.JobEvent do
   @moduledoc """
   Reports events from the job running lifecycle.
   """

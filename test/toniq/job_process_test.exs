@@ -1,8 +1,8 @@
-defmodule Exqueue.JobProcessTest do
+defmodule Toniq.JobProcessTest do
   use ExUnit.Case
 
   defmodule TestSuccessWorker do
-    use Exqueue.Worker
+    use Toniq.Worker
 
     def perform(_opts) do
     end
@@ -22,16 +22,16 @@ defmodule Exqueue.JobProcessTest do
 
   test "a successful job runs return {:job_was_successful, job}" do
     job = %{ worker: TestSuccessWorker, opts: [data: 10]}
-    assert Exqueue.JobProcess.run(job) == {:job_was_successful, job}
+    assert Toniq.JobProcess.run(job) == {:job_was_successful, job}
   end
 
   test "a job that raises an error returns {:job_has_failed, job, error}" do
     job = %{ worker: TestErrorWorker, opts: [data: 10]}
-    assert Exqueue.JobProcess.run(job) == {:job_has_failed, job, %RuntimeError{message: "fail"}}
+    assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %RuntimeError{message: "fail"}}
   end
 
   test "a job that crashes returns {:job_has_failed, job, error}" do
     job = %{ worker: TestCrashWorker, opts: [data: 10]}
-    assert Exqueue.JobProcess.run(job) == {:job_has_failed, job, %Exqueue.JobProcess.CrashError{message: "The job runner crashed. The reason that was given is: simulate an unknown error"}}
+    assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %Toniq.JobProcess.CrashError{message: "The job runner crashed. The reason that was given is: simulate an unknown error"}}
   end
 end

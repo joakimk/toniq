@@ -2,7 +2,7 @@
 
 **Status**: The core parts are there and jobs are run, but there is major bugs and missing features. See the todo list.
 
-Exqueue
+Toniq
 =======
 
 Simple and reliable background job library for [Elixir](http://elixir-lang.org/).
@@ -31,7 +31,7 @@ Define a worker:
 ```elixir
     defmodule SendEmailWorker do
       # concurrency: infinite by default. For API calls it's often useful to limit it.
-      use Exqueue.Worker, max_concurrency: 10
+      use Toniq.Worker, max_concurrency: 10
 
       def perform(to: to, title: title, text: text)
         # do work
@@ -42,7 +42,7 @@ Define a worker:
 Enqueue jobs somewhere in your app code:
 
 ```elixir
-    Exqueue.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
+      Toniq.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
 ```
 
 ## Will jobs be run in order?
@@ -109,7 +109,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
 * [ ] Errors will only be reported if retries fail.
-* [ ] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
+* [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [ ] Add CI
 * [ ] Hex package
 
@@ -118,8 +118,12 @@ This library was initially built to support what was needed in [content_translat
 * [ ] More complete testing of JobSubscriber
 * [ ] See if the pubsub can be made cleaner. Also support database numbers.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
-* [ ] Find out why :eredis_sub.controlling_process makes the entire app shutdown when killed (or any part of it's linked processes dies). "[info]  Application exqueue exited: shutdown". Would allow us to keep it linked.
+* [ ] Find out why :eredis_sub.controlling_process makes the entire app shutdown when killed (or any part of it's linked processes dies). "[info]  Application toniq exited: shutdown". Would allow us to keep it linked.
 
 ### Notes
 
 I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
+
+### Credits
+
+- The name toniq was thought up by [Henrik Nyh](https://github.com/henrik). The idea was synonym of elixir with a q for queue.

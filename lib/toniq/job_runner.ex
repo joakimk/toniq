@@ -1,4 +1,4 @@
-defmodule Exqueue.JobRunner do
+defmodule Toniq.JobRunner do
   use GenServer
   require Logger
 
@@ -21,16 +21,16 @@ defmodule Exqueue.JobRunner do
     {:noreply, state}
   end
 
-  defp run_job(job), do: Exqueue.JobProcess.run(job)
+  defp run_job(job), do: Toniq.JobProcess.run(job)
 
   defp process_result({:job_was_successful, job}) do
-    Exqueue.Peristance.mark_as_successful(job)
-    Exqueue.JobEvent.finished(job)
+    Toniq.Peristance.mark_as_successful(job)
+    Toniq.JobEvent.finished(job)
   end
 
   defp process_result({:job_has_failed, job, error}) do
-    Exqueue.Peristance.mark_as_failed(job)
+    Toniq.Peristance.mark_as_failed(job)
     Logger.error "Job ##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.opts)}) failed with error: #{inspect(error)}"
-    Exqueue.JobEvent.failed(job)
+    Toniq.JobEvent.failed(job)
   end
 end

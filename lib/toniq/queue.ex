@@ -1,6 +1,6 @@
 # Represents the queue of jobs in memory and how to load them from redis. For now there is only one.
 
-defmodule Exqueue.Queue do
+defmodule Toniq.Queue do
   use GenServer
 
   def register_job(worker_module, opts) do
