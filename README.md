@@ -84,11 +84,13 @@ defmodule RecordPageHitWorker do
 end
 ```
 
+And in the web request run:
+
 ```elixir
 Toniq.enqueue(RecordPageHitWorker)
 ```
 
-Alternatively you can specify this for induvidual enqueue's:
+Or you could specify it for induvidual enqueue's:
 
 ```elixir
 Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
