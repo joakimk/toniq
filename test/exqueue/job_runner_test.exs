@@ -36,5 +36,28 @@ defmodule Exqueue.JobRunnerTest do
     end
   end
 
+  # The job processor caught a gen_server message, didn't
+  # seem like a problem at the time. Don't do that :)
+  test "regression: can run two jobs in a row" do
+    job1 = %{ id: 1, worker: TestWorker, opts: :succeed }
+    job2 = %{ id: 2, worker: TestWorker, opts: :succeed }
+
+    Exqueue.JobRunner.register_job(job1)
+    Exqueue.JobRunner.register_job(job2)
+
+    assert_receive {:finished, job1}
+    assert_receive {:finished, job2}
+  end
+
+  #test "does not run the same job twice" do
+  #  job = %{ id: 1, worker: TestWorker, opts: :succeed }
+
+  #  Exqueue.JobRunner.register_job(job)
+  #  Exqueue.JobRunner.register_job(job)
+
+  #  assert_receive {:finished, job}
+  #  refute_receive {:finished, job}
+  #end
+
   # TODO: does not run the same job twice
 end

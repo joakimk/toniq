@@ -115,7 +115,6 @@ This library was initially built to support what was needed in [content_translat
 
 ### Later
 
-* [ ] Review if wait_for_result should catch all messages or not. A bit odd that it need to handle the gen_cast event.
 * [ ] More complete testing of JobSubscriber
 * [ ] See if the pubsub can be made cleaner. Also support database numbers.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.

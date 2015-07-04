@@ -34,10 +34,6 @@ defmodule Exqueue.JobProcess do
         |> wrap_in_crash_error
       {:failed_because_of_an_error, error} ->
         error
-      {:"$gen_cast", _} -> # Don't listen to GenServer events here
-        wait_for_result
-      other ->
-        raise "The job running process sent an unknown message: #{inspect(other)}"
     end
   end
 
