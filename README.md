@@ -51,6 +51,32 @@ Enqueue jobs somewhere in your app code:
       Toniq.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
 ```
 
+## Disabling persistance
+
+For jobs where speed is important or it does not matter if it's lost on app server restart.
+
+As an example, say you wanted to record page hits in redis. By doing so in a background job, you would not only respond quicker to the web request, but also handle temporary connection errors.
+
+```elixir
+    defmodule RecordPageHitWorker do
+      use Toniq.Worker, persist: false
+
+      def perform
+        # do work
+      end
+    end
+```
+
+```elixir
+      Toniq.enqueue(RecordPageHitWorker)
+```
+
+Alternatively you can specify this for induvidual enqueue's:
+
+```elixir
+    Toniq.enqueue(SendEmailJob, [subject: "5 minute reminder!", to: "user@example.com"], persist: false)
+```
+
 ## Will jobs be run in order?
 
 This is a first-in-first-out queue but due to retries and concurrency, ordering can not be guaranteed.
