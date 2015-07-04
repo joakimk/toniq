@@ -3,7 +3,7 @@ defmodule Spawn do
   Spawns a linked process with a name. Useful to have if you want a well named process tree in :observer.start.
   """
   def spawn_link_with_name(name, function) do
-    Process.whereis(:wait_for_redis_messages)
+    Process.whereis(name)
     |> spawn_link_with_name(name, function)
   end
 
