@@ -5,14 +5,14 @@
 Toniq
 =======
 
-Simple and reliable background job library for [Elixir](http://elixir-lang.org/).
+Simple, reliable and fast background job library for [Elixir](http://elixir-lang.org/).
 
-Just like [Phoenix](http://www.phoenixframework.org/), Toniq does not make you choose between productivity and speed.
+Just like [Phoenix](http://www.phoenixframework.org/), this library does not make you choose between productivity and speed.
 
 This job queue is designed to:
 
 * Be very easy to use
-  - Even easier than Ruby libraries like Resque and Sidekiq. No separate workers. No JSON conversion.
+  - Unlike many other libraries, there is no separate workers and no JSON conversion of arguments.
 * Play to Erlang's strengths
   - One job is one Erlang process. 100k+ concurrent processes on one computer is not unusual.
   - Run jobs within the VM that enqueued it (for speed and simplicity)
