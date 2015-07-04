@@ -3,12 +3,11 @@ defmodule Exqueue.JobRunner do
   require Logger
 
   def start_link do
-    GenServer.start_link(__MODULE__, [], name: :job_runner)
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
   def register_job(job) do
-    Process.whereis(:job_runner)
-    |> GenServer.cast({:register_job, job})
+    GenServer.cast(__MODULE__, {:register_job, job})
   end
 
   def handle_cast({:register_job, job}, state) do

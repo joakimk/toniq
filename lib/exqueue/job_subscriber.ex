@@ -6,7 +6,7 @@ defmodule Exqueue.JobSubscriber do
   use GenServer
 
   def start_link do
-    GenServer.start_link(__MODULE__, [], name: :job_subscriber)
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
   def init(args) do
@@ -29,8 +29,7 @@ defmodule Exqueue.JobSubscriber do
   defp wait_for_new_jobs do
     receive do
       :job_added ->
-        Process.whereis(:job_subscriber)
-        |> GenServer.cast(:job_added)
+        GenServer.cast(__MODULE__, :job_added)
     end
 
     wait_for_new_jobs
