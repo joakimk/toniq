@@ -49,6 +49,18 @@ defmodule Exqueue.JobRunnerTest do
     assert_receive {:finished, job2}
   end
 
+  # Don't know how to do this propertly yet. Just keeping a list
+  # of all jobs that has been run ever is not a good idea,
+  # even if that would work.
+  #
+  # removing items from that list as they are finished is not good enough
+  # because the subscriber could have added the same job twice before that...
+  #
+  # maybe if the subscriber never adds the same job twice, but then that
+  # process needs to keep state and it's unreliable
+  #
+  # in short: don't know how yet
+
   #test "does not run the same job twice" do
   #  job = %{ id: 1, worker: TestWorker, opts: :succeed }
 
