@@ -68,7 +68,7 @@ end
 
 ## Disabling persistance
 
-For jobs where speed is important or it does not matter if it's lost on app server restart.
+For jobs where speed is important and it does not matter if it's lost on app server restart.
 
 As an example, say you wanted to record page hits in redis. By doing so in a background job, you would not only respond quicker to the web request, but also handle temporary connection errors.
 
