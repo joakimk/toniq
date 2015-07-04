@@ -35,19 +35,19 @@ If **anything is unclear** about how this library works **that's considered a bu
 Define a worker:
 
 ```elixir
-    defmodule SendEmailWorker do
-      use Toniq.Worker
+defmodule SendEmailWorker do
+  use Toniq.Worker
 
-      def perform(to: to, title: title, text: text)
-        # do work
-      end
-    end
+  def perform(to: to, title: title, text: text)
+    # do work
+  end
+end
 ```
 
 Enqueue jobs somewhere in your app code:
 
 ```elixir
-      Toniq.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
+Toniq.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
 ```
 
 ## Limiting concurrency
@@ -57,13 +57,13 @@ For some workers you might want to limit the number of jobs that run at the same
 You can set this by specifying the `max_concurrency` option on a worker.
 
 ```elixir
-    defmodule RegisterArtistWorker do
-      use Toniq.Worker, max_concurrency: 10
+defmodule RegisterArtistWorker do
+  use Toniq.Worker, max_concurrency: 10
 
-      def perform(artist_attributes)
-        # do work
-      end
-    end
+  def perform(artist_attributes)
+    # do work
+  end
+end
 ```
 
 ## Disabling persistance
@@ -75,23 +75,23 @@ As an example, say you wanted to record page hits in redis. By doing so in a bac
 You can set this by specifying the `persist` option on a worker.
 
 ```elixir
-    defmodule RecordPageHitWorker do
-      use Toniq.Worker, persist: false
+defmodule RecordPageHitWorker do
+  use Toniq.Worker, persist: false
 
-      def perform
-        # do work
-      end
-    end
+  def perform
+    # do work
+  end
+end
 ```
 
 ```elixir
-    Toniq.enqueue(RecordPageHitWorker)
+Toniq.enqueue(RecordPageHitWorker)
 ```
 
 Alternatively you can specify this for induvidual enqueue's:
 
 ```elixir
-    Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
+Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
 ```
 
 ## Will jobs be run in order?
