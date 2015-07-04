@@ -12,7 +12,9 @@ Just like [Phoenix](http://www.phoenixframework.org/), this library does not mak
 Designed to:
 
 * Be very easy to use
-  - Unlike many other libraries, there is no separate workers and no JSON conversion of arguments.
+  - Just define a worker and enqueue jobs
+* Pass job arguments to the worker exactly as they where enqueued
+  - No JSON conversion of arguments
 * Play to Erlang's strengths
   - One job is one Erlang process. 100k concurrent processes on one computer is not unusual.
 * Run jobs within the VM that enqueued it when possible
