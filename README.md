@@ -15,7 +15,7 @@ Designed to:
   - Unlike many other libraries, there is no separate workers and no JSON conversion of arguments.
 * Play to Erlang's strengths
   - One job is one Erlang process. 100k concurrent processes on one computer is not unusual.
-* Run jobs within the VM that enqueued it
+* Run jobs within the VM that enqueued it when possible
 * Automatically retry jobs a few times if they fail
 * Limit concurrency when needed (for e.g. API calls)
 * Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](https://github.com/joakimk/honeybadger))
