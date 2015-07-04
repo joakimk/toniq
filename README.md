@@ -59,7 +59,7 @@ This is a first-in-first-out queue but due to retries and concurrency, ordering 
 
 Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
 
-## If an Erlang VM stops and not all jobs are processed, how is those jobs handled?
+## If an Erlang VM stops and not all jobs are processed, how are those jobs handled?
 
 As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so),
 so that the original VM has a chance to report in and retain it's jobs.
