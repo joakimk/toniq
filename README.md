@@ -107,7 +107,7 @@ This library was initially built to support what was needed in [content_translat
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
-* [x] Errors will only be reported if retries fail.
+* [ ] Errors will only be reported if retries fail.
 * [ ] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [ ] Add CI
 * [ ] Hex package
