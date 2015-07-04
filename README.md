@@ -7,18 +7,24 @@ Toniq
 
 Simple and reliable background job library for [Elixir](http://elixir-lang.org/).
 
+Just like [Phoenix](http://www.phoenixframework.org/), Toniq does not make you choose between productivity and speed.
+
 This job queue is designed to:
 
 * Be very easy to use
+  - Even easier than Ruby libraries like Resque and Sidekiq. No separate workers. No JSON conversion.
+* Play to Erlang's strengths
+  - One job is one Erlang process. 100k+ concurrent processes on one computer is not unusual.
+  - Run jobs within the VM that enqueued it (for speed and simplicity)
 * Automatically retry jobs a few times if they fail
 * Limit concurrency when needed (for e.g. API calls)
 * Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](https://github.com/joakimk/honeybadger))
-* Be able to retry or delete jobs manually
-* Be able to see status by checking redis (iex for now, possible UI in the future)
-* Handle app server restarts or crashes without loosing job data
+* Be able to disable persistance on a case-by-case basis if needed for speed (at the cost of reliability)
+* Use redis sparingly
+  - To handle Erlang VM restarts and crashes without loosing jobs
+  - To record failed jobs to be able to do manual retries or deletion
+  - To be able to see status (iex for now, possible UI in the future)
 * Fail on the side of running a job too many times rather than not at all. See more info below.
-
-Currently limited to running jobs within a single erlang VM at a time for simplicity, though there is no reason it has to work that way in the future.
 
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq).
 
@@ -49,15 +55,16 @@ Enqueue jobs somewhere in your app code:
 
 This is a first-in-first-out queue but due to retries and concurrency, ordering can not be guaranteed.
 
-## How are jobs serialized?
+## How are jobs serialized when stored in redis?
 
 Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
 
-## Can jobs be run on multiple computers at the same time?
+## If an Erlang VM stops and not all jobs are processed, how is those jobs handled?
 
-No, but running multiple erlang vms on the same or different computers talking to the same redis server does not cause any unexpected behavior.
+As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so),
+so that the original VM has a chance to report in and retain it's jobs.
 
-If the VM that runs jobs is killed, another one will try to take over.
+This is the only place where locking is used in redis. It is used to ensure that only one Erlang VM picks up jobs from a stopped one.
 
 ## Why will jobs be run more than once in rare cases?
 
@@ -90,10 +97,11 @@ This library was initially built to support what was needed in [content_translat
 * [x] Will only mark a job as done if it exits successfully
 * [x] Be able to mark jobs as failed
 * [x] Limit concurrency to 1 by default
+* [x] Errors are reported
+* [ ] Rewrite the job handling according to the new design ideas (should be much simpler, no PubSub, etc)
 * [ ] Avoid running duplicate jobs due to polling and current setup
 * [ ] Review the code one more time
 * [ ] Licence and pull request instructions
-* [x] Errors are reported
 
 ### 1.0
 
@@ -119,6 +127,9 @@ This library was initially built to support what was needed in [content_translat
 * [ ] See if the pubsub can be made cleaner. Also support database numbers.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
 * [ ] Find out why :eredis_sub.controlling_process makes the entire app shutdown when killed (or any part of it's linked processes dies). "[info]  Application toniq exited: shutdown". Would allow us to keep it linked.
+* [ ] Support different enqueue strategies on a per-worker or per-enqueue basis
+  - [ ] Delayed persistance: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
+  - [ ] No persistance: fastest. Run the job right away. If the VM is stopped jobs may be lost.
 
 ### Notes
 
