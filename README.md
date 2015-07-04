@@ -36,8 +36,7 @@ Define a worker:
 
 ```elixir
     defmodule SendEmailWorker do
-      # concurrency: infinite by default. For API calls it's often useful to limit it.
-      use Toniq.Worker, max_concurrency: 10
+      use Toniq.Worker
 
       def perform(to: to, title: title, text: text)
         # do work
@@ -49,6 +48,22 @@ Enqueue jobs somewhere in your app code:
 
 ```elixir
       Toniq.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
+```
+
+## Limiting concurrency
+
+For some workers you might want to limit the number of jobs that run at the same time. For example, if you call out to a API, you most likely don't want more than 3-10 connections at once.
+
+You can set this by specifying the `max_concurrency` option on a worker.
+
+```elixir
+    defmodule RegisterArtistWorker do
+      use Toniq.Worker, max_concurrency: 10
+
+      def perform(artist_attributes)
+        # do work
+      end
+    end
 ```
 
 ## Disabling persistance
@@ -74,7 +89,7 @@ As an example, say you wanted to record page hits in redis. By doing so in a bac
 Alternatively you can specify this for induvidual enqueue's:
 
 ```elixir
-    Toniq.enqueue(SendEmailJob, [subject: "5 minute reminder!", to: "user@example.com"], persist: false)
+    Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "user@example.com"], persist: false)
 ```
 
 ## Will jobs be run in order?
