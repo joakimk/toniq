@@ -19,10 +19,14 @@ defmodule Exredis.PeristanceTest do
     job1 = %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] }
     job2 = %{ id: 2, worker: SomeWorker, opts: [ other: "data" ] }
 
-    assert Exqueue.Peristance.jobs == [ job1, job2 ]
+    assert Exqueue.Peristance.jobs == [job1, job2]
 
-    Exqueue.Peristance.mark_as_finished(job2)
+    Exqueue.Peristance.mark_as_successful(job2)
 
-    assert Exqueue.Peristance.jobs == [ job1 ]
+    assert Exqueue.Peristance.jobs == [job1]
+
+    Exqueue.Peristance.mark_as_failed(job1)
+    assert Exqueue.Peristance.jobs == []
+    assert Exqueue.Peristance.failed_jobs == [job1]
   end
 end

@@ -24,7 +24,7 @@ defmodule Exqueue.Peristance do
   @doc """
   Marks a job as finished. This means that it's deleted from redis.
   """
-  def mark_as_finished(job) do
+  def mark_as_successful(job) do
     redis
     |> hdel(jobs_key, job.id)
   end

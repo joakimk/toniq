@@ -20,18 +20,18 @@ defmodule Exqueue.JobRunnerTest do
     end
   end
 
-  test "a successful job runs return {:mark_as_finished, job}" do
+  test "a successful job runs return {:job_was_successful, job}" do
     job = %{ worker: TestSuccessWorker, opts: [data: 10]}
-    assert Exqueue.JobRunner.run_job(job) == {:mark_as_finished, job}
+    assert Exqueue.JobRunner.run_job(job) == {:job_was_successful, job}
   end
 
-  test "a job that raises an error returns {:mark_as_failed, job}" do
+  test "a job that raises an error returns {:job_has_failed, job, error}" do
     job = %{ worker: TestErrorWorker, opts: [data: 10]}
-    assert Exqueue.JobRunner.run_job(job) == {:mark_as_failed, job}
+    assert Exqueue.JobRunner.run_job(job) == {:job_has_failed, job, %RuntimeError{message: "fail"}}
   end
 
-  test "a job that crashes returns {:mark_as_failed, job}" do
+  test "a job that crashes returns {:job_has_failed, job, error}" do
     job = %{ worker: TestCrashWorker, opts: [data: 10]}
-    assert Exqueue.JobRunner.run_job(job) == {:mark_as_failed, job}
+    assert Exqueue.JobRunner.run_job(job) == {:job_has_failed, job, %Exqueue.JobRunner.ProcessCrashError{message: "The job runner crashed. The reason that was given is: simulate an unknown error"}}
   end
 end
