@@ -38,7 +38,7 @@ Define a worker:
 defmodule SendEmailWorker do
   use Toniq.Worker
 
-  def perform(to: to, title: title, text: text)
+  def perform(to: to, subject: title, body: body)
     # do work
   end
 end
@@ -47,7 +47,7 @@ end
 Enqueue jobs somewhere in your app code:
 
 ```elixir
-Toniq.enqueue(SendEmailWorker, to: "info@example.com", title: "Hello", text: "Hello, there!")
+Toniq.enqueue(SendEmailWorker, to: "info@example.com", subject: "Hello", body: "Hello, there!")
 ```
 
 ## Limiting concurrency
