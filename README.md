@@ -72,6 +72,8 @@ For jobs where speed is important or it does not matter if it's lost on app serv
 
 As an example, say you wanted to record page hits in redis. By doing so in a background job, you would not only respond quicker to the web request, but also handle temporary connection errors.
 
+You can set this by specifying the `persist` option on a worker.
+
 ```elixir
     defmodule RecordPageHitWorker do
       use Toniq.Worker, persist: false
