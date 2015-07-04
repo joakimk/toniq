@@ -5,7 +5,7 @@
 Toniq
 =======
 
-Simple, reliable and fast background job library for [Elixir](http://elixir-lang.org/).
+Simple and reliable background job library for [Elixir](http://elixir-lang.org/).
 
 Just like [Phoenix](http://www.phoenixframework.org/), this library does not make you choose between productivity and speed.
 
