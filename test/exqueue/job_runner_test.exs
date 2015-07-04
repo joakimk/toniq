@@ -61,6 +61,9 @@ defmodule Exqueue.JobRunnerTest do
   #
   # in short: don't know how yet
 
+  # the JobRunner is just as unreliable since it calls
+  # to the Peristance in-process
+
   #test "does not run the same job twice" do
   #  job = %{ id: 1, worker: TestWorker, opts: :succeed }
 
