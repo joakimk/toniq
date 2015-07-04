@@ -1,5 +1,17 @@
 defmodule ExqueueTest do
   use ExUnit.Case
+  import  ExUnit.CaptureIO
+
+  # Borrowed from elixir test helper, is built into elixir in master
+  def capture_log(level \\ :debug, fun) do
+    Logger.configure(level: level)
+    capture_io(:user, fn ->
+      fun.()
+      Logger.flush()
+    end)
+  after
+    Logger.configure(level: :debug)
+  end
 
   defmodule TestWorker do
     use Exqueue.Worker
@@ -38,12 +50,16 @@ defmodule ExqueueTest do
   end
 
   test "failing jobs are removed from the regular job list and stored in a failed jobs list" do
-    Exqueue.enqueue(TestErrorWorker, data: 10)
+    logs = capture_log fn ->
+      Exqueue.enqueue(TestErrorWorker, data: 10)
 
-    wait_for_persistance_update
-    assert Exqueue.Peristance.jobs == []
-    assert Enum.count(Exqueue.Peristance.failed_jobs) == 1
-    assert (Exqueue.Peristance.failed_jobs |> hd).worker == TestErrorWorker
+      wait_for_persistance_update
+      assert Exqueue.Peristance.jobs == []
+      assert Enum.count(Exqueue.Peristance.failed_jobs) == 1
+      assert (Exqueue.Peristance.failed_jobs |> hd).worker == TestErrorWorker
+    end
+
+    assert logs =~ ~r/Job #\d: ExqueueTest.TestErrorWorker.perform\(\[data: 10\]\) failed with error: %RuntimeError{message: "fail"}/
   end
 
   defp wait_for_persistance_update do

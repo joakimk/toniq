@@ -1,5 +1,6 @@
 defmodule Exqueue.JobRunner do
   use GenServer
+  require Logger
 
   def start_link do
     GenServer.start_link(__MODULE__, [], name: :job_runner)
@@ -29,6 +30,6 @@ defmodule Exqueue.JobRunner do
 
   defp process_result({:job_has_failed, job, error}) do
     Exqueue.Peristance.mark_as_failed(job)
-    IO.inspect "TODO: Report error: #{inspect(error)} for job #{inspect(job)}"
+    Logger.error "Job ##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.opts)}) failed with error: #{inspect(error)}"
   end
 end
