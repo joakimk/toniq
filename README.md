@@ -1,4 +1,4 @@
-# NOTE: Readme driven development below, this means this tool does not nessesaraly do what it says below yet.
+# NOTE: Readme driven development below, this means this tool does not necessarily do what it says below yet.
 
 **Status**: The core parts are there and jobs are run, but only one at a time, and there are missing features. See the todo list.
 
@@ -18,7 +18,7 @@ Designed to:
   - 100k concurrent processes on one computer is not unusual
 * Automatically retry jobs that fail
 * Limit concurrency when requested
-* Skip persistance when requested
+* Skip persistence when requested
 * Notify about errors through [Logger](http://elixir-lang.org/docs/v1.0/logger/Logger.html)
   - Can be passed on to services like [honeybadger](https://github.com/joakimk/honeybadger)
 * Use redis sparingly
@@ -40,7 +40,7 @@ Define a worker:
 defmodule SendEmailWorker do
   use Toniq.Worker
 
-  def perform(to: to, subject: title, body: body)
+  def perform(to: to, subject: title, body: body) do
     # do work
   end
 end
@@ -92,13 +92,13 @@ You can set this by specifying the `max_concurrency` option on a worker.
 defmodule RegisterArtistWorker do
   use Toniq.Worker, max_concurrency: 10
 
-  def perform(artist_attributes)
+  def perform(artist_attributes) do
     # do work
   end
 end
 ```
 
-## Skipping persistance
+## Skipping persistence
 
 For jobs where speed is important and it does not matter if it's lost on app server restart.
 
@@ -110,7 +110,7 @@ You can set this by specifying the `persist` option on a worker.
 defmodule RecordPageHitWorker do
   use Toniq.Worker, persist: false
 
-  def perform
+  def perform do
     # do work
   end
 end
@@ -198,11 +198,11 @@ This library was initially built to support what was needed in [content_translat
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
-  
+
 ### Speed
 
 * [ ] Custom and infinite max\_concurrency
-* [ ] Be able to skip persistance
+* [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 
 ### 1.0
@@ -215,11 +215,11 @@ This library was initially built to support what was needed in [content_translat
 
 ### Later
 
-* [ ] Be able to run without any persistance if none is needed?
+* [ ] Be able to run without any persistence if none is needed?
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
 * [ ] Support different enqueue strategies on a per-worker or per-enqueue basis
-  - [ ] Delayed persistance: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
-  - [ ] No persistance: fastest. Run the job right away. If the VM is stopped jobs may be lost.
+  - [ ] Delayed persistence: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
+  - [ ] No persistence: fastest. Run the job right away. If the VM is stopped jobs may be lost.
 * [ ] Add timeouts for jobs (if anyone needs it). Should be fairly easy.
 
 ### Notes
