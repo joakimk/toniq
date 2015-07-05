@@ -157,6 +157,7 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Custom and infinite max_concurrency
+* [ ] Be able to skip persistance
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
@@ -166,6 +167,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [ ] Add CI
 * [ ] Hex package
+* [ ] Simple benchmark to see if it behaves as expected in different modes
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
 
 ### Later
