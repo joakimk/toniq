@@ -12,14 +12,15 @@ Just like [Phoenix](http://www.phoenixframework.org/), this library does not mak
 Designed to:
 
 * Be very easy to use. Just define a worker and enqueue jobs!
-* Pass arguments to the worker exactly as they where enqueued. No JSON conversion of arguments.
+* Pass arguments to the worker exactly as they where enqueued, no JSON conversion
 * Play to Erlang's strengths
   - One job is one Erlang process
   - 100k concurrent processes on one computer is not unusual
-* Automatically retry jobs a few times if they fail
-* Limit concurrency when needed (for e.g. API calls)
-* Notify about errors (by `Logger` errors, which can then be sent to services like [honeybadger](https://github.com/joakimk/honeybadger))
-* Disable persistance on a case-by-case basis if needed for speed (at the cost of reliability)
+* Automatically retry jobs that fail
+* Limit concurrency when requested
+* Disable persistance when requested
+* Notify about errors through [Logger](http://elixir-lang.org/docs/v1.0/logger/Logger.html)
+  - Can be passed on to services like [honeybadger](https://github.com/joakimk/honeybadger)
 * Use redis sparingly
   - To handle Erlang VM restarts and crashes without loosing jobs
   - To record failed jobs and be able to do manual retries or deletion
