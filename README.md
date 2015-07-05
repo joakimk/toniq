@@ -167,6 +167,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [ ] Add CI
 * [ ] Hex package
+* [ ] Add installation instructions
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
 
