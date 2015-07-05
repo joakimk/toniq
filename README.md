@@ -175,6 +175,7 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Support different enqueue strategies on a per-worker or per-enqueue basis
   - [ ] Delayed persistance: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
   - [ ] No persistance: fastest. Run the job right away. If the VM is stopped jobs may be lost.
+* [ ] Add timeouts for jobs (if anyone needs it). Should be fairly easy.
 
 ### Notes
 
