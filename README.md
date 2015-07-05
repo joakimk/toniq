@@ -192,16 +192,16 @@ This library was initially built to support what was needed in [content_translat
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [x] Make the tests reliable.
 * [x] Readable error message when redis isn't present
-* [ ] Safe takeover of jobs
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
   - Simple solution: get the pid from a helper class, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
+* [ ] Safe takeover of jobs
+* [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the takeover feature
+* [ ] Look though every GenServer, ensure there is a plan for not loosing data when they crash
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
-* [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the takeover feature
-* [ ] Look though every GenServer, ensure there is a plan for not loosing data when they crash
-
+  - 
 ### Speed
 
 * [ ] Custom and infinite max\_concurrency
