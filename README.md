@@ -184,7 +184,7 @@ This library was initially built to support what was needed in [content_translat
 ### 1.0
 
 * [x] Support takeover of jobs from a stopped VM.
-* [ ] Support jobs without arguments
+* [x] Support jobs without arguments
 * [ ] Safe takeover of jobs
 * [x] Make the tests reliable.
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker

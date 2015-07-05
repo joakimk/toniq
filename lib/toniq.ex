@@ -18,7 +18,7 @@ defmodule Toniq do
   @doc """
   Enqueue job to be run in the background as soon as possible
   """
-  def enqueue(worker_module, opts) do
+  def enqueue(worker_module, opts \\ []) do
     Toniq.Peristance.store_job(worker_module, opts)
     |> Toniq.JobRunner.register_job
   end

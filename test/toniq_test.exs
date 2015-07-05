@@ -18,6 +18,13 @@ defmodule ToniqTest do
     end
   end
 
+  defmodule TestNoArgumentsWorker do
+    use Toniq.Worker
+
+    def perform do
+    end
+  end
+
   setup do
     Toniq.JobEvent.subscribe
     on_exit &Toniq.JobEvent.unsubscribe/0
@@ -61,6 +68,8 @@ defmodule ToniqTest do
     assert_receive { :job_has_been_run, number_was: 10 }, 1000
   end
 
-  #test "can enqueue job without arguments"
-  #test "can pick up jobs previosly stored in redis"
+  test "can run jobs without arguments" do
+    job = Toniq.enqueue(TestNoArgumentsWorker)
+    assert_receive { :finished, ^job }
+  end
 end
