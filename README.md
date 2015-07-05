@@ -202,6 +202,7 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Add installation instructions
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
+* [ ] MAYBE: Better error for arity bugs on `perform` since that will be common
 
 ### Later
 
