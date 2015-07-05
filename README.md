@@ -182,29 +182,35 @@ This library was initially built to support what was needed in [content_translat
 * [x] Review the code one more time
 * [x] Licence and pull request instructions
 
-### 1.0
+### Safety and reliability
 
 * [x] Support takeover of jobs from a stopped VM.
 * [x] Support jobs without arguments
-* [ ] Safe takeover of jobs
-* [x] Make the tests reliable.
-* [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
-* [ ] Verify that enqueue worked, it may return a no connection error
-* [ ] Custom and infinite max\_concurrency
-* [ ] Be able to skip persistance
-* Retries
-  - [ ] A failed job will be automatically retried with a delay between each.
-  - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
 * [x] Errors will only be reported if retries fail
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
+* [x] Make the tests reliable.
+* [x] Readable error message when redis isn't present
+* [ ] Safe takeover of jobs
+* [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
+* [ ] Verify that enqueue worked, it may return a no connection error
+* Retries
+  - [ ] A failed job will be automatically retried with a delay between each.
+  - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
+  
+### Speed
+
+* [ ] Custom and infinite max\_concurrency
+* [ ] Be able to skip persistance
+* [ ] Simple benchmark to see if it behaves as expected in different modes
+
+### 1.0
+
 * [ ] Add CI
 * [ ] Hex package
 * [ ] Add installation instructions
-* [ ] Simple benchmark to see if it behaves as expected in different modes
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
-* [x] Readable error message when redis isn't present
 * [ ] MAYBE: Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
 
 ### Later
