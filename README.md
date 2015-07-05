@@ -202,6 +202,7 @@ This library was initially built to support what was needed in [content_translat
 ### Speed
 
 * [ ] Custom and infinite max\_concurrency
+  - Probably only enforced on a VM-level. Two vms of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
 * [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 
