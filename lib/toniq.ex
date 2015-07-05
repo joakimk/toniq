@@ -80,14 +80,14 @@ defmodule Toniq do
 
     Could not connect to redis.
 
-    The error was: \"#{inspect(error)}\"
+    The error was: "#{inspect(error)}"
 
     Some things you could check:
     * Is the redis server running?
 
     * Did you set Mix.Config in your app?
       Example:
-      config :toniq, redis_url: \"redis://localhost:6379/0\"
+      config :toniq, redis_url: "redis://localhost:6379/0"
 
     * Is the current redis_url (#{redis_url}) correct?
     """
