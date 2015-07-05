@@ -201,7 +201,7 @@ This library was initially built to support what was needed in [content_translat
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
-  - 
+
 ### Speed
 
 * [ ] Custom and infinite max\_concurrency
