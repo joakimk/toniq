@@ -64,13 +64,41 @@ defmodule Toniq do
     # but will look into this more later.
     #
     # https://github.com/wooga/eredis#reconnecting-on-redis-down--network-failure--timeout--etc
-    Application.get_env(:toniq, :redis_url)
+    redis_url
     |> Exredis.start_using_connection_string
-    |> Process.register(:toniq_redis)
+    |> register_redis
 
     # TODO: do this in a cleaner way, preferabbly after each redis test
     if Mix.env == :test do
       Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
     end
+  end
+
+  defp register_redis({:connection_error, error}) do
+    raise """
+
+
+    Could not connect to redis.
+
+    The error was: \"#{inspect(error)}\"
+
+    Some things you could check:
+    * Is the redis server running?
+
+    * Did you set Mix.Config in your app?
+      Example:
+      config :toniq, redis_url: \"redis://localhost:6379/0\"
+
+    * Is the current redis_url (#{redis_url}) correct?
+    """
+  end
+
+  defp register_redis(pid) do
+    pid
+    |> Process.register(:toniq_redis)
+  end
+
+  defp redis_url do
+    Application.get_env(:toniq, :redis_url)
   end
 end

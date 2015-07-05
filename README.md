@@ -203,7 +203,7 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Add installation instructions
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
-* [ ] Readable error message when redis isn't present
+* [x] Readable error message when redis isn't present
 * [ ] MAYBE: Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
 
 ### Later
