@@ -127,22 +127,24 @@ Or you could specify it for induvidual enqueue's:
 Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
 ```
 
-## Will jobs be run in order?
+## FAQ
+
+### Will jobs be run in order?
 
 This is a first-in-first-out queue but due to retries and concurrency, ordering can not be guaranteed.
 
-## How are jobs serialized when stored in redis?
+### How are jobs serialized when stored in redis?
 
 Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
 
-## If an Erlang VM stops and not all jobs are processed, how are those jobs handled?
+### If an Erlang VM stops and not all jobs are processed, how are those jobs handled?
 
 As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so),
 so that the original VM has a chance to report in and retain it's jobs.
 
 This is the only place where locking is used in redis. It is used to ensure that only one Erlang VM picks up jobs from a stopped one.
 
-## Why will jobs be run more than once in rare cases?
+### Why will jobs be run more than once in rare cases?
 
 If something really unexpected happens and a job can't be marked as finished after being run, this library prefers to run it twice (or more) rather than not at all.
 
