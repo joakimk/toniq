@@ -194,6 +194,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Readable error message when redis isn't present
 * [ ] Safe takeover of jobs
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
+  - Simple solution: get the pid from a helper class, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
