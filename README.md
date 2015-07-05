@@ -144,15 +144,16 @@ This library was initially built to support what was needed in [content_translat
 * [x] Be able to mark jobs as failed
 * [x] Limit concurrency to 1 by default
 * [x] Errors are reported
-* [ ] Rewrite the job handling according to the new design ideas (should be much simpler, no PubSub, etc)
-* [ ] Avoid running duplicate jobs due to polling and current setup
+* [x] Rewrite the job handling according to the new design ideas (should be much simpler, no PubSub, etc)
+* [x] Avoid running duplicate jobs due to polling and current setup
 * [ ] Review the code one more time
 * [ ] Licence and pull request instructions
 
 ### 1.0
 
-* [ ] Support takeover of jobs from a stopped VM.
-* [ ] Make the tests reliable.
+* [x] Support takeover of jobs from a stopped VM.
+* [ ] Safe takeover of jobs
+* [x] Make the tests reliable.
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Custom and infinite max_concurrency
@@ -161,7 +162,7 @@ This library was initially built to support what was needed in [content_translat
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistance abstract, don't assume redis
-* [ ] Errors will only be reported if retries fail.
+* [x] Errors will only be reported if retries fail
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [ ] Add CI
 * [ ] Hex package
@@ -169,10 +170,7 @@ This library was initially built to support what was needed in [content_translat
 
 ### Later
 
-* [ ] More complete testing of JobSubscriber
-* [ ] See if the pubsub can be made cleaner. Also support database numbers.
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
-* [ ] Find out why :eredis_sub.controlling_process makes the entire app shutdown when killed (or any part of it's linked processes dies). "[info]  Application toniq exited: shutdown". Would allow us to keep it linked.
 * [ ] Support different enqueue strategies on a per-worker or per-enqueue basis
   - [ ] Delayed persistance: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
   - [ ] No persistance: fastest. Run the job right away. If the VM is stopped jobs may be lost.

@@ -8,6 +8,7 @@ defmodule Toniq.JobRunner do
 
   def register_job(job) do
     GenServer.cast(__MODULE__, {:register_job, job})
+    job
   end
 
   def handle_cast({:register_job, job}, state) do

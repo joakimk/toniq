@@ -31,19 +31,19 @@ defmodule ToniqTest do
   test "running jobs" do
     Process.register(self, :toniq_test)
 
-    Toniq.enqueue(TestWorker, data: 10)
+    job = Toniq.enqueue(TestWorker, data: 10)
 
     assert_receive { :job_has_been_run, number_was: 10 }, 1000
-    assert_receive { :finished, job }
+    assert_receive { :finished, ^job }
 
     assert Toniq.Peristance.jobs == []
   end
 
   test "failing jobs are removed from the regular job list and stored in a failed jobs list" do
     logs = capture_log fn ->
-      Toniq.enqueue(TestErrorWorker, data: 10)
+      job = Toniq.enqueue(TestErrorWorker, data: 10)
 
-      assert_receive { :failed, job }
+      assert_receive { :failed, ^job }
       assert Toniq.Peristance.jobs == []
       assert Enum.count(Toniq.Peristance.failed_jobs) == 1
       assert (Toniq.Peristance.failed_jobs |> hd).worker == TestErrorWorker

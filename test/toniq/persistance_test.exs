@@ -13,11 +13,8 @@ defmodule Exredis.PeristanceTest do
     # as we rely on exact numbers here, let's clean out redis
     Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
 
-    Toniq.Peristance.store_job(SomeWorker, some: "data")
-    Toniq.Peristance.store_job(SomeWorker, other: "data")
-
-    job1 = %{ id: 1, worker: SomeWorker, opts: [ some: "data" ] }
-    job2 = %{ id: 2, worker: SomeWorker, opts: [ other: "data" ] }
+    job1 = Toniq.Peristance.store_job(SomeWorker, some: "data")
+    job2 = Toniq.Peristance.store_job(SomeWorker, other: "data")
 
     assert Toniq.Peristance.jobs == [job1, job2]
 

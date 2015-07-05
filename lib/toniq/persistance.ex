@@ -9,6 +9,8 @@ defmodule Toniq.Peristance do
 
     redis
     |> hset(jobs_key, job_id, :erlang.term_to_binary(%{ worker: worker_module, opts: opts }))
+
+    %{ id: job_id, worker: worker_module, opts: opts }
   end
 
   @doc """
@@ -41,13 +43,6 @@ defmodule Toniq.Peristance do
       ["HSET", failed_jobs_key, job.id, job_data],
       ["EXEC"],
     ])
-  end
-
-  @doc """
-  Subscribes to added jobs. The current process will receive :job_added when a job is added.
-  """
-  def subscribe_to_new_jobs do
-    Toniq.PubSub.subscribe
   end
 
   defp load_jobs(redis_key) do
