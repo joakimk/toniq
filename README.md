@@ -18,7 +18,7 @@ Designed to:
   - 100k concurrent processes on one computer is not unusual
 * Automatically retry jobs that fail
 * Limit concurrency when requested
-* Disable persistance when requested
+* Skip persistance when requested
 * Notify about errors through [Logger](http://elixir-lang.org/docs/v1.0/logger/Logger.html)
   - Can be passed on to services like [honeybadger](https://github.com/joakimk/honeybadger)
 * Use redis sparingly
@@ -67,7 +67,7 @@ defmodule RegisterArtistWorker do
 end
 ```
 
-## Disabling persistance
+## Skipping persistance
 
 For jobs where speed is important and it does not matter if it's lost on app server restart.
 
