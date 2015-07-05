@@ -146,8 +146,8 @@ This library was initially built to support what was needed in [content_translat
 * [x] Errors are reported
 * [x] Rewrite the job handling according to the new design ideas (should be much simpler, no PubSub, etc)
 * [x] Avoid running duplicate jobs due to polling and current setup
-* [ ] Review the code one more time
-* [ ] Licence and pull request instructions
+* [x] Review the code one more time
+* [x] Licence and pull request instructions
 
 ### 1.0
 
@@ -182,6 +182,42 @@ This library was initially built to support what was needed in [content_translat
 
 I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
 
-### Credits
+## Credits
 
 - The name toniq was thought up by [Henrik Nyh](https://github.com/henrik). The idea was synonym of elixir with a q for queue.
+
+## Contributing
+
+* Pull requests:
+  - Are very welcome :)
+  - Should have tests
+  - Should have refactored code that conforms to the style of the project
+  - Should have updated documentation
+  - Should implement or fix something that makes sense for this library (feel free to ask if you are unsure)
+  - Will only be merged if all the above is fulfilled. I won't fix your code, but I will try and give feedback.
+* If this project ever becomes too inactive, feel free to ask about taking over as maintainer.
+
+## License
+
+Copyright (c) 2015 [Joakim Kolsjö](https://twitter.com/joakimk)
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
