@@ -198,6 +198,7 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Safe takeover of jobs
 * [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the takeover feature
 * [ ] Look though every GenServer, ensure there is a plan for not loosing data when they crash
+* [ ] If mark_as_finish/failed fails. Do something appropriate. Right now jobs will most likely wait around until next restart to be re-run.
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
