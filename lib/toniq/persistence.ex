@@ -1,4 +1,4 @@
-defmodule Toniq.Peristance do
+defmodule Toniq.Persistence do
   use Exredis.Api
 
   @doc """

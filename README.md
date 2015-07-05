@@ -187,7 +187,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Support takeover of jobs from a stopped VM.
 * [x] Support jobs without arguments
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
-  - [x] Make persistance abstract, don't assume redis
+  - [x] Make persistence abstract, don't assume redis
 * [x] Errors will only be reported if retries fail
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [x] Make the tests reliable.
