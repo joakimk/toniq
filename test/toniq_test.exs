@@ -24,7 +24,7 @@ defmodule ToniqTest do
   end
 
   setup do
-    Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
+    Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
     :ok
   end
 

@@ -69,6 +69,6 @@ defmodule Toniq.Peristance do
   end
 
   defp redis do
-    Process.whereis(:redis)
+    Process.whereis(:toniq_redis)
   end
 end

@@ -50,11 +50,11 @@ defmodule Toniq do
     # https://github.com/wooga/eredis#reconnecting-on-redis-down--network-failure--timeout--etc
     Application.get_env(:toniq, :redis_url)
     |> Exredis.start_using_connection_string
-    |> Process.register(:redis)
+    |> Process.register(:toniq_redis)
 
     # TODO: do this in a cleaner way, preferabbly after each redis test
     if Mix.env == :test do
-      Process.whereis(:redis) |> Exredis.query([ "FLUSHDB" ])
+      Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
     end
   end
 end
