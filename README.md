@@ -63,6 +63,24 @@ email
 |> Toniq.enqueue_to(SendEmailWorker)
 ```
 
+## Pattern matching
+
+You can pattern match in workers. This can be used to clean up the code, or to handle data from previous versions of the same worker!
+
+```elixir
+defmodule SendMessageWorker do
+  use Toniq.Worker
+
+  def perform(message: "", receipient: _receipient) do
+    # don't send empty messages
+  end
+
+  def perform(message: message, receipient: receipient) do
+    SomeMessageService.send(message, receipient)
+  end
+end
+```
+
 ## Limiting concurrency
 
 For some workers you might want to limit the number of jobs that run at the same time. For example, if you call out to a API, you most likely don't want more than 3-10 connections at once.
