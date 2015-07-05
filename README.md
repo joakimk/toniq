@@ -205,6 +205,7 @@ This library was initially built to support what was needed in [content_translat
 
 ### Later
 
+* [ ] Be able to run without any persistance if none is needed?
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
 * [ ] Support different enqueue strategies on a per-worker or per-enqueue basis
   - [ ] Delayed persistance: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
