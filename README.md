@@ -156,7 +156,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Make the tests reliable.
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
 * [ ] Verify that enqueue worked, it may return a no connection error
-* [ ] Custom and infinite max_concurrency
+* [ ] Custom and infinite max\_concurrency
 * [ ] Be able to skip persistance
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
