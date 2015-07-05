@@ -51,7 +51,7 @@ defmodule Toniq.Peristance do
     |> Enum.map &build_job/1
   end
 
-  def build_job({key, data}) do
+  defp build_job({key, data}) do
     { job_id, _remainder_of_string } = Integer.parse(key)
     :erlang.binary_to_term(data) |> Dict.put(:id, job_id)
   end
@@ -64,7 +64,7 @@ defmodule Toniq.Peristance do
     :toniq_failed_jobs
   end
 
-  def counter_key do
+  defp counter_key do
     :toniq_last_job_id
   end
 
