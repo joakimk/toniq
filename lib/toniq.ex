@@ -2,6 +2,22 @@ defmodule Toniq do
   use Application
   require Logger
 
+  @doc """
+  Enqueue for use in pipelines
+
+  Example:
+
+    params
+    |> extract_data
+    |> Toniq.enqueue_to(SendEmailWorker)
+  """
+  def enqueue_to(opts, worker_module) do
+    enqueue(worker_module, opts)
+  end
+
+  @doc """
+  Enqueue job to be run in the background as soon as possible
+  """
   def enqueue(worker_module, opts) do
     Toniq.Peristance.store_job(worker_module, opts)
     |> Toniq.JobRunner.register_job

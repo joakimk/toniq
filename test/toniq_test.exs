@@ -52,6 +52,15 @@ defmodule ToniqTest do
     assert logs =~ ~r/Job #\d: ToniqTest.TestErrorWorker.perform\(\[data: 10\]\) failed with error: %RuntimeError{message: "fail"}/
   end
 
+  test "can be conventiently called within a pipeline" do
+    Process.register(self, :toniq_test)
+
+    [data: 10]
+    |> Toniq.enqueue_to(TestWorker)
+
+    assert_receive { :job_has_been_run, number_was: 10 }, 1000
+  end
+
   #test "can enqueue job without arguments"
   #test "can pick up jobs previosly stored in redis"
 end

@@ -51,6 +51,18 @@ Enqueue jobs somewhere in your app code:
 Toniq.enqueue(SendEmailWorker, to: "info@example.com", subject: "Hello", body: "Hello, there!")
 ```
 
+## Pipelines
+
+You can also enqueue jobs using |> like this:
+
+
+```elixir
+email = [to: "info@example.com", subject: "Hello", body: "Hello, there!"]
+
+email
+|> Toniq.enqueue_to(SendEmailWorker)
+```
+
 ## Limiting concurrency
 
 For some workers you might want to limit the number of jobs that run at the same time. For example, if you call out to a API, you most likely don't want more than 3-10 connections at once.
