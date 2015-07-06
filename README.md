@@ -40,7 +40,7 @@ Define a worker:
 defmodule SendEmailWorker do
   use Toniq.Worker
 
-  def perform(to: to, subject: title, body: body) do
+  def perform(to: to, subject: subject, body: body) do
     # do work
   end
 end
