@@ -21,17 +21,17 @@ defmodule Toniq.JobProcessTest do
   end
 
   test "a successful job runs return {:job_was_successful, job}" do
-    job = %{ worker: TestSuccessWorker, opts: [data: 10]}
+    job = %{worker: TestSuccessWorker, opts: [data: 10]}
     assert Toniq.JobProcess.run(job) == {:job_was_successful, job}
   end
 
   test "a job that raises an error returns {:job_has_failed, job, error}" do
-    job = %{ worker: TestErrorWorker, opts: [data: 10]}
+    job = %{worker: TestErrorWorker, opts: [data: 10]}
     assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %RuntimeError{message: "fail"}}
   end
 
   test "a job that crashes returns {:job_has_failed, job, error}" do
-    job = %{ worker: TestCrashWorker, opts: [data: 10]}
+    job = %{worker: TestCrashWorker, opts: [data: 10]}
     assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %Toniq.JobProcess.CrashError{message: "The job runner crashed. The reason that was given is: simulate an unknown error"}}
   end
 end
