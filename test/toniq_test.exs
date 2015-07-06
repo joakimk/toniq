@@ -40,7 +40,7 @@ defmodule ToniqTest do
 
     job = Toniq.enqueue(TestWorker, data: 10)
 
-    assert_receive { :job_has_been_run, number_was: 10 }, 1000
+    assert_receive { :job_has_been_run, number_was: 10 }
     assert_receive { :finished, ^job }
 
     assert Toniq.Persistence.jobs == []
@@ -65,7 +65,7 @@ defmodule ToniqTest do
     [data: 10]
     |> Toniq.enqueue_to(TestWorker)
 
-    assert_receive { :job_has_been_run, number_was: 10 }, 1000
+    assert_receive { :job_has_been_run, number_was: 10 }
   end
 
   test "can run jobs without arguments" do
