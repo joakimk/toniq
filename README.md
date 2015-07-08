@@ -194,7 +194,7 @@ This library was initially built to support what was needed in [content_translat
 * [x] Make the tests reliable.
 * [x] Readable error message when redis isn't present
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
-  - Simple solution: get the pid from a helper class, reconnect if there is no pid
+  - Simple solution: get the pid from a helper module, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Safe takeover of jobs
 * [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the takeover feature
