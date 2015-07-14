@@ -211,6 +211,19 @@ This library was initially built to support what was needed in [content_translat
   - Simple solution: get the pid from a helper module, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Safe takeover of jobs
+  - Design idea:
+    - assign a uuid on boot
+      - use uuid in the waiting jobs list, eg. "waiting_jobs_from_#{uuid}"
+    - keepalive process:
+      - update a redis hash of "uuid: timestamp" every 5 seconds
+      - if keepalive fails to write within 5 seconds, restart and get new UUID
+    - takeover process:
+      - if any of the timestamps are older than 15 seconds:
+        - in transaction in another VM
+          - inherit all the jobs of the lost VM
+          - remove the lost VM from the vm-list
+          - remove the lost VM job-list
+        - if the above fails, the data will remain, and some other VM can try it
 * [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the takeover feature
 * [ ] Look though every GenServer, ensure there is a plan for not loosing data when they crash
 * [ ] If mark_as_finish/failed fails. Do something appropriate. Right now jobs will most likely wait around until next restart to be re-run.
@@ -222,6 +235,7 @@ This library was initially built to support what was needed in [content_translat
 
 * [ ] Custom and infinite max\_concurrency
   - Probably only enforced on a VM-level. Two vms of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
+  - Idea: use GenEvent of finished/failed to drive it?
 * [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 
@@ -241,6 +255,12 @@ This library was initially built to support what was needed in [content_translat
   - [ ] Delayed persistence: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
   - [ ] No persistence: fastest. Run the job right away. If the VM is stopped jobs may be lost.
 * [ ] Add timeouts for jobs (if anyone needs it). Should be fairly easy.
+* [ ] Admin UI
+  - [ ] That shows waiting and failed jobs
+  - [ ] Make data easiliy available for display in the app that uses toniq
+  - [ ] Store/show time of creation
+  - [ ] Store/show retry count
+* [ ] Look into cleaning up code using [exactor](https://github.com/sasa1977/exactor)
 
 ### Notes
 
