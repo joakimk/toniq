@@ -87,7 +87,7 @@ end
 
 For some workers you might want to limit the number of jobs that run at the same time. For example, if you call out to a API, you most likely don't want more than 3-10 connections at once.
 
-You can set this by specifying the `max_concurrency` option on a worker.
+You can set this by specifying the `max\_concurrency` option on a worker.
 
 ```elixir
 defmodule RegisterArtistWorker do
@@ -143,7 +143,7 @@ Sometimes they'll see a 500 error page when you can't connect to the mailserver.
 
 Now say you spawn a mailer process. This will avoid slow responses and errors to the user, but what if it fails? Will you implement your own retries?
 
-So you decide to use a queue with retries. The user gets a response right away. Failing jobs will be retried and you will not have to deal with support issues due to 500 errors or spend time manually resending email :) 
+So you decide to use a queue with retries. The user gets a response right away. Failing jobs will be retried and you will not have to deal with support issues due to 500 errors or spend time manually resending email :)
 
 ### Will jobs be run in order?
 
