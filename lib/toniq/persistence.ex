@@ -32,7 +32,7 @@ defmodule Toniq.Persistence do
   end
 
   @doc """
-  Marks a job as finished. This means that it's deleted from redis.
+  Marks a job as failed. This removes the job from the regular list and stores it in the failed jobs list.
   """
   def mark_as_failed(job) do
     job_data = hget(redis, jobs_key, job.id)
