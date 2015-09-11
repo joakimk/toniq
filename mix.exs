@@ -30,6 +30,7 @@ defmodule Toniq.Mixfile do
   defp deps do
     [
       {:exredis, ">= 0.1.1"},
+      {:uuid, "~> 1.0"},
     ]
   end
 end

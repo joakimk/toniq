@@ -31,7 +31,7 @@ defmodule Toniq do
     set_up_redis
     spawn_link fn ->
       :timer.sleep 1000 # wait for things to start
-      enqueue_waiting_jobs
+      if Mix.env != :test, do: enqueue_waiting_jobs
     end
 
     children = [
