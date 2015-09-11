@@ -133,17 +133,9 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 ### Why have a job queue at all?
 
-Say you're doing a phoenix app and want to send an email. You can probably get away with sending it syncronously in the request since phoenix can handle lots of simultationous requests, right?
-
-Well... the user has to wait for that to complete.
-
-Sometimes quite a long time.
-
-Sometimes they'll see a 500 error page when you can't connect to the mailserver.
-
-Now say you spawn a mailer process. This will avoid slow responses and errors to the user, but what if it fails? Will you implement your own retries?
-
-So you decide to use a queue with retries. The user gets a response right away. Failing jobs will be retried and you will not have to deal with support issues due to 500 errors or spend time manually resending email :)
+* You don't have to run the code syncronously. E.g. don't delay a web response while sending email.
+* You don't have to write custom code for the things a job queue can handle for you.
+* You get persistence, retries, concurrency limits, etc.
 
 ### Will jobs be run in order?
 
