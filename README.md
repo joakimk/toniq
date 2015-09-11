@@ -90,10 +90,10 @@ For some workers you might want to limit the number of jobs that run at the same
 You can set this by specifying the `max_concurrency` option on a worker.
 
 ```elixir
-defmodule RegisterArtistWorker do
+defmodule RegisterInvoiceWorker do
   use Toniq.Worker, max_concurrency: 10
 
-  def perform(artist_attributes) do
+  def perform(invoice_attributes) do
     # do work
   end
 end
