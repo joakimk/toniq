@@ -87,7 +87,7 @@ end
 
 For some workers you might want to limit the number of jobs that run at the same time. For example, if you call out to a API, you most likely don't want more than 3-10 connections at once.
 
-You can set this by specifying the `max\_concurrency` option on a worker.
+You can set this by specifying the `max_concurrency` option on a worker.
 
 ```elixir
 defmodule RegisterArtistWorker do
