@@ -39,6 +39,15 @@ defmodule Toniq.TakeoverTest do
     assert uuid1 != uuid2
   end
 
+  # Will probably rewrite the tests to use separate OS processes.
+  #MIX_ENV=test elixir --sname one --no-halt -S mix
+  #{:ok, hostname} = :inet.gethostname
+  #node_name = :"one@#{hostname}"
+  #Node.connect(node_name)
+  #Node.spawn_link node_name, fn ->
+  #  Toniq.Persistence.store_job(SomeWorker, some: "data1")
+  #end
+
   #test "jobs from a missing app can be taken over by another app"
     # start first app
     # start second app
