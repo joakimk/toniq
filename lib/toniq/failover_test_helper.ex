@@ -25,14 +25,14 @@ if Mix.env == :test do
       end
     end
 
-    def halt(name) do
-      Node.spawn node_name(name), fn -> System.halt(0) end
-    end
-
     def get_state(name) do
       run_on name, fn ->
         %{ jobs: Toniq.Persistence.jobs, system_pid: System.get_pid }
       end
+    end
+
+    def halt(name) do
+      Node.spawn node_name(name), fn -> System.halt(0) end
     end
 
     defp run_on(name, function) do
