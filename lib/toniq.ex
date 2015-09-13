@@ -67,11 +67,6 @@ defmodule Toniq do
     redis_url
     |> Exredis.start_using_connection_string
     |> register_redis
-
-    # TODO: do this in a cleaner way, preferabbly after each redis test
-    if Mix.env == :test do
-      Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
-    end
   end
 
   defp register_redis({:connection_error, error}) do
