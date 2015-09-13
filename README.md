@@ -191,7 +191,7 @@ This library was initially built to support what was needed in [content_translat
 
 ### Safety and reliability
 
-* [x] Support takeover of jobs from a stopped VM.
+* [x] Support failover of jobs from a stopped VM.
 * [x] Support jobs without arguments
 * [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
   - [x] Make persistence abstract, don't assume redis
@@ -202,21 +202,23 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
   - Simple solution: get the pid from a helper module, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
-* [ ] Safe takeover of jobs
+* [ ] Safe failover of jobs
   - Design idea:
     - assign a uuid on boot
       - use uuid in the waiting jobs list, eg. "waiting_jobs_from_#{uuid}"
     - keepalive process:
       - update a redis hash of "uuid: timestamp" every 5 seconds
       - if keepalive fails to write within 5 seconds, restart and get new UUID
-    - takeover process:
+    - failover process:
       - if any of the timestamps are older than 15 seconds:
         - in transaction in another VM
           - inherit all the jobs of the lost VM
           - remove the lost VM from the vm-list
           - remove the lost VM job-list
         - if the above fails, the data will remain, and some other VM can try it
-* [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the takeover feature
+* [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
+  - Maybe have the JobRunner own the failover process, so that it's also restarted and the uuid gets re-generated?
+  - Orphaned jobs would be re-queued by the failover process?
 * [ ] Look though every GenServer, ensure there is a plan for not loosing data when they crash
 * [ ] If mark_as_finish/failed fails. Do something appropriate. Right now jobs will most likely wait around until next restart to be re-run.
 * Retries
