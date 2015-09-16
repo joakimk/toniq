@@ -200,6 +200,8 @@ This library was initially built to support what was needed in [content_translat
 * [x] Make the tests reliable.
 * [x] Readable error message when redis isn't present
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
+  - Run the persistance in a singleton, named, process and have that own the redis connection?
+    - Maybe run a process just to keep track of messages going to it, and retry if one times out?
   - Simple solution: get the pid from a helper module, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Safe failover of jobs
