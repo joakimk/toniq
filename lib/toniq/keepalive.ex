@@ -65,5 +65,7 @@ defmodule Toniq.Keepalive do
   defp keepalive_expiration, do: Application.get_env(:toniq, :keepalive_expiration)
   defp default_scope,        do: Application.get_env(:toniq, :redis_key_prefix)
 
+  # This is not a API any production code should rely upon, but could be useful
+  # info when debugging or to verify things in tests.
   defp debug_info, do: %{ system_pid: System.get_pid, last_updated_at: :os.system_time }
 end
