@@ -242,6 +242,8 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Add installation instructions
   - Make a note about multiple apps using the same redis server and the config for that.
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
+* [ ] Remove all old todos from the readme.
+* [ ] Cleanup "Later" todos
 * [ ] MAYBE: Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
 
 ### Later
