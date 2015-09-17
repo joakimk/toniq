@@ -10,7 +10,7 @@ defmodule Toniq.Keepalive do
 
   def start_link(scope \\ default_scope, name \\ __MODULE__) do
     identifier = UUID.uuid1()
-    GenServer.start_link(__MODULE__, %{ identifier: identifier, scope: scope, starter: self }, name: name)
+    GenServer.start_link(__MODULE__, %{ identifier: identifier, scope: scope }, name: name)
   end
 
   def identifier(name \\ __MODULE__) do
