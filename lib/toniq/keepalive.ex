@@ -8,7 +8,7 @@
 defmodule Toniq.Keepalive do
   use GenServer
 
-  def start_link(scope \\ :toniq, name \\ __MODULE__) do
+  def start_link(scope \\ default_scope, name \\ __MODULE__) do
     identifier = UUID.uuid1()
     GenServer.start_link(__MODULE__, %{ identifier: identifier, scope: scope, starter: self }, name: name)
   end
@@ -63,6 +63,7 @@ defmodule Toniq.Keepalive do
 
   defp keepalive_interval,   do: Application.get_env(:toniq, :keepalive_interval)
   defp keepalive_expiration, do: Application.get_env(:toniq, :keepalive_expiration)
+  defp default_scope,        do: Application.get_env(:toniq, :redis_key_prefix)
 
   defp debug_info, do: %{ system_pid: System.get_pid, last_updated_at: :os.system_time }
 end

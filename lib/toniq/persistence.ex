@@ -57,15 +57,20 @@ defmodule Toniq.Persistence do
   end
 
   defp jobs_key do
-    :toniq_jobs
+    scoped_key :toniq_jobs
   end
 
   defp failed_jobs_key do
-    :toniq_failed_jobs
+    scoped_key :toniq_failed_jobs
   end
 
   defp counter_key do
-    :toniq_last_job_id
+    scoped_key :toniq_last_job_id
+  end
+
+  defp scoped_key(key) do
+    prefix = Application.get_env(:toniq, :redis_key_prefix)
+    "#{prefix}:#{key}"
   end
 
   defp redis do
