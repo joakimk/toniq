@@ -1,4 +1,4 @@
-# Responsible for ensuring the process is connected to the redis server. If
+# Responsible for ensuring the erlang vm is connected to the redis server. If
 # the connection fails, this will crash and the supervisor will restart toniq.
 
 # Each time this starts it generates a new identifier used to scope job persistence.
