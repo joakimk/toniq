@@ -206,9 +206,9 @@ This library was initially built to support what was needed in [content_translat
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Safe failover of jobs
   - Design idea:
-    - assign a uuid on boot
-      - use uuid in the waiting jobs list, eg. "waiting_jobs_from_#{uuid}"
     - keepalive process:
+      - assign a uuid on boot
+        - use uuid in the waiting jobs list, eg. "waiting_jobs_from_#{uuid}"
       - update a redis hash of "uuid: timestamp" every 5 seconds
       - if keepalive fails to write within 5 seconds, restart and get new UUID
     - failover process:

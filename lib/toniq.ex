@@ -36,12 +36,13 @@ defmodule Toniq do
 
     children = [
       worker(Toniq.JobRunner, []),
-      worker(Toniq.JobEvent, [])
+      worker(Toniq.JobEvent, []),
+      worker(Toniq.Keepalive, []),
     ]
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Toniq.Supervisor]
+    # When one process fails we restart all of them to ensure a valid state. Jobs are then
+    # re-loaded from redis. Supervisor docs: http://elixir-lang.org/docs/stable/elixir/Supervisor.html
+    opts = [strategy: :one_for_all, name: Toniq.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
