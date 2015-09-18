@@ -10,9 +10,6 @@ defmodule Exredis.JobPersistenceTest do
   end
 
   test "can store, fetch and mark a job as finished or failed" do
-    # as we rely on exact numbers here, let's clean out redis
-    Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
-
     job1 = Toniq.JobPersistence.store_job(SomeWorker, some: "data")
     job2 = Toniq.JobPersistence.store_job(SomeWorker, other: "data")
 
@@ -25,5 +22,10 @@ defmodule Exredis.JobPersistenceTest do
     Toniq.JobPersistence.mark_as_failed(job1)
     assert Toniq.JobPersistence.jobs == []
     assert Toniq.JobPersistence.failed_jobs == [job1]
+  end
+
+  test "can store and retrieve incoming jobs" do
+    job = Toniq.JobPersistence.store_incoming_job(SomeWorker, incoming: "take cover")
+    assert Toniq.JobPersistence.incoming_jobs == [job]
   end
 end

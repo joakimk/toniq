@@ -7,7 +7,7 @@ defmodule Exredis.KeepaliveTest do
   end
 
   test "periodically updates its keepalive entry in Redis" do
-    {:ok, pid} = Toniq.Keepalive.start_link(:test_keepalive, :test_toniq)
+    {:ok, pid} = Toniq.Keepalive.start_link(:test_keepalive)
     :timer.sleep 1 # wait for init to complete
 
     identifier = Toniq.Keepalive.identifier(:test_keepalive)
@@ -31,7 +31,7 @@ defmodule Exredis.KeepaliveTest do
   end
 
   defp registered_vms do
-    Toniq.KeepalivePersistence.registered_vms(:test_toniq)
+    Toniq.KeepalivePersistence.registered_vms
   end
 
   defp alive_vm_last_updated_at(identifier) do
@@ -46,6 +46,6 @@ defmodule Exredis.KeepaliveTest do
   end
 
   defp alive_vm_debug_info(identifier) do
-    Toniq.KeepalivePersistence.alive_vm_debug_info(identifier, :test_toniq)
+    Toniq.KeepalivePersistence.alive_vm_debug_info(identifier)
   end
 end

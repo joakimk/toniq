@@ -38,6 +38,7 @@ defmodule Toniq do
       worker(Toniq.JobRunner, []),
       worker(Toniq.JobEvent, []),
       worker(Toniq.Keepalive, []),
+      worker(Toniq.Takeover, []),
     ]
 
     # When one process fails we restart all of them to ensure a valid state. Jobs are then
