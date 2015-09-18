@@ -15,11 +15,13 @@ if Mix.env == :test do
     redis_url: "redis://localhost:6379/1",
     keepalive_interval: 50, # ms
     keepalive_expiration: 70, # ms
-    takeover_interval: 100 # ms
+    takeover_interval: 100, # ms
+    job_import_interval: 100 # ms
 else
   config :toniq,
     redis_url: "redis://localhost:6379/0",
     keepalive_interval: 4000, # ms
     keepalive_expiration: 10000, # ms
-    takeover_interval: 5000 # ms
+    takeover_interval: 2000, # ms
+    job_import_interval: 2000 # ms
 end

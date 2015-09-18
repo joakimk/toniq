@@ -13,6 +13,11 @@ defmodule Toniq.JobPersistence do
     store_job_in_key(worker_module, opts, incoming_jobs_key(identifier))
   end
 
+  # Only used internally by JobImporter
+  def remove_from_incoming_jobs(job) do
+    redis |> srem(incoming_jobs_key(default_identifier), job)
+  end
+
   @doc """
   Returns all jobs that has not yet finished or failed.
   """
