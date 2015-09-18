@@ -8,7 +8,7 @@
 defmodule Toniq.Keepalive do
   use GenServer
 
-  def start_link(scope \\ default_scope, name \\ __MODULE__) do
+  def start_link(name \\ __MODULE__, scope \\ Toniq.KeepalivePersistence.default_scope) do
     identifier = UUID.uuid1()
     GenServer.start_link(__MODULE__, %{ identifier: identifier, scope: scope }, name: name)
   end
@@ -29,7 +29,7 @@ defmodule Toniq.Keepalive do
   end
 
   def handle_info(:register_vm, state) do
-    register_vm(state)
+    Toniq.KeepalivePersistence.register_vm(state.identifier, state.scope)
 
     update_alive_key(state)
     :timer.send_interval keepalive_interval, :update_alive_key
@@ -43,29 +43,10 @@ defmodule Toniq.Keepalive do
     {:noreply, state}
   end
 
-  defp register_vm(state) do
-    redis_query(["SADD", registered_vms_key(state.scope), state.identifier])
-  end
-
   defp update_alive_key(state) do
-    # Logger.log(:debug, "Updating keepalive for #{state.identifier} #{inspect(debug_info)}")
-    redis_query(["PSETEX", alive_key(state), keepalive_expiration, debug_info])
+    Toniq.KeepalivePersistence.update_alive_key(state.identifier, keepalive_expiration, state.scope)
   end
-
-  defp redis_query(query) do
-    :toniq_redis
-    |> Process.whereis
-    |> Exredis.query(query)
-  end
-
-  defp alive_key(state),          do: "#{state.scope}:alive_vms:#{state.identifier}"
-  defp registered_vms_key(scope), do: "#{scope}:registered_vms"
 
   defp keepalive_interval,   do: Application.get_env(:toniq, :keepalive_interval)
   defp keepalive_expiration, do: Application.get_env(:toniq, :keepalive_expiration)
-  defp default_scope,        do: Application.get_env(:toniq, :redis_key_prefix)
-
-  # This is not a API any production code should rely upon, but could be useful
-  # info when debugging or to verify things in tests.
-  defp debug_info, do: %{ system_pid: System.get_pid, last_updated_at: :os.system_time }
 end
