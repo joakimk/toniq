@@ -21,13 +21,13 @@ if Mix.env == :test do
 
     def add_job(name) do
       run_on name, fn ->
-        Toniq.Persistence.store_job(TestWorker, some: "data")
+        Toniq.JobPersistence.store_job(TestWorker, some: "data")
       end
     end
 
     def get_state(name) do
       run_on name, fn ->
-        %{ jobs: Toniq.Persistence.jobs, system_pid: System.get_pid }
+        %{ jobs: Toniq.JobPersistence.jobs, system_pid: System.get_pid }
       end
     end
 

@@ -43,7 +43,7 @@ defmodule ToniqTest do
     assert_receive { :job_has_been_run, number_was: 10 }
     assert_receive { :finished, ^job }
 
-    assert Toniq.Persistence.jobs == []
+    assert Toniq.JobPersistence.jobs == []
   end
 
   test "failing jobs are removed from the regular job list and stored in a failed jobs list" do
@@ -51,9 +51,9 @@ defmodule ToniqTest do
       job = Toniq.enqueue(TestErrorWorker, data: 10)
 
       assert_receive { :failed, ^job }
-      assert Toniq.Persistence.jobs == []
-      assert Enum.count(Toniq.Persistence.failed_jobs) == 1
-      assert (Toniq.Persistence.failed_jobs |> hd).worker == TestErrorWorker
+      assert Toniq.JobPersistence.jobs == []
+      assert Enum.count(Toniq.JobPersistence.failed_jobs) == 1
+      assert (Toniq.JobPersistence.failed_jobs |> hd).worker == TestErrorWorker
     end
 
     assert logs =~ ~r/Job #\d: ToniqTest.TestErrorWorker.perform\(\[data: 10\]\) failed with error: %RuntimeError{message: "fail"}/

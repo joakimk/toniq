@@ -19,7 +19,7 @@ defmodule Toniq do
   Enqueue job to be run in the background as soon as possible
   """
   def enqueue(worker_module, opts \\ []) do
-    Toniq.Persistence.store_job(worker_module, opts)
+    Toniq.JobPersistence.store_job(worker_module, opts)
     |> Toniq.JobRunner.register_job
   end
 
@@ -50,7 +50,7 @@ defmodule Toniq do
   # that not every VM will try and requeue any waiting jobs. This way, jobs are run,
   # but they might be run more than once.
   defp enqueue_waiting_jobs do
-    jobs = Toniq.Persistence.jobs
+    jobs = Toniq.JobPersistence.jobs
 
     if Enum.count(jobs) > 0 do
       Logger.info "Requeuing #{Enum.count(jobs)} jobs from redis on app boot"
