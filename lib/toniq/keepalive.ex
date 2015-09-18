@@ -29,7 +29,7 @@ defmodule Toniq.Keepalive do
   end
 
   def handle_info(:register_vm, state) do
-    Toniq.KeepalivePersistence.register_vm(state.identifier, state.scope)
+    register_vm(state)
 
     update_alive_key(state)
     :timer.send_interval keepalive_interval, :update_alive_key
@@ -41,6 +41,10 @@ defmodule Toniq.Keepalive do
     update_alive_key(state)
 
     {:noreply, state}
+  end
+
+  def register_vm(state) do
+    Toniq.KeepalivePersistence.register_vm(state.identifier, state.scope)
   end
 
   defp update_alive_key(state) do
