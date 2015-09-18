@@ -35,7 +35,8 @@ defmodule Exredis.KeepaliveTest do
   end
 
   defp alive_vm_last_updated_at(identifier) do
-    alive_vm_debug_info(identifier)
+    identifier
+    |> alive_vm_debug_info
     |> :erlang.binary_to_term
     |> Map.get(:last_updated_at)
   end
