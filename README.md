@@ -218,6 +218,7 @@ This library was initially built to support what was needed in [content_translat
           - remove the lost VM from the vm-list
           - remove the lost VM job-list
         - if the above fails, the data will remain, and some other VM can try it
+* [ ] Exponential backoff on retries for the redis connection, on both queries and initial connect
 * [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
   - Maybe have the JobRunner own the failover process, so that it's also restarted and the uuid gets re-generated?
   - Orphaned jobs would be re-queued by the failover process?
