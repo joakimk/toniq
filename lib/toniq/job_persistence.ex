@@ -8,7 +8,7 @@ defmodule Toniq.JobPersistence do
     job_id = redis |> incr(counter_key)
 
     redis
-    |> hset(jobs_key, job_id, :erlang.term_to_binary(%{ worker: worker_module, opts: opts }))
+    |> sadd(jobs_key, :erlang.term_to_binary(%{ id: job_id, worker: worker_module, opts: opts }))
 
     %{ id: job_id, worker: worker_module, opts: opts }
   end
@@ -28,32 +28,29 @@ defmodule Toniq.JobPersistence do
   """
   def mark_as_successful(job) do
     redis
-    |> hdel(jobs_key, job.id)
+    |> srem(jobs_key, job)
   end
 
   @doc """
   Marks a job as failed. This removes the job from the regular list and stores it in the failed jobs list.
   """
   def mark_as_failed(job) do
-    job_data = hget(redis, jobs_key, job.id)
-
     redis |> Exredis.query_pipe([
       ["MULTI"],
-      ["HDEL", jobs_key, job.id],
-      ["HSET", failed_jobs_key, job.id, job_data],
+      ["SREM", jobs_key, job],
+      ["SADD", failed_jobs_key, job],
       ["EXEC"],
     ])
   end
 
   defp load_jobs(redis_key) do
     redis
-    |> hgetall(redis_key)
+    |> smembers(redis_key)
     |> Enum.map &build_job/1
   end
 
-  defp build_job({key, data}) do
-    { job_id, _remainder_of_string } = Integer.parse(key)
-    :erlang.binary_to_term(data) |> Dict.put(:id, job_id)
+  defp build_job(data) do
+    :erlang.binary_to_term(data)
   end
 
   defp jobs_key do
