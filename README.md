@@ -166,45 +166,8 @@ I tend to prefer the first alternative in whenever possible.
 
 ## TODO
 
-### Enough to run jobs with no safety what so ever :)
-
-* [x] Always store jobs in redis and have another process pull them out to support multiple erlang vms adding jobs, like when having multiple web servers
-* [x] Implement pubsub
-* [x] Implement job subscriber
-* [x] Find out why killing any process kills the entire app even if the supervisor ought to restart that part.
-* [x] Just run jobs in worker watcher
-
-### Enough to replace what's currently in content\_translator
-
-This library was initially built to support what was needed in [content_translator](https://github.com/barsoom/content_translator).
-
-* [x] Implement job runner and monitor
-* [x] Enqueue and run jobs for different workers
-* [x] Will only mark a job as done if it exits successfully
-* [x] Be able to mark jobs as failed
-* [x] Limit concurrency to 1 by default
-* [x] Errors are reported
-* [x] Rewrite the job handling according to the new design ideas (should be much simpler, no PubSub, etc)
-* [x] Avoid running duplicate jobs due to polling and current setup
-* [x] Review the code one more time
-* [x] Licence and pull request instructions
-
 ### Safety and reliability
 
-* [x] Support failover of jobs from a stopped VM.
-* [x] Support jobs without arguments
-* [x] Re-queues jobs that exist in redis when it starts so that server crashes won't make you loose jobs.
-  - [x] Make persistence abstract, don't assume redis
-* [x] Errors will only be reported if retries fail
-* [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
-* [x] Make the tests reliable.
-* [x] Readable error message when redis isn't present
-* [x] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
-* [x] If mark_as_finish/failed fails. Do something appropriate. (any sub-system crash will use failover to get jobs back)
-* [x] Safe failover of jobs
-* [x] Restart the redis connection if it fails
-* [x] Verify that enqueue worked, it may return a no connection error
-* [x] Look though every GenServer, ensure there is a plan for not loosing data when they crash
 * [ ] Retry connecting to redis for at least 15 seconds before crashing toniq
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
