@@ -199,13 +199,13 @@ This library was initially built to support what was needed in [content_translat
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [x] Make the tests reliable.
 * [x] Readable error message when redis isn't present
+* [x] Safe failover of jobs
+  * [ ] Consider starting toniq differently in tests to better isolate unit tests
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
   - Run the persistance in a singleton, named, process and have that own the redis connection?
     - Maybe run a process just to keep track of messages going to it, and retry if one times out?
   - Simple solution: get the pid from a helper module, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
-* [ ] Safe failover of jobs
-  * [ ] Consider starting toniq differently in tests to better isolate unit tests
 * [ ] Exponential backoff on retries for the redis connection, on both queries and initial connect
 * [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
   - Maybe have the JobRunner own the failover process, so that it's also restarted and the uuid gets re-generated?
