@@ -256,7 +256,7 @@ I'm trying to follow the default elixir style when writing elixir. That means le
 ## Credits
 
 - The name toniq was thought up by [Henrik Nyh](https://github.com/henrik). The idea was synonym of elixir with a q for queue.
-- [Lennart Fridén](https://github.com/devl) helped out with building the failover system during his [journeyman-tour](http://codecoupled.org/journeyman-tour/) visit to our our office
+- [Lennart Fridén](https://github.com/devl) helped out with building the failover system during his [journeyman-tour](http://codecoupled.org/journeyman-tour/) visit to our office
 
 ## Contributing
 
