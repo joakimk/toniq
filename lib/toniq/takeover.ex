@@ -38,6 +38,10 @@ defmodule Toniq.Takeover do
 
   defp handle_dead_vm(nil, _state), do: nil
   defp handle_dead_vm(identifier, state) do
+    if Mix.env != :test do
+      Logger.log(:info, "#{__MODULE__}: Taking over all jobs from missing vm #{identifier}")
+    end
+
     Toniq.KeepalivePersistence.takeover_jobs(identifier, Toniq.Keepalive.identifier(state.keepalive_name))
   end
 
