@@ -29,10 +29,6 @@ defmodule Toniq do
     import Supervisor.Spec, warn: false
 
     set_up_redis
-    spawn_link fn ->
-      :timer.sleep 1000 # wait for things to start
-      if Mix.env != :test, do: enqueue_waiting_jobs
-    end
 
     children = [
       worker(Toniq.JobRunner, []),
@@ -46,20 +42,6 @@ defmodule Toniq do
     # re-loaded from redis. Supervisor docs: http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     opts = [strategy: :one_for_all, name: Toniq.Supervisor]
     Supervisor.start_link(children, opts)
-  end
-
-  # Temporary way to restore jobs on app boot, later we want something that ensures
-  # that not every VM will try and requeue any waiting jobs. This way, jobs are run,
-  # but they might be run more than once.
-  defp enqueue_waiting_jobs do
-    jobs = Toniq.JobPersistence.jobs
-
-    if Enum.count(jobs) > 0 do
-      Logger.info "Requeuing #{Enum.count(jobs)} jobs from redis on app boot"
-    end
-
-    jobs
-    |> Enum.each &Toniq.JobRunner.register_job/1
   end
 
   defp set_up_redis do
