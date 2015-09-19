@@ -42,4 +42,3 @@ defmodule Toniq.JobImporter do
 
   defp job_import_interval, do: Application.get_env(:toniq, :job_import_interval)
 end
-
