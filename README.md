@@ -184,17 +184,16 @@ I tend to prefer the first alternative in whenever possible.
 ### 1.0
 
 * [ ] Add CI
-* [ ] Hex package
 * [ ] Add installation instructions
   - Make a note about multiple apps using the same redis server and the config for that.
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
 * [ ] Remove all old todos from the readme.
-* [ ] Cleanup "Later" todos
+* [ ] Hex package
 * [ ] MAYBE: Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
-* [ ] MAYBE: More logging. For example in job importing.
 
 ### Later
 
+* [ ] More logging
 * [ ] Consider starting toniq differently in tests to better isolate unit tests
 * [ ] Be able to run without any persistence if none is needed?
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
