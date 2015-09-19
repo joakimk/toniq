@@ -3,6 +3,13 @@ defmodule Exredis.TakeoverTest do
 
   setup do
     Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
+
+    # Disable import to isolate takeover in this test
+    Application.put_env(:toniq, :disable_import, true)
+    on_exit fn ->
+      Application.put_env(:toniq, :disable_import, false)
+    end
+
     :ok
   end
 

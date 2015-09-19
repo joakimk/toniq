@@ -9,18 +9,24 @@ defmodule Toniq.JobImporter do
   end
 
   def handle_info(:import_jobs, state) do
+    import_jobs(enabled: enabled?)
+    {:noreply, state}
+  end
+
+  defp import_jobs(enabled: false), do: nil
+  defp import_jobs(enabled: true) do
     incoming_jobs
     |> Enum.each fn(job) ->
       Toniq.enqueue(job.worker, job.opts)
       Toniq.JobPersistence.remove_from_incoming_jobs(job)
     end
-
-    {:noreply, state}
   end
 
   defp incoming_jobs do
     Toniq.JobPersistence.incoming_jobs
   end
+
+  defp enabled?, do: !Application.get_env(:toniq, :disable_import)
 
   defp job_import_interval, do: Application.get_env(:toniq, :job_import_interval)
 end

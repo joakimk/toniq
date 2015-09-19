@@ -43,6 +43,7 @@ defmodule ToniqTest do
     assert_receive { :job_has_been_run, number_was: 10 }
     assert_receive { :finished, ^job }
 
+    :timer.sleep 1 # allow persistence some time to remove the job
     assert Toniq.JobPersistence.jobs == []
   end
 

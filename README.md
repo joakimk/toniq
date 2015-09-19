@@ -205,19 +205,7 @@ This library was initially built to support what was needed in [content_translat
   - Simple solution: get the pid from a helper module, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Safe failover of jobs
-  - Design idea:
-    - keepalive process:
-      - assign a uuid on boot
-        - use uuid in the waiting jobs list, eg. "waiting_jobs_from_#{uuid}"
-      - update a redis hash of "uuid: timestamp" every 5 seconds
-      - if keepalive fails to write within 5 seconds, restart and get new UUID
-    - failover process:
-      - if any of the timestamps are older than 15 seconds:
-        - in transaction in another VM
-          - inherit all the jobs of the lost VM
-          - remove the lost VM from the vm-list
-          - remove the lost VM job-list
-        - if the above fails, the data will remain, and some other VM can try it
+  * [ ] Consider starting toniq differently in tests to better isolate unit tests
 * [ ] Exponential backoff on retries for the redis connection, on both queries and initial connect
 * [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
   - Maybe have the JobRunner own the failover process, so that it's also restarted and the uuid gets re-generated?

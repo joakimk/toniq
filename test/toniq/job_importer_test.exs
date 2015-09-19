@@ -16,7 +16,7 @@ defmodule Exredis.JobImporterTest do
 
   test "imports jobs from the incoming_jobs queue" do
     Process.register self, :toniq_job_importer_test
-    job = Toniq.JobPersistence.store_incoming_job(TestWorker, data: 10)
+    Toniq.JobPersistence.store_incoming_job(TestWorker, data: 10)
 
     assert_receive :job_has_been_run, 1000
     :timer.sleep 1 # wait for job to be removed
