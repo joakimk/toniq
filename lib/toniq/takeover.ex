@@ -18,8 +18,8 @@ defmodule Toniq.Takeover do
 
   def handle_info(:check_takeover, state) do
     registered_vms
-    |> select_first_dead
-    |> handle_dead_vm(state)
+    |> select_first_missing
+    |> handle_missing_vm(state)
 
     {:noreply, state}
   end
@@ -28,16 +28,17 @@ defmodule Toniq.Takeover do
     Toniq.KeepalivePersistence.registered_vms
   end
 
-  defp select_first_dead(vms) do
-    vms |> Enum.find fn(identifier) -> dead?(identifier) end
+  defp select_first_missing(vms) do
+    vms
+    |> Enum.find fn(identifier) -> missing?(identifier) end
   end
 
-  defp dead?(identifier) do
+  defp missing?(identifier) do
     !Toniq.KeepalivePersistence.alive?(identifier)
   end
 
-  defp handle_dead_vm(nil, _state), do: nil
-  defp handle_dead_vm(identifier, state) do
+  defp handle_missing_vm(nil, _state), do: nil
+  defp handle_missing_vm(identifier, state) do
     if Mix.env != :test do
       Logger.log(:info, "#{__MODULE__}: Taking over all jobs from missing vm #{identifier}")
     end
