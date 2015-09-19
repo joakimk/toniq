@@ -16,10 +16,20 @@ defmodule Toniq.JobImporter do
   defp import_jobs(enabled: false), do: nil
   defp import_jobs(enabled: true) do
     incoming_jobs
+    |> log_import
     |> Enum.each fn(job) ->
       Toniq.enqueue(job.worker, job.opts)
       Toniq.JobPersistence.remove_from_incoming_jobs(job)
     end
+  end
+
+  defp log_import([]), do: []
+  defp log_import(jobs) do
+    if Mix.env != :test do
+      Logger.log(:info, "Importing #{Enum.count(jobs)} jobs from incoming_jobs")
+    end
+
+    jobs
   end
 
   defp incoming_jobs do
