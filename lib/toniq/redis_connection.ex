@@ -1,5 +1,14 @@
 defmodule Toniq.RedisConnection do
-  def init do
+  use GenServer
+
+  def start_link do
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  def init(state) do
+    # TODO: Replace this very basic timeout between attempts
+    :timer.sleep 250
+
     # Not supervising exredis seems like it could work as :eredis reconnects if needed,
     # but will look into this more later.
     #
@@ -7,6 +16,8 @@ defmodule Toniq.RedisConnection do
     redis_url
     |> Exredis.start_using_connection_string
     |> register_redis
+
+    {:ok, state}
   end
 
   defp register_redis({:connection_error, error}) do
