@@ -72,11 +72,16 @@ defmodule Toniq.JobPersistence do
   defp load_jobs(redis_key) do
     redis
     |> smembers(redis_key)
-    |> Enum.map &build_job/1
+    |> Enum.map(&build_job/1)
+    |> Enum.sort(&first_in_first_out/2)
   end
 
   defp build_job(data) do
     :erlang.binary_to_term(data)
+  end
+
+  defp first_in_first_out(first, second) do
+    first.id < second.id
   end
 
   defp failed_jobs_key do
