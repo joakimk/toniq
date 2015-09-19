@@ -76,13 +76,7 @@ defmodule Toniq.KeepalivePersistence do
 
   # This is not a API any production code should rely upon, but could be useful
   # info when debugging or to verify things in tests.
-  defp debug_info, do: %{ system_pid: System.get_pid, last_updated_at: system_time }
-
-  # When we can depend on erlang 18+, replace this with :erlang.system_time
-  defp system_time do
-    {mega, seconds, ms} = :os.timestamp()
-    (mega*1000000 + seconds)*1000 + :erlang.round(ms/1000)
-  end
+  defp debug_info, do: %{ system_pid: System.get_pid, last_updated_at: :os.system_time }
 
   defp alive_key(identifier), do: "#{default_scope}:alive_vms:#{identifier}"
   defp registered_vms_key,    do: "#{default_scope}:registered_vms"
