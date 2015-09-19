@@ -1,6 +1,6 @@
 # There is no default config system in Elixir yet, but this workaround seems to work.
 defmodule Toniq.Config do
-  def setup do
+  def init do
     # keepalive_interval: The time between each time the vm reports in as being alive.
     # keepalive_expiration: The time until other vms can take over jobs from a stopped vm.
     # takeover_interval: The time between checking for orphaned jobs originally belonging to other vms.
