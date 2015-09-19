@@ -263,7 +263,7 @@ I'm trying to follow the default elixir style when writing elixir. That means le
 * Pull requests:
   - Are very welcome :)
   - Should have tests
-  - Should have refactored code that conforms to the style of the project
+  - Should have refactored code that conforms to the style of the project (as best you can)
   - Should have updated documentation
   - Should implement or fix something that makes sense for this library (feel free to ask if you are unsure)
   - Will only be merged if all the above is fulfilled. I won't fix your code, but I will try and give feedback.
