@@ -78,6 +78,6 @@ defmodule Toniq.KeepalivePersistence do
   # info when debugging or to verify things in tests.
   defp debug_info, do: %{ system_pid: System.get_pid, last_updated_at: :os.system_time }
 
-  defp alive_key(identifier), do: "#{default_scope}:alive_vms:#{identifier}"
+  defp alive_key(identifier), do: "#{default_scope}:#{identifier}:alive"
   defp registered_vms_key,    do: "#{default_scope}:registered_vms"
 end
