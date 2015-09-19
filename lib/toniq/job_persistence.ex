@@ -8,7 +8,7 @@ defmodule Toniq.JobPersistence do
     store_job_in_key(worker_module, opts, jobs_key(identifier))
   end
 
-  # only used in tests
+  # Only used in tests
   def store_incoming_job(worker_module, opts, identifier \\ default_identifier) do
     store_job_in_key(worker_module, opts, incoming_jobs_key(identifier))
   end
