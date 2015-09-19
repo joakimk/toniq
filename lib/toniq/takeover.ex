@@ -12,7 +12,7 @@ defmodule Toniq.Takeover do
   end
 
   def init(state) do
-    :timer.send_interval takeover_interval, :check_takeover
+    {:ok, _} = :timer.send_interval takeover_interval, :check_takeover
     {:ok, state}
   end
 

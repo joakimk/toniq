@@ -4,7 +4,7 @@ defmodule Toniq.JobImporter do
   end
 
   def init(state) do
-    :timer.send_interval job_import_interval, :import_jobs
+    {:ok, _} = :timer.send_interval job_import_interval, :import_jobs
     {:ok, state}
   end
 
