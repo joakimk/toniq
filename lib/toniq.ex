@@ -28,6 +28,8 @@ defmodule Toniq do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+    Toniq.Config.setup
+
     set_up_redis
 
     children = [
