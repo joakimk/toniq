@@ -202,14 +202,10 @@ This library was initially built to support what was needed in [content_translat
 * [x] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
 * [x] If mark_as_finish/failed fails. Do something appropriate. (any sub-system crash will use failover to get jobs back)
 * [x] Safe failover of jobs
-  * [ ] Consider starting toniq differently in tests to better isolate unit tests
-* [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
-  - Run the persistance in a singleton, named, process and have that own the redis connection?
-    - Maybe run a process just to keep track of messages going to it, and retry if one times out?
-  - Simple solution: get the pid from a helper module, reconnect if there is no pid
-* [ ] Verify that enqueue worked, it may return a no connection error
-* [ ] Exponential backoff on retries for the redis connection, on both queries and initial connect
-* [ ] Look though every GenServer, ensure there is a plan for not loosing data when they crash
+* [x] Restart the redis connection if it fails
+* [x] Verify that enqueue worked, it may return a no connection error
+* [x] Look though every GenServer, ensure there is a plan for not loosing data when they crash
+* [ ] Retry connecting to redis for at least 15 seconds before crashing toniq
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
@@ -236,6 +232,7 @@ This library was initially built to support what was needed in [content_translat
 
 ### Later
 
+* [ ] Consider starting toniq differently in tests to better isolate unit tests
 * [ ] Be able to run without any persistence if none is needed?
 * [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
 * [ ] Support different enqueue strategies on a per-worker or per-enqueue basis
