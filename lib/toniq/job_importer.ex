@@ -17,10 +17,11 @@ defmodule Toniq.JobImporter do
   defp import_jobs(enabled: true) do
     incoming_jobs
     |> log_import
-    |> Enum.each fn(job) ->
-      Toniq.enqueue(job.worker, job.opts)
-      Toniq.JobPersistence.remove_from_incoming_jobs(job)
-    end
+    |> Enum.each &import_job/1
+  end
+
+  defp incoming_jobs do
+    Toniq.JobPersistence.incoming_jobs
   end
 
   defp log_import([]), do: []
@@ -32,8 +33,9 @@ defmodule Toniq.JobImporter do
     jobs
   end
 
-  defp incoming_jobs do
-    Toniq.JobPersistence.incoming_jobs
+  def import_job(job) do
+    Toniq.enqueue(job.worker, job.opts)
+    Toniq.JobPersistence.remove_from_incoming_jobs(job)
   end
 
   defp enabled?, do: !Application.get_env(:toniq, :disable_import)
