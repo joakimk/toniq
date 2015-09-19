@@ -199,6 +199,8 @@ This library was initially built to support what was needed in [content_translat
 * [x] Consider renaming this since it's very hard to differentiate between exqueue and exq in spoken language
 * [x] Make the tests reliable.
 * [x] Readable error message when redis isn't present
+* [x] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
+* [x] If mark_as_finish/failed fails. Do something appropriate. (any sub-system crash will use failover to get jobs back)
 * [x] Safe failover of jobs
   * [ ] Consider starting toniq differently in tests to better isolate unit tests
 * [ ] Figure out if exredis can be supervised, maybe by wrapping it in a supervised worker
@@ -207,11 +209,7 @@ This library was initially built to support what was needed in [content_translat
   - Simple solution: get the pid from a helper module, reconnect if there is no pid
 * [ ] Verify that enqueue worked, it may return a no connection error
 * [ ] Exponential backoff on retries for the redis connection, on both queries and initial connect
-* [ ] If the JobRunner crashes, restore jobs somehow. Possibly use the failover feature.
-  - Maybe have the JobRunner own the failover process, so that it's also restarted and the uuid gets re-generated?
-  - Orphaned jobs would be re-queued by the failover process?
 * [ ] Look though every GenServer, ensure there is a plan for not loosing data when they crash
-* [ ] If mark_as_finish/failed fails. Do something appropriate. Right now jobs will most likely wait around until next restart to be re-run.
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
