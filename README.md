@@ -139,7 +139,7 @@ Jobs are run within the VM where they are enqueued, but if that VM is stopped or
 
 By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a very complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
 
-The failover system consists of three independent processes:
+The system responsible for taking over orphaned jobs consists of three independent processes:
 
 * `Toniq.Keepalive` reports in as long as the VM is running and redis is available
 * `Toniq.Takeover` takes over jobs from VMs that hasn't reported in recently enough
