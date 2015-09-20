@@ -189,6 +189,8 @@ I tend to prefer the first alternative in whenever possible.
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
+* [ ] Log an error when a job takes "too long" to run, set a sensible default
+  - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 
 ### Speed
 
