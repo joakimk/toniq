@@ -126,7 +126,7 @@ Or you could specify it for induvidual enqueue's:
 Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
 ```
 
-## Designed for safety and simplicity
+## Designed for reliability and simplicity
 
 Instead of using redis as a messaging queue, toniq uses it for backup.
 
