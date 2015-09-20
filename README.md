@@ -151,13 +151,13 @@ As soon as another Erlang VM is running it will find the jobs in redis, move the
 
 Toniq does not use any locks in redis. The takeover is the only point where multiple VMs contest for the same data and it's handled with a redis transaction. The jobs are either moved over or nothing happens if it's already moved by another VM.
 
-You can configure the timeouts in your application, see [config.ex](lib/toniq/config.ex) for defaults.
-
 The failover system consists of three independent processes:
 
 * `Toniq.Keepalive` reports in as long as the VM is running and redis is available
 * `Toniq.Takeover` takes over jobs from vms that hasn't reported in recently enough
 * `Toniq.JobImporter` enqueues and runs inherited jobs
+
+The default timeouts and intervals should work for most people, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
 
 ### Why will jobs be run more than once in rare cases?
 
