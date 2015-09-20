@@ -140,7 +140,7 @@ As toniq only runs jobs within the VM that enqueued them, it's up to you to enqu
 
 This could be as simple as web requests to load balanced web servers enqueuing jobs within each web server, or as complex as a custom redis pub-sub system.
 
-Alternatively you can use the `Toniq.JobImporter` to pass jobs to a random VM. It has a few seconds delay due to being a polling system.
+Alternatively you can use the [Toniq.JobImporter](lib/toniq/job_importer.ex) to pass jobs to a random VM. It has a few seconds delay due to being a polling system.
 
 ```elixir
 identifier = Toniq.KeepalivePersistence.registered_vms |> Enum.shuffle |> hd
