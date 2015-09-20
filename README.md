@@ -145,7 +145,7 @@ The failover system consists of three independent processes:
 * `Toniq.Takeover` takes over jobs from VMs that hasn't reported in recently enough
 * `Toniq.JobImporter` enqueues and runs the jobs that where taken over
 
-Toniq will restart all it's processes if keepalive fails. The new processes will be be treated just the same as if the entire VM was restarted. They will try and take over jobs just the same as any other VM instance.
+Toniq restarts all it's processes if keepalive fails. The new processes will be be treated just the same as if the entire VM was restarted. They will try and take over jobs just the same as any other VM instance.
 
 The default timeouts and intervals should work for most use cases, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
 
