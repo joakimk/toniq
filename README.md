@@ -131,7 +131,7 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 ## Designed for safety and simplicity first
 
-In contrast to many other job queues toniq is very simple. That does not mean it's not powerful.
+In contrast to many other job queues toniq is very simple, but that does not mean it's not powerful!
 
 Instead of using redis as a messaging queue, toniq uses it as a backup system.
 
