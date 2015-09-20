@@ -128,7 +128,7 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 ## Designed for safety and simplicity first
 
-Instead of using redis as a messaging queue, toniq uses it as a backup system.
+Instead of using redis as a messaging queue, toniq uses it as a backup.
 
 Jobs are run within the VM where they are enqueued, but if that VM is stopped or crashes, jobs are recovered from redis by another VM.
 
