@@ -14,13 +14,12 @@ Designed to:
 * Be very easy to use. Just define a worker and enqueue jobs!
 * Pass arguments to the worker exactly as they where enqueued, no JSON conversion
 * Automatically retry jobs that fail
-* Limit concurrency when requested
-* Skip persistence when requested
+* Be able to limit concurrency and skip persistence when requested
 * Play to Erlang's strengths by using processes well
   - Practically no limits on concurrent jobs
   - Uses all available CPU cores
 * Fail on the side of running a job too many times rather than not at all. See more on this below.
-* Work well on limited environments like Heroku where you can't connect multiple erlang nodes directly or do hot code updates
+* Work well on limited environments like Heroku where you can't connect multiple Erlang nodes directly or do hot code updates
 * Have helpful error messages
 
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq). You can run both Exq and Toniq in the same app for different workers.
