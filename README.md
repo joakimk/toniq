@@ -130,19 +130,9 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 Instead of using redis as a messaging queue, toniq uses it as a backup.
 
-Jobs are run within the VM where they are enqueued, but if that VM is stopped or crashes, jobs can be recovered from redis.
+Jobs are run within the VM where they are enqueued, but if that VM is stopped or crashes, jobs will be recovered from redis once another VM is running.
 
 By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a very complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
-
-The system responsible for taking over orphaned jobs consists of three independent processes:
-
-* `Toniq.Keepalive` reports in as long as the VM is running and redis is available
-* `Toniq.Takeover` takes over jobs from VMs that hasn't reported in recently enough
-* `Toniq.JobImporter` enqueues and runs the jobs that where taken over
-
-Toniq restarts all it's processes when keepalive fails. The new processes will be be treated just the same as if the entire VM was restarted.
-
-The default timeouts and intervals should work for most use cases, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
 
 ## Load balancing
 
