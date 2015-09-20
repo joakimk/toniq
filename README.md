@@ -135,7 +135,7 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 * You don't have to run the code syncronously. E.g. don't delay a web response while sending email.
 * You don't have to write custom code for the things a job queue can handle for you.
-* You get persistence, retries, concurrency limits, etc.
+* You get persistence, retries, failover, concurrency limits, etc.
 
 ### Will jobs be run in order?
 
