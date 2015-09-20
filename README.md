@@ -13,15 +13,12 @@ Designed to:
 
 * Be very easy to use. Just define a worker and enqueue jobs!
 * Pass arguments to the worker exactly as they where enqueued, no JSON conversion
-* Play to Erlang's strengths
-  - One job is one Erlang process
-  - 100k concurrent processes on one computer is not unusual
 * Automatically retry jobs that fail
 * Limit concurrency when requested
 * Skip persistence when requested
-* Notify about errors through [Logger](http://elixir-lang.org/docs/v1.0/logger/Logger.html)
-  - Can be passed on to services like [honeybadger](https://github.com/joakimk/honeybadger)
-* Only use redis as a backup
+* Play to Erlang's strengths by using processes well
+  - Practically no limits on concurrent jobs
+  - Uses all available CPU cores
 * Fail on the side of running a job too many times rather than not at all. See more on this below.
 * Work well on limited environments like Heroku where you can't connect multiple erlang nodes directly or do hot code updates
 * Have helpful error messages
