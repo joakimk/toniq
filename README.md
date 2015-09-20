@@ -154,7 +154,7 @@ Toniq does not use any locks in redis. The takeover is the only point where mult
 The failover system consists of three independent processes:
 
 * `Toniq.Keepalive` reports in as long as the VM is running and redis is available
-* `Toniq.Takeover` takes over jobs from vms that hasn't reported in recently enough
+* `Toniq.Takeover` takes over jobs from VMs that hasn't reported in recently enough
 * `Toniq.JobImporter` enqueues and runs inherited jobs
 
 The default timeouts and intervals should work for most use cases, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
@@ -183,7 +183,7 @@ I tend to prefer the first alternative in whenever possible.
 ### Speed
 
 * [ ] Custom and infinite max\_concurrency
-  - Probably only enforced on a VM-level. Two vms of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
+  - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
   - Idea: use GenEvent of finished/failed to drive it?
 * [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
