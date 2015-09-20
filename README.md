@@ -188,6 +188,7 @@ I tend to prefer the first alternative in whenever possible.
 * [ ] Remove all old todos from the readme.
 * [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
 * [ ] Review persistence format. Will have to write migrations after 1.0.
+* [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?
 * [ ] Make a note about API stability and semver
 * [ ] Hex package
 * [ ] Add installation instructions
