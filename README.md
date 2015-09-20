@@ -157,7 +157,7 @@ The failover system consists of three independent processes:
 * `Toniq.Takeover` takes over jobs from vms that hasn't reported in recently enough
 * `Toniq.JobImporter` enqueues and runs inherited jobs
 
-The default timeouts and intervals should work for most people, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
+The default timeouts and intervals should work for most use cases, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
 
 ### Why will jobs be run more than once in rare cases?
 
