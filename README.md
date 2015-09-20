@@ -136,16 +136,19 @@ By running jobs within the same VM that enqueues them we avoid having to use any
 
 ## Load balancing
 
-As toniq only runs jobs within the VM that enqueued them, it's up to you to enqueue jobs in different VMs if you want to run more of them concurrently than a single Erlang VM can handle. A single VM can handle quite a lot though!
+As toniq only runs jobs within the VM that enqueued them, it's up to you to enqueue jobs in different VMs if you want to run more of them concurrently than a single Erlang VM can handle.
 
 This could be as simple as web requests to load balanced web servers enqueuing jobs within each web server, or as complex as a custom redis pub-sub system.
 
-Alternatively you can use the Toniq.JobImporter to pass jobs to a random VM. It has a few seconds delay due to being a polling system.
+Alternatively you can use the `Toniq.JobImporter` to pass jobs to a random VM. It has a few seconds delay due to being a polling system.
 
 ```elixir
 identifier = Toniq.KeepalivePersistence.registered_vms |> Enum.shuffle |> hd
 Toniq.JobPersistence.store_incoming_job(Toniq.TestWorker, [], identifier)
 ```
+
+A single VM can handle quite a lot though! So start out that way.
+
 ## FAQ
 
 ### Why have a job queue at all?
