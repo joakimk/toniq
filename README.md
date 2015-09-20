@@ -147,10 +147,11 @@ Jobs are serialized using erlang serialization. This means you can pass almost a
 
 ### If an Erlang VM stops and not all jobs are processed, how are those jobs handled?
 
-As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so),
-so that the original VM has a chance to report in and retain it's jobs.
+As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so), so that the original VM has a chance to report in and retain it's jobs.
 
-This is the only place where locking is used in redis. It is used to ensure that only one Erlang VM picks up jobs from a stopped one.
+Toniq does not use any locks in redis. The takeover is the only point where multiple VMs contest for the same data and it's handled with a redis transaction. The jobs are either moved over or nothing happens if it's already moved by another VM.
+
+You can configure the timeouts in your application, see [config.ex](lib/toniq/config.ex) for defaults.
 
 ### Why will jobs be run more than once in rare cases?
 
