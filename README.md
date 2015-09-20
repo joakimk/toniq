@@ -130,7 +130,7 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 Instead of using redis as a messaging queue, toniq uses it for backup.
 
-Jobs are run within the VM where they are enqueued, but if that VM is stopped or crashes, jobs are recovered from redis once another VM is running.
+Jobs are run within the VM where they are enqueued. If a VM is stopped or crashes, unprocessed jobs are recovered from redis once another VM is running.
 
 By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
 
