@@ -169,8 +169,6 @@ Jobs are serialized using erlang serialization. This means you can pass almost a
 
 As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so), so that the original VM has a chance to report in and retain it's jobs.
 
-See the section in toniq's design for more details.
-
 ### Why will jobs be run more than once in rare cases?
 
 If something really unexpected happens and a job can't be marked as finished after being run, this library prefers to run it twice (or more) rather than not at all.
