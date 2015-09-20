@@ -144,6 +144,12 @@ Toniq restarts all it's processes when keepalive fails. The new processes will b
 
 The default timeouts and intervals should work for most use cases, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
 
+## Load balancing
+
+As toniq only runs jobs within the VM that enqueued them, it's up to you to enqueue jobs in different VMs if you want to run more of them concurrently than a single erlang VM can handle. A single VM can handle quite a lot though!
+
+This could be as simple as web requests to round-robin load balanced web servers enqueuing jobs within each web server, or as complex as a custom redis pub-sub system.
+
 ## FAQ
 
 ### Why have a job queue at all?
