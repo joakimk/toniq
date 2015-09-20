@@ -21,10 +21,7 @@ Designed to:
 * Skip persistence when requested
 * Notify about errors through [Logger](http://elixir-lang.org/docs/v1.0/logger/Logger.html)
   - Can be passed on to services like [honeybadger](https://github.com/joakimk/honeybadger)
-* Use redis sparingly
-  - To handle Erlang VM restarts and crashes without loosing jobs
-  - To record failed jobs and be able to do manual retries or deletion
-  - To be able to see status (iex for now, possible UI in the future)
+* Only use redis as a backup
 * Fail on the side of running a job too many times rather than not at all. See more on this below.
 * Work well on limited environments like Heroku where you can't connect multiple erlang nodes directly or do hot code updates
 * Have helpful error messages
