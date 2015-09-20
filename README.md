@@ -147,7 +147,11 @@ identifier = Toniq.KeepalivePersistence.registered_vms |> Enum.shuffle |> hd
 Toniq.JobPersistence.store_incoming_job(Toniq.TestWorker, [], identifier)
 ```
 
-A single VM can handle quite a lot though! So start out with that.
+## Request for feedback
+
+Would be awesome if you ping `@joakimk` on twitter if you use this library and give some feedback on what works well, what caused you problems, what was hard to understand, on what scale you run jobs, etc.
+
+It will help greatly with future improvements and will introduce more people to toniq.
 
 ## FAQ
 
