@@ -133,7 +133,7 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 ### Why have a job queue at all?
 
-* You don't have to run the code syncronously. E.g. don't delay a web response while sending email.
+* You don't have to run the code synchronously. E.g. don't delay a web response while sending email.
 * You don't have to write custom code for the things a job queue can handle for you.
 * You get persistence, retries, failover, concurrency limits, etc.
 
