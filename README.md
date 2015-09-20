@@ -136,7 +136,7 @@ By running jobs within the same VM that enqueues them we avoid having to use any
 
 ## Load balancing
 
-As toniq only runs jobs within the VM that enqueued them, it's up to you to enqueue jobs in different VMs if you want to run more of them concurrently than a single erlang VM can handle. A single VM can handle quite a lot though!
+As toniq only runs jobs within the VM that enqueued them, it's up to you to enqueue jobs in different VMs if you want to run more of them concurrently than a single Erlang VM can handle. A single VM can handle quite a lot though!
 
 This could be as simple as web requests to load balanced web servers enqueuing jobs within each web server, or as complex as a custom redis pub-sub system.
 
