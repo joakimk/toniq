@@ -153,6 +153,12 @@ Toniq does not use any locks in redis. The takeover is the only point where mult
 
 You can configure the timeouts in your application, see [config.ex](lib/toniq/config.ex) for defaults.
 
+The failover system consists of three independent processes:
+
+* `Toniq.Keepalive` reports in as long as the VM is running and redis is available
+* `Toniq.Takeover` takes over jobs from vms that hasn't reported in recently enough
+* `Toniq.JobImporter` enqueues and runs inherited jobs
+
 ### Why will jobs be run more than once in rare cases?
 
 If something really unexpected happens and a job can't be marked as finished after being run, this library prefers to run it twice (or more) rather than not at all.
