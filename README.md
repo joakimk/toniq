@@ -184,14 +184,14 @@ I tend to prefer the first alternative in whenever possible.
 ### 1.0
 
 * [ ] Add CI
-* [ ] Add installation instructions
-  - Make a note about multiple apps using the same redis server and the config for that.
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
 * [ ] Remove all old todos from the readme.
-* [ ] Hex package
 * [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
 * [ ] Review persistence format. Will have to write migrations after 1.0.
 * [ ] Make a note about API stability and semver
+* [ ] Hex package
+* [ ] Add installation instructions
+  - Make a note about multiple apps using the same redis server and the config for that.
 * [ ] MAYBE: Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
 
 ### Later
