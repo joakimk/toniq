@@ -128,17 +128,17 @@ Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persi
 
 ## Designed for safety and simplicity first
 
-Instead of using redis as a messaging queue, toniq uses it as a backup.
+Instead of using redis as a messaging queue, toniq uses it for backup.
 
-Jobs are run within the VM where they are enqueued, but if that VM is stopped or crashes, jobs will be recovered from redis once another VM is running.
+Jobs are run within the VM where they are enqueued, but if that VM is stopped or crashes, jobs are recovered from redis once another VM is running.
 
-By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a very complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
+By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
 
 ## Load balancing
 
 As toniq only runs jobs within the VM that enqueued them, it's up to you to enqueue jobs in different VMs if you want to run more of them concurrently than a single erlang VM can handle. A single VM can handle quite a lot though!
 
-This could be as simple as web requests to round-robin load balanced web servers enqueuing jobs within each web server, or as complex as a custom redis pub-sub system.
+This could be as simple as web requests to load balanced web servers enqueuing jobs within each web server, or as complex as a custom redis pub-sub system.
 
 ## FAQ
 
