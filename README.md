@@ -145,7 +145,6 @@ Alternatively you can use [Toniq.JobImporter](lib/toniq/job_importer.ex) to pass
 ```elixir
 identifier = Toniq.KeepalivePersistence.registered_vms |> Enum.shuffle |> hd
 Toniq.JobPersistence.store_incoming_job(Toniq.TestWorker, [], identifier)
-# Toniq.JobPersistence.store_job does not work because toniq only uses that list as a backup, not as an inbox
 ```
 
 A single VM can handle quite a lot though! So start out with that.
