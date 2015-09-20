@@ -129,6 +129,26 @@ Or you could specify it for induvidual enqueue's:
 Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
 ```
 
+## Designed for safety and simplicity first
+
+In contrast to many other job queues toniq is very simple. That does not mean it's not powerful.
+
+Instead of using redis as a messaging queue, toniq uses it as a backup system.
+
+Jobs are run within the VM where they are enqueued, but if that VM is stopped or crashes, jobs can be recovered from the backup in redis.
+
+By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a very complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
+
+The failover system consists of three independent processes:
+
+* `Toniq.Keepalive` reports in as long as the VM is running and redis is available
+* `Toniq.Takeover` takes over jobs from VMs that hasn't reported in recently enough
+* `Toniq.JobImporter` enqueues and runs the jobs that where taken over
+
+Toniq will restart all it's processes if keepalive fails. The new processes will be be treated just the same as if the entire VM was restarted. They will try and take over jobs just the same as any other VM instance.
+
+The default timeouts and intervals should work for most use cases, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
+
 ## FAQ
 
 ### Why have a job queue at all?
@@ -145,21 +165,11 @@ This is a first-in-first-out queue but due to retries and concurrency, ordering 
 
 Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
 
-### If an Erlang VM stops and not all jobs are processed, how are those jobs handled?
+### If an Erlang VM stops with unprocessed jobs in its queue, how are those jobs handled?
 
 As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so), so that the original VM has a chance to report in and retain it's jobs.
 
-Toniq does not use any locks in redis. The takeover is the only point where multiple VMs contest for the same data and it's handled with a redis transaction. The jobs are either moved over or nothing happens if it's already moved by another VM.
-
-The failover system consists of three independent processes:
-
-* `Toniq.Keepalive` reports in as long as the VM is running and redis is available
-* `Toniq.Takeover` takes over jobs from VMs that hasn't reported in recently enough
-* `Toniq.JobImporter` enqueues and runs inherited jobs
-
-Toniq will restart all it's processes if keepalive fails. The new processes will be be treated just the same as if the entire VM was restarted. They will try and takeover jobs just the same as any other VM instance.
-
-The default timeouts and intervals should work for most use cases, but you can customize them for your application, see [config.ex](lib/toniq/config.ex) for defaults.
+See the section in toniq's design for more details.
 
 ### Why will jobs be run more than once in rare cases?
 
