@@ -143,7 +143,7 @@ Toniq.JobPersistence.store_incoming_job(Toniq.TestWorker, [], identifier)
 
 ## Request for feedback
 
-I would like to know how using this tool works out for you. Any problems? Anything that was hard to understand from the docs? What scale do you run jobs on? Works great? Better than anything you've used before?
+I would like to know how using this tool works out for you. Any problems? Anything that was hard to understand from the docs? What scale do you run jobs on? Works great? Better than something you've used before? Missing some feature you're used to?
 
 Ping [@joakimk](https://twitter.com/joakimk) or open an issue.
 
