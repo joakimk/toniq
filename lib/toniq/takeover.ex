@@ -6,6 +6,7 @@ defmodule Toniq.Takeover do
   """
 
   use GenServer
+  require Logger
 
   def start_link(name \\ __MODULE__, keepalive_name \\ Toniq.Keepalive) do
     GenServer.start_link(__MODULE__, %{ keepalive_name: keepalive_name }, name: name)
