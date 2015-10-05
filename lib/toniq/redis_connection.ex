@@ -6,13 +6,6 @@ defmodule Toniq.RedisConnection do
   end
 
   def init(state) do
-    # TODO: Replace this very basic timeout between attempts
-    :timer.sleep 250
-
-    # Not supervising exredis seems like it could work as :eredis reconnects if needed,
-    # but will look into this more later.
-    #
-    # https://github.com/wooga/eredis#reconnecting-on-redis-down--network-failure--timeout--etc
     redis_url
     |> Exredis.start_using_connection_string
     |> register_redis

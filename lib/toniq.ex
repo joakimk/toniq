@@ -41,7 +41,12 @@ defmodule Toniq do
 
     # When one process fails we restart all of them to ensure a valid state. Jobs are then
     # re-loaded from redis. Supervisor docs: http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    opts = [strategy: :one_for_all, name: Toniq.Supervisor, max_seconds: 15, max_restarts: 3]
+    opts = [
+      strategy: :one_for_all,
+      name: Toniq.Supervisor,
+      max_seconds: 15,
+      max_restarts: 3
+    ]
     Supervisor.start_link(children, opts)
   end
 end

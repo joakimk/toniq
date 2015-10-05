@@ -183,7 +183,6 @@ I tend to prefer the first alternative in whenever possible.
 
 ### Safety and reliability
 
-* [ ] Retry connecting to redis for at least 15 seconds before crashing toniq
 * Retries
   - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
