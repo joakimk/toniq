@@ -192,14 +192,14 @@ I tend to prefer the first alternative in whenever possible.
 ### Speed
 
 * [ ] Infinite concurrency
-* [ ] Custom max\_concurrency
-  - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
-  - Idea: use GenEvent of finished/failed to drive it?
 * [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 
 ### 1.0
 
+* [ ] Custom max\_concurrency
+  - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
+  - Idea: use GenEvent of finished/failed to drive it?
 * [ ] Verify that errors are only reported to honeybadger when a job is moved into failed_jobs
 * [ ] Add CI
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
