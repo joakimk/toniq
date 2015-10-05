@@ -191,7 +191,8 @@ I tend to prefer the first alternative in whenever possible.
 
 ### Speed
 
-* [ ] Custom and infinite max\_concurrency
+* [ ] Infinite concurrency
+* [ ] Custom max\_concurrency
   - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
   - Idea: use GenEvent of finished/failed to drive it?
 * [ ] Be able to skip persistence
@@ -213,6 +214,7 @@ I tend to prefer the first alternative in whenever possible.
 
 ### Later
 
+* [ ] Test that RedisConnection shows the nice error message
 * [ ] More logging
 * [ ] Consider starting toniq differently in tests to better isolate unit tests
 * [ ] Be able to run without any persistence if none is needed?
