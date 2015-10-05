@@ -19,13 +19,15 @@ defmodule Toniq.RedisConnection do
 
   defp register_redis({:connection_error, error}) do
     raise """
-
+    \n
+    ----------------------------------------------------
 
     Could not connect to redis.
 
     The error was: "#{inspect(error)}"
 
     Some things you could check:
+
     * Is the redis server running?
 
     * Did you set Mix.Config in your app?
@@ -33,6 +35,9 @@ defmodule Toniq.RedisConnection do
       config :toniq, redis_url: "redis://localhost:6379/0"
 
     * Is the current redis_url (#{redis_url}) correct?
+
+    ----------------------------------------------------
+
     """
   end
 
