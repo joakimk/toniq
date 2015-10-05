@@ -184,8 +184,8 @@ I tend to prefer the first alternative in whenever possible.
 ### Safety and reliability
 
 * Retries
-  - [ ] A failed job will be automatically retried with a delay between each.
   - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
+  - [ ] A failed job will be automatically retried with a delay between each.
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 
@@ -200,6 +200,7 @@ I tend to prefer the first alternative in whenever possible.
 
 ### 1.0
 
+* [ ] Verify that errors are only reported to honeybadger when a job is moved into failed_jobs
 * [ ] Add CI
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
 * [ ] Remove all old todos from the readme.
