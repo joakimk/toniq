@@ -127,7 +127,7 @@ An admin web UI is planned, but until then (and after that) you can use the cons
 Retrying all failed jobs:
 
     iex -S mix
-    iex> Enum.each Toniq.JobPersistence.failed_jobs, &Toniq.JobPersistence.retry/1
+    iex> Toniq.JobPersistence.failed_jobs |> Enum.each &Toniq.JobPersistence.retry/1
 
 Retrying one at a time:
 
