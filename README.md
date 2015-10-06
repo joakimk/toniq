@@ -120,7 +120,9 @@ Or you could specify it for induvidual enqueue's:
 Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
 ```
 
-## Retrying failed jobs from the console
+## Retrying failed jobs
+
+An admin web UI is planned, but until then (and after that) you can use the console.
 
 Retrying all failed jobs:
 
@@ -132,10 +134,6 @@ Retrying one at a time:
     iex> job = Toniq.JobPersistence.failed_jobs |> hd
     iex> IO.inspect job
     iex> Toniq.JobPersistence.retry(job)
-
-## Retrying failed jobs from the admin web UI
-
-Planned feature, but not in 1.0.
 
 ## Designed to avoid complexity
 
