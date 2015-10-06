@@ -127,13 +127,13 @@ An admin web UI is planned, but until then (and after that) you can use the cons
 Retrying all failed jobs:
 
     iex -S mix
-    iex> Toniq.JobPersistence.failed_jobs |> Enum.each &Toniq.JobPersistence.retry/1
+    iex> Toniq.JobPersistence.failed_jobs |> Enum.each &Toniq.retry/1
 
 Retrying one at a time:
 
     iex> job = Toniq.JobPersistence.failed_jobs |> hd
     iex> IO.inspect job
-    iex> Toniq.JobPersistence.retry(job)
+    iex> Toniq.retry(job)
 
 ## Designed to avoid complexity
 
@@ -199,7 +199,8 @@ I tend to prefer the first alternative in whenever possible.
 ### Safety and reliability
 
 * Retries
-  - [ ] A failed job can be manually retried and/or deleted by running code in an iex prompt.
+  - [x] A failed job can be manually retried in an iex prompt.
+  - [ ] A failed job can be manually deleted in an iex prompt.
   - [ ] A failed job will be automatically retried with a delay between each.
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.

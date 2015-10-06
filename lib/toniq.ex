@@ -23,6 +23,14 @@ defmodule Toniq do
     |> Toniq.JobRunner.register_job
   end
 
+  @doc """
+  Retry a job
+  """
+  def retry(job) do
+    Toniq.JobPersistence.move_failed_job_to_jobs(job)
+    |> Toniq.JobRunner.register_job
+  end
+
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do

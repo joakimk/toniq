@@ -9,7 +9,7 @@ defmodule Exredis.JobPersistenceTest do
   defmodule SomeWorker do
   end
 
-  test "can store, fetch and mark a job as finished or failed" do
+  test "can persist job state" do
     job1 = Toniq.JobPersistence.store_job(SomeWorker, some: "data")
     job2 = Toniq.JobPersistence.store_job(SomeWorker, other: "data")
 
@@ -22,6 +22,10 @@ defmodule Exredis.JobPersistenceTest do
     Toniq.JobPersistence.mark_as_failed(job1)
     assert Toniq.JobPersistence.jobs == []
     assert Toniq.JobPersistence.failed_jobs == [job1]
+
+    Toniq.JobPersistence.move_failed_job_to_jobs(job1)
+    assert Toniq.JobPersistence.jobs == [job1]
+    assert Toniq.JobPersistence.failed_jobs == []
   end
 
   test "can store and retrieve incoming jobs" do

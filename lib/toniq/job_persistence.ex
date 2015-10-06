@@ -53,6 +53,22 @@ defmodule Toniq.JobPersistence do
     ])
   end
 
+  @doc """
+  Moves a failed job to the regular jobs list.
+
+  Use Toniq.retry instead of this to actually run the job too.
+  """
+  def move_failed_job_to_jobs(job) do
+    redis |> Exredis.query_pipe([
+      ["MULTI"],
+      ["SREM", failed_jobs_key, job],
+      ["SADD", jobs_key(default_identifier), job],
+      ["EXEC"],
+    ])
+
+    job
+  end
+
   def jobs_key(identifier) do
     identifier_scoped_key :jobs, identifier
   end

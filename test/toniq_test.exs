@@ -60,6 +60,19 @@ defmodule ToniqTest do
     assert logs =~ ~r/Job #\d: ToniqTest.TestErrorWorker.perform\(\[data: 10\]\) failed with error: %RuntimeError{message: "fail"}/
   end
 
+  test "failed jobs can be retried" do
+    capture_log fn ->
+      job = Toniq.enqueue(TestErrorWorker, data: 10)
+      assert_receive { :failed, ^job }
+      assert Toniq.JobPersistence.failed_jobs == [job]
+
+      assert Toniq.retry(job)
+
+      assert_receive { :failed, ^job }
+      assert Toniq.JobPersistence.failed_jobs == [job]
+    end
+  end
+
   test "can be conventiently called within a pipeline" do
     Process.register(self, :toniq_test)
 
