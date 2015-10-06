@@ -132,7 +132,6 @@ Retrying all failed jobs:
 Retrying one at a time:
 
     iex> job = Toniq.JobPersistence.failed_jobs |> hd
-    iex> IO.inspect job
     iex> Toniq.retry(job)
 
 ## Designed to avoid complexity
