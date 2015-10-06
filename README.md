@@ -120,6 +120,19 @@ Or you could specify it for induvidual enqueue's:
 Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
 ```
 
+## Retrying failed jobs
+
+Until there is a admin web UI you can do something like this from an iex prompt:
+
+    iex -S mix
+    iex> Enum.each Toniq.JobPersistence.failed_jobs, &Toniq.JobPersistence.retry/1
+
+Or like this if you like to inspect each job before you retry:
+
+    iex> job = Toniq.JobPersistence.failed_jobs |> hd
+    iex> IO.inspect job
+    iex> Toniq.JobPersistence.retry(job)
+
 ## Designed to avoid complexity
 
 Instead of using redis as a messaging queue, toniq uses it for backup.
