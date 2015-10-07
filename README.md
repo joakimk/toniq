@@ -126,18 +126,24 @@ An admin web UI is planned, but until then (and after that) you can use the cons
 
 Retrying all failed jobs:
 
-    iex -S mix
-    iex> Toniq.failed_jobs |> Enum.each &Toniq.retry/1
+```elixir
+iex -S mix
+iex> Toniq.failed_jobs |> Enum.each &Toniq.retry/1
+```
 
 Retrying one at a time:
 
-    iex> job = Toniq.failed_jobs |> hd
-    iex> Toniq.retry(job)
+```elixir
+iex> job = Toniq.failed_jobs |> hd
+iex> Toniq.retry(job)
+```
 
 Or delete the failed job:
 
-    iex> job = Toniq.failed_jobs |> hd
-    iex> Toniq.delete(job)
+```elixir
+iex> job = Toniq.failed_jobs |> hd
+iex> Toniq.delete(job)
+```
 
 ## Designed to avoid complexity
 
