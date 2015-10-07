@@ -24,11 +24,18 @@ defmodule Toniq do
   end
 
   @doc """
-  Retry a job
+  Retry a failed job
   """
   def retry(job) do
     Toniq.JobPersistence.move_failed_job_to_jobs(job)
     |> Toniq.JobRunner.register_job
+  end
+
+  @doc """
+  Delete a failed job
+  """
+  def delete(job) do
+    Toniq.JobPersistence.delete_failed_job(job)
   end
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html

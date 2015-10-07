@@ -69,6 +69,11 @@ defmodule Toniq.JobPersistence do
     job
   end
 
+  def delete_failed_job(job) do
+    redis
+    |> srem(failed_jobs_key, job)
+  end
+
   def jobs_key(identifier) do
     identifier_scoped_key :jobs, identifier
   end

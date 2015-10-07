@@ -134,6 +134,11 @@ Retrying one at a time:
     iex> job = Toniq.JobPersistence.failed_jobs |> hd
     iex> Toniq.retry(job)
 
+Or delete the failed job:
+
+    iex> job = Toniq.JobPersistence.failed_jobs |> hd
+    iex> Toniq.delete(job)
+
 ## Designed to avoid complexity
 
 Instead of using redis as a messaging queue, toniq uses it for backup.
