@@ -206,14 +206,6 @@ I tend to prefer the first alternative in whenever possible.
 
 ## TODO
 
-### Safety and reliability
-
-* Retries
-  - [x] A failed job can be manually retried in an iex prompt.
-  - [x] A failed job can be manually deleted in an iex prompt.
-  - [ ] A failed job will be automatically retried with a delay between each.
-* [x] Take over failed jobs too
-
 ### Speed
 
 * [ ] Infinite concurrency
@@ -222,6 +214,7 @@ I tend to prefer the first alternative in whenever possible.
 
 ### 1.0
 
+- [ ] A failed job will be automatically retried with a delay between each.
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Custom max\_concurrency
