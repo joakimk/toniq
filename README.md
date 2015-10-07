@@ -208,7 +208,7 @@ I tend to prefer the first alternative in whenever possible.
 
 ### Speed
 
-* [ ] Infinite concurrency
+* [x] Infinite concurrency
 * [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
 

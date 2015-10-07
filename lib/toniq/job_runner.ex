@@ -12,12 +12,11 @@ defmodule Toniq.JobRunner do
   end
 
   def handle_cast({:register_job, job}, state) do
-    # NOTE: Run jobs concurrently later
-    #spawn_link fn ->
+    spawn_link fn ->
       job
       |> run_job
       |> process_result
-    #end
+    end
 
     {:noreply, state}
   end
