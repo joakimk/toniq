@@ -19,11 +19,15 @@ defmodule Exredis.TakeoverTest do
 
     # Jobs are not taken over while :other_vm is still reporting in
     add_incoming_job(other_vm)
+    add_failed_job(other_vm)
     add_job(other_vm)
     :timer.sleep 150
     assert Enum.count(jobs(other_vm)) == 1
+    assert Enum.count(failed_jobs(other_vm)) == 1
     assert Enum.count(incoming_jobs(other_vm)) == 1
+
     assert Enum.count(jobs(current_vm)) == 0
+    assert Enum.count(failed_jobs(current_vm)) == 0
     assert Enum.count(incoming_jobs(current_vm)) == 0
 
     # When :other_vm is stopped, :current_vm moves the jobs to the incoming jobs list
@@ -31,8 +35,11 @@ defmodule Exredis.TakeoverTest do
     stop_keepalive(:other_vm)
     :timer.sleep 200
     assert Enum.count(jobs(other_vm)) == 0
+    assert Enum.count(failed_jobs(other_vm)) == 0
     assert Enum.count(incoming_jobs(other_vm)) == 0
+
     assert Enum.count(jobs(current_vm)) == 0
+    assert Enum.count(failed_jobs(current_vm)) == 1
     assert Enum.count(incoming_jobs(current_vm)) == 2
 
     # check that :other_vm has been deregistered
@@ -55,8 +62,17 @@ defmodule Exredis.TakeoverTest do
     Toniq.JobPersistence.store_job(FakeWorker, [], identifier)
   end
 
+  defp add_failed_job(identifier) do
+    job = add_job(identifier)
+    Toniq.JobPersistence.mark_as_failed(job, identifier)
+  end
+
   defp jobs(identifier) do
     identifier |> Toniq.JobPersistence.jobs
+  end
+
+  defp failed_jobs(identifier) do
+    identifier |> Toniq.JobPersistence.failed_jobs
   end
 
   defp incoming_jobs(identifier) do

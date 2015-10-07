@@ -31,7 +31,7 @@ defmodule Toniq.JobPersistence do
   @doc """
   Returns all failed jobs.
   """
-  def failed_jobs, do: load_jobs(failed_jobs_key)
+  def failed_jobs(identifier \\ default_identifier), do: load_jobs(failed_jobs_key(identifier))
 
   @doc """
   Marks a job as finished. This means that it's deleted from redis.
@@ -48,7 +48,7 @@ defmodule Toniq.JobPersistence do
     redis |> Exredis.query_pipe([
       ["MULTI"],
       ["SREM", jobs_key(identifier), job],
-      ["SADD", failed_jobs_key, job],
+      ["SADD", failed_jobs_key(identifier), job],
       ["EXEC"],
     ])
   end
@@ -61,7 +61,7 @@ defmodule Toniq.JobPersistence do
   def move_failed_job_to_jobs(job) do
     redis |> Exredis.query_pipe([
       ["MULTI"],
-      ["SREM", failed_jobs_key, job],
+      ["SREM", failed_jobs_key(default_identifier), job],
       ["SADD", jobs_key(default_identifier), job],
       ["EXEC"],
     ])
@@ -71,11 +71,15 @@ defmodule Toniq.JobPersistence do
 
   def delete_failed_job(job) do
     redis
-    |> srem(failed_jobs_key, job)
+    |> srem(failed_jobs_key(default_identifier), job)
   end
 
   def jobs_key(identifier) do
     identifier_scoped_key :jobs, identifier
+  end
+
+  def failed_jobs_key(identifier) do
+    identifier_scoped_key :failed_jobs, identifier
   end
 
   def incoming_jobs_key(identifier) do
@@ -103,10 +107,6 @@ defmodule Toniq.JobPersistence do
 
   defp first_in_first_out(first, second) do
     first.id < second.id
-  end
-
-  defp failed_jobs_key do
-    identifier_scoped_key :failed_jobs, default_identifier
   end
 
   defp counter_key do

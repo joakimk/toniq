@@ -27,6 +27,10 @@ defmodule Toniq.KeepalivePersistence do
       ["MULTI"],
 
       # Copy orphaned jobs to incoming jobs
+      #
+      # We copy jobs to incoming jobs so that they will be
+      # enqueued and run in this vm. Data in redis is just
+      # a backup, we only poll for incoming jobs.
       [
         "SUNIONSTORE",
         incoming_jobs_key(to_identifier),
@@ -35,10 +39,19 @@ defmodule Toniq.KeepalivePersistence do
         incoming_jobs_key(to_identifier)
       ],
 
+      # Move failed jobs
+      [
+        "SUNIONSTORE",
+        failed_jobs_key(to_identifier),
+        failed_jobs_key(from_identifier),
+        failed_jobs_key(to_identifier),
+      ],
+
       # Remove orphaned job lists
       [
         "DEL",
         jobs_key(from_identifier),
+        failed_jobs_key(from_identifier),
         incoming_jobs_key(from_identifier)
       ],
 
@@ -63,6 +76,10 @@ defmodule Toniq.KeepalivePersistence do
 
   defp jobs_key(identifier) do
     Toniq.JobPersistence.jobs_key(identifier)
+  end
+
+  defp failed_jobs_key(identifier) do
+    Toniq.JobPersistence.failed_jobs_key(identifier)
   end
 
   defp redis_query(query) do
