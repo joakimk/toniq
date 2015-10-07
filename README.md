@@ -213,8 +213,6 @@ I tend to prefer the first alternative in whenever possible.
   - [x] A failed job can be manually deleted in an iex prompt.
   - [ ] A failed job will be automatically retried with a delay between each.
 * [x] Take over failed jobs too
-* [ ] Log an error when a job takes "too long" to run, set a sensible default
-  - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 
 ### Speed
 
@@ -224,6 +222,8 @@ I tend to prefer the first alternative in whenever possible.
 
 ### 1.0
 
+* [ ] Log an error when a job takes "too long" to run, set a sensible default
+  - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Custom max\_concurrency
   - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
   - Idea: use GenEvent of finished/failed to drive it?
