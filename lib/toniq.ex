@@ -24,6 +24,11 @@ defmodule Toniq do
   end
 
   @doc """
+  List failed jobs
+  """
+  def failed_jobs, do: Toniq.JobPersistence.failed_jobs
+
+  @doc """
   Retry a failed job
   """
   def retry(job) do

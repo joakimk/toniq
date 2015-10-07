@@ -64,12 +64,12 @@ defmodule ToniqTest do
     capture_log fn ->
       job = Toniq.enqueue(TestErrorWorker, data: 10)
       assert_receive { :failed, ^job }
-      assert Toniq.JobPersistence.failed_jobs == [job]
+      assert Toniq.failed_jobs == [job]
 
       assert Toniq.retry(job)
 
       assert_receive { :failed, ^job }
-      assert Toniq.JobPersistence.failed_jobs == [job]
+      assert Toniq.failed_jobs == [job]
     end
   end
 
@@ -77,11 +77,11 @@ defmodule ToniqTest do
     capture_log fn ->
       job = Toniq.enqueue(TestErrorWorker, data: 10)
       assert_receive { :failed, ^job }
-      assert Toniq.JobPersistence.failed_jobs == [job]
+      assert Toniq.failed_jobs == [job]
 
       assert Toniq.delete(job)
 
-      assert Toniq.JobPersistence.failed_jobs == []
+      assert Toniq.failed_jobs == []
     end
   end
 
