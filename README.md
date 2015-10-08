@@ -211,6 +211,12 @@ I tend to prefer the first alternative in whenever possible.
 * [x] Infinite concurrency
 * [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
+   - [ ] write job times in microseconds?
+   - [ ] benchmark unpersisted jobs
+   - [ ] benchmark persisting many jobs (100k+)
+   - [ ] benchmark many long running jobs
+   - [ ] optimize a bit
+   - [ ] comparative benchmark for sidekiq and/or exq?
 
 ### 1.0
 

@@ -62,7 +62,3 @@ Measure.duration job_count, fn ->
 
   JobFinishedCounter.count 0, job_count
 end
-
-# Notes
-# 1850 ms overhead to register 10000 jobs?
-# write job times in microseconds?
