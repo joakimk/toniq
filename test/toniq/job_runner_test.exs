@@ -1,6 +1,5 @@
 defmodule Toniq.JobRunnerTest do
   use ExUnit.Case
-  import CaptureLog
 
   defmodule TestWorker do
     use Toniq.Worker
@@ -26,14 +25,13 @@ defmodule Toniq.JobRunnerTest do
     assert_receive {:finished, ^job}
   end
 
+  @tag :capture_log
   test "can run a job and report it as failed" do
     job = %{ id: 1, worker: TestWorker, opts: :fail }
 
-    capture_log fn ->
-      Toniq.JobRunner.register_job(job)
+    Toniq.JobRunner.register_job(job)
 
-      assert_receive {:failed, ^job}
-    end
+    assert_receive {:failed, ^job}
   end
 
   # The job processor caught a gen_server message, didn't
