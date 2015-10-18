@@ -186,7 +186,7 @@ This is a first-in-first-out queue but due to retries and concurrency, ordering 
 
 ### How are jobs serialized when stored in redis?
 
-Jobs are serialized using erlang serialization. This means you can pass almost anything to jobs, but just passing basic types is probably a good idea for compatibility with future code changes
+Jobs are serialized using [erlang serialization](http://www.erlang.org/doc/apps/erts/erl_ext_dist.html). It's the same format that is used when distributed nodes communicate. This means you can pass almost anything to jobs.
 
 ### If an Erlang VM stops with unprocessed jobs in its queue, how are those jobs handled?
 
