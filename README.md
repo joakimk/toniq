@@ -1,6 +1,6 @@
 # NOTE: Readme driven development below, this means this tool does not necessarily do what it says below yet.
 
-**Status**: The core parts are there and jobs are run, but only one at a time, and there are missing features. See the todo list.
+**Status**: The core parts are there, failover works, error handling works and jobs are run. See the 1.0 todo list.
 
 Toniq
 =======
@@ -209,23 +209,15 @@ I tend to prefer the first alternative in whenever possible.
 ### Speed
 
 * [x] Infinite concurrency
-* [ ] Be able to skip persistence
-* [ ] Simple benchmark to see if it behaves as expected in different modes
-   - [ ] write job times in microseconds?
-   - [ ] benchmark unpersisted jobs
-   - [ ] benchmark persisting many jobs (100k+)
-   - [ ] benchmark many long running jobs
-   - [ ] optimize a bit
-   - [ ] comparative benchmark for sidekiq and/or exq?
 
 ### 1.0
 
-- [ ] A failed job will be automatically retried with a delay between each.
-* [ ] Log an error when a job takes "too long" to run, set a sensible default
-  - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Custom max\_concurrency
   - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
   - Idea: use GenEvent of finished/failed to drive it?
+- [ ] A failed job will be automatically retried with a delay between each.
+* [ ] Log an error when a job takes "too long" to run, set a sensible default
+  - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Verify that errors are only reported to honeybadger when a job is moved into failed_jobs
 * [ ] Add CI
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
@@ -241,6 +233,14 @@ I tend to prefer the first alternative in whenever possible.
 
 ### Later
 
+* [ ] Be able to skip persistence
+* [ ] Simple benchmark to see if it behaves as expected in different modes
+   - [ ] write job times in microseconds?
+   - [ ] benchmark unpersisted jobs
+   - [ ] benchmark persisting many jobs (100k+)
+   - [ ] benchmark many long running jobs
+   - [ ] optimize a bit
+   - [ ] comparative benchmark for sidekiq and/or exq?
 * [ ] Test that RedisConnection shows the nice error message
 * [ ] More logging
 * [ ] Consider starting toniq differently in tests to better isolate unit tests
