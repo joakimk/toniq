@@ -212,18 +212,18 @@ I tend to prefer the first alternative in whenever possible.
 
 ### 1.0
 
+- [ ] A failed job will be automatically retried with a delay between each.
+* [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
+* [ ] Review persistence format. Will have to write migrations after 1.0.
 * [ ] Custom max\_concurrency
   - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
   - Idea: use GenEvent of finished/failed to drive it?
-- [ ] A failed job will be automatically retried with a delay between each.
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Verify that errors are only reported to honeybadger when a job is moved into failed_jobs
 * [ ] Add CI
 * [ ] Update README to reflect what exists and remove readme-driven-development tag.
 * [ ] Remove all old todos from the readme.
-* [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
-* [ ] Review persistence format. Will have to write migrations after 1.0.
 * [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?
 * [ ] Make a note about API stability and semver
 * [ ] Hex package
