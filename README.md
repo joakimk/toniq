@@ -242,6 +242,7 @@ I tend to prefer the first alternative in whenever possible.
 * [ ] Hex package
 * [ ] Add installation instructions
   - Make a note about multiple apps using the same redis server and the config for that.
+* [ ] Figure out how to handle multiple listeners to JobEvent's
 * [ ] MAYBE: Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
 
 ### Later
