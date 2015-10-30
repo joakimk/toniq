@@ -37,8 +37,6 @@ defmodule Toniq.JobRunner do
     end
   end
 
-  defp retry_strategy, do: Application.get_env(:toniq, :retry_strategy)
-
   defp process_result({:job_was_successful, job}) do
     Toniq.JobPersistence.mark_as_successful(job)
     Toniq.JobEvent.finished(job)
@@ -49,4 +47,6 @@ defmodule Toniq.JobRunner do
     Logger.error "Job ##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.opts)}) failed with error: #{inspect(error)}"
     Toniq.JobEvent.failed(job)
   end
+
+  defp retry_strategy, do: Application.get_env(:toniq, :retry_strategy)
 end
