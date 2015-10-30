@@ -149,7 +149,7 @@ iex> Toniq.delete(job)
 
 Jobs will be retried automatically when they fail. This can be customized, or even disabled by configuring a retry strategy for toniq (keep in mind that a system crash will still run a job more than once in some cases even if retries are disabled).
 
-The default strategy is `Toniq.RetryWithIncreasingDelayStrategy`, which will retry a job 5 times after the initial run with increasing delay between each. Delays are: 250 ms, 1 second, 20 seconds, 1 minute, 2.5 minutes. In total about 4 minutes (+ 6 x job run time) before the job is marked as failed.
+The default strategy is `Toniq.RetryWithIncreasingDelayStrategy`, which will retry a job 5 times after the initial run with increasing delay between each. Delays are approximately: 250 ms, 1 second, 20 seconds, 1 minute and 2.5 minutes. In total about 4 minutes (+ 6 x job run time) before the job is marked as failed.
 
 An alternative is `Toniq.RetryWithoutDelayStrategy` which just retries twice without delay (this is used in toniq tests).
 
