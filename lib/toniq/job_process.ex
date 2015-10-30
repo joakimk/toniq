@@ -9,8 +9,6 @@ defmodule Toniq.JobProcess do
         {:job_has_failed, job, error}
     end
   end
-  
-  defp 
 
   defp run_job_in_background(job) do
     parent = self
