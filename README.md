@@ -1,6 +1,6 @@
 # NOTE: Readme driven development below, this means this tool does not necessarily do what it says below yet.
 
-**Status**: The core parts are there, failover works, error handling works and jobs are run. See the 1.0 todo list.
+**Status**: The core parts are there, failover works, error handling works and jobs are run. Used in at least one small production app. See the 1.0 todo list.
 
 Toniq
 =======
