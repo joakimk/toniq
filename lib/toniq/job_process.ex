@@ -6,10 +6,11 @@ defmodule Toniq.JobProcess do
       :ok ->
         {:job_was_successful, job}
       error ->
-        # recurse after waiting to retry here later?
         {:job_has_failed, job, error}
     end
   end
+  
+  defp 
 
   defp run_job_in_background(job) do
     parent = self
