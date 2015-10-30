@@ -15,25 +15,32 @@ defmodule Toniq.JobProcess do
     parent = self
 
     spawn_monitor fn ->
-      try do
-        #IO.inspect "Running #{inspect(job)}"
-        job.worker.perform(job.opts)
-      rescue
-        error ->
-          send parent, {:failed_because_of_an_error, error}
-      end
+      result =
+        try do
+          #IO.inspect "Running #{inspect(job)}"
+          job.worker.perform(job.opts)
+          :success
+        rescue
+          error ->
+            {:failed_because_of_an_error, error}
+        end
+
+      send parent, result
     end
   end
 
   defp wait_for_result do
     receive do
       {:DOWN, _ref, :process, _pid, :normal} ->
-        :ok
+        # both errors and successes result in a normal exit, wait for more information
+        wait_for_result
       {:DOWN, _ref, :process, _pid, error} -> # Failed beause the process crashed
         "The job runner crashed. The reason that was given is: #{error}"
         |> wrap_in_crash_error
       {:failed_because_of_an_error, error} ->
         error
+      :success ->
+        :ok
     end
   end
 

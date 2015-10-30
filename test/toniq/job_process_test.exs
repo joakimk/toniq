@@ -34,4 +34,11 @@ defmodule Toniq.JobProcessTest do
     job = %{worker: TestCrashWorker, opts: [data: 10]}
     assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %Toniq.JobProcess.CrashError{message: "The job runner crashed. The reason that was given is: simulate an unknown error"}}
   end
+
+  # regression
+  test "when run twice, a failing job still returns job_has_failed" do
+    job = %{worker: TestErrorWorker, opts: [data: 10]}
+    assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %RuntimeError{message: "fail"}}
+    assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %RuntimeError{message: "fail"}}
+  end
 end
