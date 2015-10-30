@@ -145,6 +145,19 @@ iex> job = Toniq.failed_jobs |> hd
 iex> Toniq.delete(job)
 ```
 
+## Automatic retries
+
+Jobs will be retried automatically when they fail. This can be customized, or even disabled by configuring a retry strategy for toniq (keep in mind that a system crash will still run a job more than once in some cases even if retries are disabled).
+
+The default strategy is `Toniq.RetryWithIncreasingDelayStrategy`, which will retry a job 5 times after the initial run with increasing delay between each. Delays are: 250 ms, 1 second, 20 seconds, 1 minute, 2.5 minutes. In total about 4 minutes (+ 6 x job run time) before the job is marked as failed.
+
+An alternative is `Toniq.RetryWithoutDelayStrategy` which just retries twice without delay (this is used in toniq tests).
+
+```elixir
+config :toniq, retry_strategy: Toniq.RetryWithoutDelayStrategy
+# config :toniq, retry_strategy: YourCustomStrategy
+```
+
 ## Designed to avoid complexity
 
 Instead of using redis as a messaging queue, toniq uses it for backup.
@@ -212,7 +225,7 @@ I tend to prefer the first alternative in whenever possible.
 
 ### 1.0
 
-- [ ] A failed job will be automatically retried with a delay between each.
+- [x] A failed job will be automatically retried with a delay between each.
 * [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
 * [ ] Review persistence format. Will have to write migrations after 1.0.
 * [ ] Custom max\_concurrency

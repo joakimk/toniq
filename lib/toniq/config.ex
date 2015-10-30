@@ -12,7 +12,8 @@ defmodule Toniq.Config do
       keepalive_interval: 4000, # ms
       keepalive_expiration: 10000, # ms
       takeover_interval: 2000, # ms
-      job_import_interval: 2000 # ms
+      job_import_interval: 2000, # ms
+      retry_strategy: Toniq.RetryWithIncreasingDelayStrategy
   end
 
   defp default(scope, options) do

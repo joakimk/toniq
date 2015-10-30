@@ -10,5 +10,6 @@ if Mix.env == :test do
     keepalive_interval: 50, # ms
     keepalive_expiration: 70, # ms
     takeover_interval: 100, # ms
-    job_import_interval: 100 # ms
+    job_import_interval: 100, # ms
+    retry_strategy: Toniq.RetryWithoutDelayStrategy
 end

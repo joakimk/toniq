@@ -3,6 +3,11 @@
 defmodule Toniq.TestWorker do
   use Toniq.Worker
 
+  def perform(:fail) do
+    IO.inspect "Running fail-every-time job"
+    raise "failing every time"
+  end
+
   def perform(:fail_once) do
     unless Application.get_env(:toniq, :fail_once) do
       Application.put_env(:toniq, :fail_once, true)

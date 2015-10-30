@@ -14,6 +14,7 @@ defmodule ToniqTest do
     use Toniq.Worker
 
     def perform(_arg) do
+      send :toniq_test, :job_has_been_run
       raise "fail"
     end
   end
@@ -27,6 +28,7 @@ defmodule ToniqTest do
 
   setup do
     Toniq.JobEvent.subscribe
+    Process.register(self, :toniq_test)
     on_exit &Toniq.JobEvent.unsubscribe/0
   end
 
@@ -36,8 +38,6 @@ defmodule ToniqTest do
   end
 
   test "running jobs" do
-    Process.register(self, :toniq_test)
-
     job = Toniq.enqueue(TestWorker, data: 10)
 
     assert_receive { :job_has_been_run, number_was: 10 }
@@ -58,6 +58,18 @@ defmodule ToniqTest do
     end
 
     assert logs =~ ~r/Job #\d: ToniqTest.TestErrorWorker.perform\(\[data: 10\]\) failed with error: %RuntimeError{message: "fail"}/
+  end
+
+  @tag :capture_log
+  test "failing jobs are automatically retried" do
+    job = Toniq.enqueue(TestErrorWorker, data: 10)
+
+    assert_receive :job_has_been_run
+    assert_receive :job_has_been_run
+    assert_receive :job_has_been_run
+    refute_receive :job_has_been_run
+
+    assert_receive { :failed, ^job }
   end
 
   @tag :capture_log
@@ -84,8 +96,6 @@ defmodule ToniqTest do
   end
 
   test "can be conventiently called within a pipeline" do
-    Process.register(self, :toniq_test)
-
     [data: 10]
     |> Toniq.enqueue_to(TestWorker)
 
