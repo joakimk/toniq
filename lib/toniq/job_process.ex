@@ -1,31 +1,19 @@
 defmodule Toniq.JobProcess do
   def run(job) do
-    run_job_in_background(job)
-
-    case wait_for_result do
-      :ok ->
-        {:job_was_successful, job}
-      error ->
-        {:job_has_failed, job, error}
+    case run_job(job) do
+      :ok   -> {:job_was_successful, job}
+      error -> {:job_has_failed, job, error}
     end
   end
 
-  defp run_job_in_background(job) do
+  defp run_job(job) do
     parent = self
 
     spawn_monitor fn ->
-      result =
-        try do
-          #IO.inspect "Running #{inspect(job)}"
-          job.worker.perform(job.opts)
-          :success
-        rescue
-          error ->
-            {:failed_because_of_an_error, error}
-        end
-
-      send parent, result
+      send parent, run_job_and_capture_result(job)
     end
+
+    wait_for_result
   end
 
   defp wait_for_result do
@@ -40,6 +28,17 @@ defmodule Toniq.JobProcess do
         error
       :success ->
         :ok
+    end
+  end
+
+  defp run_job_and_capture_result(job) do
+    #IO.inspect "Running #{inspect(job)}"
+
+    try do
+      job.worker.perform(job.opts)
+      :success
+    rescue
+      error -> {:failed_because_of_an_error, error}
     end
   end
 
