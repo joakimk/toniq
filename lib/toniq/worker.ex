@@ -7,6 +7,10 @@ defmodule Toniq.Worker do
         perform
       end
 
+      def max_concurrency do
+        unquote(opts[:max_concurrency] || :unlimited)
+      end
+
       defoverridable [perform: 1]
     end
   end

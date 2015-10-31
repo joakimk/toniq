@@ -54,6 +54,7 @@ defmodule Toniq do
       worker(Toniq.RedisConnection, []),
       worker(Toniq.JobRunner, []),
       worker(Toniq.JobEvent, []),
+      worker(Toniq.JobConcurrencyLimiter, []),
       worker(Toniq.Keepalive, []),
       worker(Toniq.Takeover, []),
       worker(Toniq.JobImporter, []),

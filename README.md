@@ -227,9 +227,7 @@ I tend to prefer the first alternative in whenever possible.
 
 * [x] A failed job will be automatically retried with a delay between each.
 * [x] Verify that errors are only reported to honeybadger when a job is moved into failed_jobs
-* [ ] Custom max\_concurrency **working on this in the [max_concurrency](https://github.com/joakimk/toniq/compare/max_concurrency?expand=1) branch**
-  - Probably only enforced on a VM-level. Two VMs of max\_concurrency 10 can run 20 concurrent jobs. Document how it works.
-  - Idea: use GenEvent of finished/failed to drive it?
+* [x] Custom max\_concurrency
 * [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
 * [ ] Review persistence format. Will have to write migrations after 1.0.
 * [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?

@@ -22,7 +22,7 @@ defmodule Toniq.JobRunner do
     {:noreply, state}
   end
 
-  defp run_job(job), do: Toniq.JobProcess.run(job)
+  defp run_job(job), do: Toniq.JobConcurrencyLimiter.run(job)
 
   defp retry_when_failing(status), do: retry_when_failing(status, 1)
   defp retry_when_failing({:job_was_successful, job}, _attempt), do: {:job_was_successful, job}

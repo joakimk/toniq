@@ -26,6 +26,27 @@ defmodule ToniqTest do
     end
   end
 
+  defmodule TestMaxConcurrencyWorker do
+    use Toniq.Worker, max_concurrency: 2
+
+    def perform(process_name) do
+      add_to_list process_name
+
+      Process.register(self, process_name)
+      receive do
+        :stop -> nil
+      end
+
+      remove_from_list process_name
+    end
+
+    def currently_running_job_names, do: Agent.get(agent, fn (names) -> names end)
+
+    defp add_to_list(process_name),      do: agent |> Agent.update fn (list) -> list ++ [ process_name ] end
+    defp remove_from_list(process_name), do: agent |> Agent.update fn (list) -> list -- [ process_name ] end
+    defp agent, do: Process.whereis(:job_list)
+  end
+
   setup do
     Toniq.JobEvent.subscribe
     Process.register(self, :toniq_test)
@@ -105,5 +126,42 @@ defmodule ToniqTest do
   test "can run jobs without arguments" do
     job = Toniq.enqueue(TestNoArgumentsWorker)
     assert_receive { :finished, ^job }
+  end
+
+  test "can limit concurrency of jobs" do
+    {:ok, _pid} = Agent.start_link(fn -> [] end, name: :job_list)
+
+    assert TestWorker.max_concurrency == :unlimited
+    assert TestMaxConcurrencyWorker.max_concurrency == 2
+
+    job1 = Toniq.enqueue(TestMaxConcurrencyWorker, :job1)
+    job2 = Toniq.enqueue(TestMaxConcurrencyWorker, :job2)
+    job3 = Toniq.enqueue(TestMaxConcurrencyWorker, :job3)
+    job4 = Toniq.enqueue(TestMaxConcurrencyWorker, :job4)
+
+    # wait for jobs to boot up
+    :timer.sleep 1
+
+    assert currently_running_job_names == [ :job1, :job2 ]
+
+    send :job1, :stop
+    assert_receive {:finished, ^job1}
+    assert currently_running_job_names == [ :job2, :job3 ]
+
+    send :job2, :stop
+    assert_receive {:finished, ^job2}
+    assert currently_running_job_names == [ :job3, :job4 ]
+
+    send :job3, :stop
+    assert_receive {:finished, ^job3}
+    assert currently_running_job_names == [ :job4 ]
+
+    send :job4, :stop
+    assert_receive {:finished, ^job4}
+    assert currently_running_job_names == []
+  end
+
+  defp currently_running_job_names do
+    Enum.sort(TestMaxConcurrencyWorker.currently_running_job_names)
   end
 end
