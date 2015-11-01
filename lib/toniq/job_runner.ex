@@ -43,7 +43,7 @@ defmodule Toniq.JobRunner do
   end
 
   defp process_result({:job_has_failed, job, error}) do
-    Toniq.JobPersistence.mark_as_failed(job)
+    Toniq.JobPersistence.mark_as_failed(job, error)
     Logger.error "Job ##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.opts)}) failed with error: #{inspect(error)}"
     Toniq.JobEvent.failed(job)
   end

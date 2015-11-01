@@ -3,6 +3,10 @@
 defmodule Toniq.TestWorker do
   use Toniq.Worker, max_concurrency: 2
 
+  # Usage: Toniq.enqueue(Toniq.TestWorker, :fail)
+  #
+  # To make this fail right away:
+  # Application.put_env(:toniq, :retry_strategy, Toniq.RetryWithoutDelayStrategy)
   def perform(:fail) do
     IO.inspect "Running fail-every-time job"
     raise "failing every time"

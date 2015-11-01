@@ -188,7 +188,7 @@ I tend to prefer the first alternative in whenever possible.
 ## Todo for 1.0
 
 * [ ] Review persistence format. Will have to write migrations after 1.0.
-  - [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
+  - [x] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
   - [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?
 * [ ] Remove all old todos from the readme.
 * [ ] Make a note about API stability and semver

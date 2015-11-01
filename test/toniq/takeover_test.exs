@@ -64,7 +64,7 @@ defmodule Exredis.TakeoverTest do
 
   defp add_failed_job(identifier) do
     job = add_job(identifier)
-    Toniq.JobPersistence.mark_as_failed(job, identifier)
+    Toniq.JobPersistence.mark_as_failed(job, "error", identifier)
   end
 
   defp jobs(identifier) do

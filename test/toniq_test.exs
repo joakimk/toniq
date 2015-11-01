@@ -97,20 +97,21 @@ defmodule ToniqTest do
   test "failed jobs can be retried" do
     job = Toniq.enqueue(TestErrorWorker, data: 10)
     assert_receive { :failed, ^job }
-    assert Toniq.failed_jobs == [job]
+    assert Enum.map(Toniq.failed_jobs, &(&1.id)) == [job.id]
 
     assert Toniq.retry(job)
 
     assert_receive { :failed, ^job }
-    assert Toniq.failed_jobs == [job]
+    assert Enum.map(Toniq.failed_jobs, &(&1.id)) == [job.id]
   end
 
   @tag :capture_log
   test "failed jobs can be deleted" do
     job = Toniq.enqueue(TestErrorWorker, data: 10)
     assert_receive { :failed, ^job }
-    assert Toniq.failed_jobs == [job]
+    assert Enum.count(Toniq.failed_jobs) == 1
 
+    job = Toniq.failed_jobs |> hd
     assert Toniq.delete(job)
 
     assert Toniq.failed_jobs == []

@@ -19,11 +19,12 @@ defmodule Exredis.JobPersistenceTest do
 
     assert Toniq.JobPersistence.jobs == [job1]
 
-    Toniq.JobPersistence.mark_as_failed(job1)
+    error = %Toniq.JobProcess.CrashError{message: "error"}
+    job1_with_error = Toniq.JobPersistence.mark_as_failed(job1, error)
     assert Toniq.JobPersistence.jobs == []
-    assert Toniq.JobPersistence.failed_jobs == [job1]
+    assert Toniq.JobPersistence.failed_jobs == [job1_with_error]
 
-    Toniq.JobPersistence.move_failed_job_to_jobs(job1)
+    Toniq.JobPersistence.move_failed_job_to_jobs(job1_with_error)
     assert Toniq.JobPersistence.jobs == [job1]
     assert Toniq.JobPersistence.failed_jobs == []
   end

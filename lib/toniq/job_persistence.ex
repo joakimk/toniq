@@ -44,13 +44,17 @@ defmodule Toniq.JobPersistence do
   @doc """
   Marks a job as failed. This removes the job from the regular list and stores it in the failed jobs list.
   """
-  def mark_as_failed(job, identifier \\ default_identifier) do
+  def mark_as_failed(job, error, identifier \\ default_identifier) do
+    job_with_error = Map.put(job, :error, error)
+
     redis |> Exredis.query_pipe([
       ["MULTI"],
       ["SREM", jobs_key(identifier), job],
-      ["SADD", failed_jobs_key(identifier), job],
+      ["SADD", failed_jobs_key(identifier), job_with_error],
       ["EXEC"],
     ])
+
+    job_with_error
   end
 
   @doc """
@@ -58,10 +62,12 @@ defmodule Toniq.JobPersistence do
 
   Use Toniq.retry instead of this to actually run the job too.
   """
-  def move_failed_job_to_jobs(job) do
+  def move_failed_job_to_jobs(job_with_error) do
+    job = Map.delete(job_with_error, :error)
+
     redis |> Exredis.query_pipe([
       ["MULTI"],
-      ["SREM", failed_jobs_key(default_identifier), job],
+      ["SREM", failed_jobs_key(default_identifier), job_with_error],
       ["SADD", jobs_key(default_identifier), job],
       ["EXEC"],
     ])
