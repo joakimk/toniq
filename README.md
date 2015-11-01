@@ -245,7 +245,12 @@ This library uses [semver](http://semver.org/) for versioning. The API won't cha
   - Will only be merged if all the above is fulfilled. I won't fix your code, but I will try and give feedback.
 * If this project ever becomes too inactive, feel free to ask about taking over as maintainer.
 
-### TODO and ideas for after 1.0
+## Development
+
+    mix deps.get
+    mix test
+
+## TODO and ideas for after 1.0
 
 * [ ] Document JobEvent in readme
 * [ ] Add CI
