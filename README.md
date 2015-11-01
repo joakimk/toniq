@@ -44,6 +44,7 @@ And configure toniq in different environments:
 
 ```elixir
 config :toniq, redis_url: "redis://localhost:6379/0"
+# config :toniq, redis_url: System.get_env("REDIS_PROVIDER")
 ```
 
 If you have multiple apps using the same redis server, then don't forget to also configure `redis_key_prefix`.
