@@ -21,7 +21,9 @@ Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need
 
 If anything is unclear about how this library works or what an error message means **that's considered a bug**, please file an issue (or a pull request)!
 
-**Status**: Relatively new. Used in at least one small production app. If you like, ping [@joakimk](https://twitter.com/joakimk) about how you use toniq and for what size/type of app.
+--
+
+**Status**: Relatively new. Used in at least one small production app for months. If you like, ping [@joakimk](https://twitter.com/joakimk) about how you use toniq and for what size/type of app.
 
 ## Installation
 
