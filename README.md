@@ -1,6 +1,4 @@
-# NOTE: Readme driven development below, this means this tool does not necessarily do what it says below yet.
-
-**Status**: The core parts are there, failover works, error handling works, jobs are run, automatically retried and concurrency can be limited. Used in at least one small production app. See the 1.0 todo list.
+**Status**: Close to 1.0. See the todo list. The core parts are there, failover works, error handling works, jobs are run, automatically retried and concurrency can be limited. Used in at least one small production app.
 
 Toniq
 =======
@@ -12,7 +10,7 @@ Designed to:
 * Be very easy to use. Just define a worker and enqueue jobs!
 * Pass arguments to the worker exactly as they where enqueued, no JSON conversion
 * Automatically retry jobs that fail
-* Be able to limit concurrency and skip persistence when requested
+* Be able to limit concurrency when requested
 * Play to Erlang's strengths by using processes well
   - Practically no limits on concurrent jobs
   - Uses all available CPU cores
@@ -90,36 +88,6 @@ defmodule RegisterInvoiceWorker do
 end
 ```
 
-## Skipping persistence
-
-For jobs where speed is important and it does not matter if it's lost on app server restart.
-
-As an example, say you wanted to record page hits in redis. By doing so in a background job, you would not only respond quicker to the web request, but also handle temporary connection errors.
-
-You can set this by specifying the `persist` option on a worker.
-
-```elixir
-defmodule RecordPageHitWorker do
-  use Toniq.Worker, persist: false
-
-  def perform do
-    # do work
-  end
-end
-```
-
-And in the web request run:
-
-```elixir
-Toniq.enqueue(RecordPageHitWorker)
-```
-
-Or you could specify it for induvidual enqueue's:
-
-```elixir
-Toniq.enqueue(SendEmailWorker, [subject: "5 minute reminder!", to: "..."], persist: false)
-```
-
 ## Retrying failed jobs
 
 An admin web UI is planned, but until then (and after that) you can use the console.
@@ -149,9 +117,9 @@ iex> Toniq.delete(job)
 
 Jobs will be retried automatically when they fail. This can be customized, or even disabled by configuring a retry strategy for toniq (keep in mind that a system crash will still cause a job to be run more than once in some cases even if retries are disabled).
 
-The default strategy is `Toniq.RetryWithIncreasingDelayStrategy`, which will retry a job 5 times after the initial run with increasing delay between each. Delays are approximately: 250 ms, 1 second, 20 seconds, 1 minute and 2.5 minutes. In total about 4 minutes (+ 6 x job run time) before the job is marked as failed.
+The default strategy is [Toniq.RetryWithIncreasingDelayStrategy](lib/toniq/retry_with_increasing_delay_strategy.ex), which will retry a job 5 times after the initial run with increasing delay between each. Delays are approximately: 250 ms, 1 second, 20 seconds, 1 minute and 2.5 minutes. In total about 4 minutes (+ 6 x job run time) before the job is marked as failed.
 
-An alternative is `Toniq.RetryWithoutDelayStrategy` which just retries twice without delay (this is used in toniq tests).
+An alternative is [Toniq.RetryWithoutDelayStrategy](lib/toniq/retry_without_delay_strategy.ex) which just retries twice without delay (this is used in toniq tests).
 
 ```elixir
 config :toniq, retry_strategy: Toniq.RetryWithoutDelayStrategy
@@ -217,35 +185,24 @@ You can solve this in two ways:
 
 I tend to prefer the first alternative in whenever possible.
 
-## TODO
+## Todo for 1.0
 
-### Speed
-
-* [x] Infinite concurrency
-
-### 1.0
-
-* [x] A failed job will be automatically retried with a delay between each.
-* [x] Verify that errors are only reported to honeybadger when a job is moved into failed_jobs
-* [x] Custom max\_concurrency
-  - [x] Fix bug: count can become negative? breaks the limiter
-* [ ] Raise an error for unknown options to avoid typos like "max_concurrenc"
-* [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
 * [ ] Review persistence format. Will have to write migrations after 1.0.
-* [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?
-* [ ] Figure out how to handle multiple listeners to JobEvent's
-* [ ] Log an error when a job takes "too long" to run, set a sensible default
-  - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
-* [ ] Update README to reflect what exists and remove readme-driven-development tag.
-  - [ ] Remove all old todos from the readme.
+  - [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
+  - [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?
+* [ ] Remove all old todos from the readme.
 * [ ] Make a note about API stability and semver
 * [ ] Add installation instructions
-  - Make a note about multiple apps using the same redis server and the config for that.
+  - Make a note about multiple apps using the same redis server and the config for that (e.g namespacing on toniq keys).
+* [ ] Raise an error for unknown options to avoid typos like "max_concurrenc"
+* [ ] Remove JobEvent from 1.0 (does not handle multiple listeners and haven't been used as I would have thought)
 * [ ] Add CI
 * [ ] Hex package
 
 ### Later
 
+* [ ] Log an error when a job takes "too long" to run, set a sensible default
+  - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
 * [ ] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
