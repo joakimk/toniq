@@ -169,6 +169,10 @@ This is a first-in-first-out queue but due to retries and concurrency, ordering 
 
 Jobs are serialized using [erlang serialization](http://www.erlang.org/doc/apps/erts/erl_ext_dist.html). It's the same format that is used when distributed nodes communicate. This means you can pass almost anything to jobs.
 
+### What happens if the persistence format changes?
+
+There is code in place to automatically [migrate](lib/toniq/job.ex) old versions of jobs.
+
 ### If an Erlang VM stops with unprocessed jobs in its queue, how are those jobs handled?
 
 As soon as another Erlang VM is running it will find the jobs in redis, move them into it's own queue and run them. It may take a little while before this happens (10-15 seconds or so), so that the original VM has a chance to report in and retain it's jobs.
@@ -184,10 +188,6 @@ You can solve this in two ways:
 * Implement your own locking, or contribute some such thing to this library.
 
 I tend to prefer the first alternative in whenever possible.
-
-### What happens if the persistence format changes?
-
-There is code in place to automatically [migrate](lib/toniq/job.ex) old versions of jobs.
 
 ## Todo for 1.0
 
