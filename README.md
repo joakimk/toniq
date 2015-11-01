@@ -6,7 +6,7 @@ Simple and reliable background job library for [Elixir](http://elixir-lang.org/)
 Designed to:
 
 * Be very easy to use. Just define a worker and enqueue jobs!
-* Focus on error handling before features.
+* Focus on error handling before features
 * Pass arguments to the worker exactly as they where enqueued, no JSON conversion
 * Automatically retry jobs that fail
 * Be able to limit concurrency when requested
