@@ -22,6 +22,28 @@ Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need
 
 If **anything is unclear** about how this library works or what an error message means **that's considered a bug**, please file an issue (or a pull request)!
 
+## Installation
+
+Add as a dependency in your mix.exs file:
+
+    defp deps do
+      [
+        {:toniq, "~> 1.0.rc1"}
+      ]
+    end
+
+And run:
+
+    mix deps.get
+
+Then add `:toniq` to the list of applications in mix.exs.
+
+And configure toniq in different environments:
+
+    config :toniq, redis_url: "redis://localhost:6379/0"
+
+If you have multiple apps using the same redis server, then don't forget to also configure `redis_key_prefix`.
+
 ## Usage
 
 Define a worker:
@@ -152,28 +174,6 @@ Toniq.JobPersistence.store_incoming_job(Toniq.TestWorker, [], identifier)
 I would like to know how using this tool works out for you. Any problems? Anything that was hard to understand from the docs? What scale do you run jobs on? Works great? Better than something you've used before? Missing some feature you're used to?
 
 Ping [@joakimk](https://twitter.com/joakimk) or open an issue.
-
-## Installation
-
-Add as a dependency in your mix.exs file:
-
-    defp deps do
-      [
-        {:toniq, "~> 1.0.rc1"}
-      ]
-    end
-
-And run:
-
-    mix deps.get
-
-Then add `:toniq` to the list of applications in mix.exs.
-
-And configure toniq in different environments:
-
-    config :toniq, redis_url: "redis://localhost:6379/0"
-
-If you have multiple apps using the same redis server, then don't forget to also configure `redis_key_prefix`.
 
 ## FAQ
 
