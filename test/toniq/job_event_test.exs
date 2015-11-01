@@ -13,6 +13,8 @@ defmodule Toniq.JobEventTest do
 
     spawn_link fn ->
       Toniq.JobEvent.subscribe
+
+      :timer.sleep 1 # make sure this runs after :one
       receive do
         {:finished, job} -> send test_pid, {:two, job.id}
       end
