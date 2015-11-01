@@ -161,6 +161,37 @@ defmodule ToniqTest do
     assert currently_running_job_names == []
   end
 
+  # regression
+  test "can enqueue more jobs after limiting jobs once" do
+    {:ok, _pid} = Agent.start_link(fn -> [] end, name: :job_list)
+
+    Toniq.enqueue(TestMaxConcurrencyWorker, :job1)
+    job2 = Toniq.enqueue(TestMaxConcurrencyWorker, :job2)
+    Toniq.enqueue(TestMaxConcurrencyWorker, :job3)
+
+    :timer.sleep 1 # wait for jobs to boot up
+
+    send :job1, :stop
+    send :job2, :stop
+    assert_receive {:finished, ^job2}
+    send :job3, :stop
+
+    Toniq.enqueue(TestMaxConcurrencyWorker, :job4)
+    Toniq.enqueue(TestMaxConcurrencyWorker, :job5)
+    job6 = Toniq.enqueue(TestMaxConcurrencyWorker, :job6)
+
+    :timer.sleep 1 # wait for jobs to boot up
+
+    assert currently_running_job_names == [ :job4, :job5 ]
+
+    # Stop everything before running other tests
+    send :job4, :stop
+    send :job5, :stop
+    :timer.sleep 1
+    send :job6, :stop
+    assert_receive {:finished, ^job6}
+  end
+
   defp currently_running_job_names do
     Enum.sort(TestMaxConcurrencyWorker.currently_running_job_names)
   end

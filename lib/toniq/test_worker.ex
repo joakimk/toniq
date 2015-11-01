@@ -1,7 +1,7 @@
 # Used for manual testing of toniq
 # Usage: Toniq.enqueue(Toniq.TestWorker)
 defmodule Toniq.TestWorker do
-  use Toniq.Worker
+  use Toniq.Worker, max_concurrency: 2
 
   def perform(:fail) do
     IO.inspect "Running fail-every-time job"

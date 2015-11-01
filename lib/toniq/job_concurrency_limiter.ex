@@ -72,7 +72,7 @@ defmodule Toniq.JobConcurrencyLimiter do
   defp run_next_pending_job(state, []), do: state
   defp run_next_pending_job(state, pending_jobs) do
     [ first_pending_job | pending_jobs ] = pending_jobs
-    run_now(state, first_pending_job)
+    state = run_now(state, first_pending_job)
     Map.put(state, :pending_jobs, pending_jobs)
   end
 
@@ -100,7 +100,14 @@ defmodule Toniq.JobConcurrencyLimiter do
   defp update_running_count(state, job, difference) do
     running_count = running_count(state, job) + difference
     job_count_by_worker = Map.put(state.job_count_by_worker, job.worker, running_count)
-    %{state | job_count_by_worker: job_count_by_worker}
+
+    state = %{state | job_count_by_worker: job_count_by_worker}
+
+    if running_count < 0 do
+      raise "Job count should never be able to be less than zero, state is: #{inspect(state)}"
+    end
+
+    state
   end
 
   defp running_count(state, job), do: Map.get(state.job_count_by_worker, job.worker, 0)
