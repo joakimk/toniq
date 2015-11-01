@@ -270,6 +270,7 @@ I tend to prefer the first alternative in whenever possible.
   - [ ] Store/show time of creation
   - [ ] Store/show retry count
 * [ ] Look into cleaning up code using [exactor](https://github.com/sasa1977/exactor)
+* [ ] Look into using [redix](https://github.com/whatyouhide/redix). A native elixir redis client. Explore error handling and usabillity. Benchmark.
 
 ### Notes
 
