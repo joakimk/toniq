@@ -211,7 +211,36 @@ You can solve this in two ways:
 
 I tend to prefer the first alternative in whenever possible.
 
-### After 1.0
+### Notes
+
+I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
+
+### Versioning
+
+This library uses [semver](http://semver.org/) for versioning. The API won't change in incompatible ways within the same major version, etc. The version is specified in [mix.exs](mix.exs).
+
+## Credits
+
+- The name toniq was thought up by [Henrik Nyh](https://github.com/henrik). The idea was synonym of elixir with a q for queue.
+- [Lennart Fridén](https://github.com/devl) helped out with building the failover system during his [journeyman-tour](http://codecoupled.org/journeyman-tour/) [visit to our office](https://codecoupled.org/2015/10/14/journeyman-auctionet/).
+
+## Presentations featuring toniq
+
+- 2015
+  - Presentation at Stockholm Elixir "October talkfest": [slides](https://dl.dropboxusercontent.com/u/136929/elixir_oct2015_toniq/index.html#1)
+
+## Contributing
+
+* Pull requests:
+  - Are very welcome :)
+  - Should have tests
+  - Should have refactored code that conforms to the style of the project (as best you can)
+  - Should have updated documentation
+  - Should implement or fix something that makes sense for this library (feel free to ask if you are unsure)
+  - Will only be merged if all the above is fulfilled. I won't fix your code, but I will try and give feedback.
+* If this project ever becomes too inactive, feel free to ask about taking over as maintainer.
+
+### TODO and ideas for after 1.0
 
 * [ ] Document JobEvent in readme
 * [ ] Add CI
@@ -242,35 +271,6 @@ I tend to prefer the first alternative in whenever possible.
   - [ ] Store/show retry count
 * [ ] Look into cleaning up code using [exactor](https://github.com/sasa1977/exactor)
 * [ ] Look into using [redix](https://github.com/whatyouhide/redix). A native elixir redis client. Explore error handling and usabillity. Benchmark.
-
-### Notes
-
-I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
-
-### Versioning
-
-This library uses [semver](http://semver.org/) for versioning. The API won't change in incompatible ways within the same major version, etc. The version is specified in [mix.exs](mix.exs).
-
-## Credits
-
-- The name toniq was thought up by [Henrik Nyh](https://github.com/henrik). The idea was synonym of elixir with a q for queue.
-- [Lennart Fridén](https://github.com/devl) helped out with building the failover system during his [journeyman-tour](http://codecoupled.org/journeyman-tour/) [visit to our office](https://codecoupled.org/2015/10/14/journeyman-auctionet/).
-
-## Presentations featuring toniq
-
-- 2015
-  - Presentation at Stockholm Elixir "October talkfest": [slides](https://dl.dropboxusercontent.com/u/136929/elixir_oct2015_toniq/index.html#1)
-
-## Contributing
-
-* Pull requests:
-  - Are very welcome :)
-  - Should have tests
-  - Should have refactored code that conforms to the style of the project (as best you can)
-  - Should have updated documentation
-  - Should implement or fix something that makes sense for this library (feel free to ask if you are unsure)
-  - Will only be merged if all the above is fulfilled. I won't fix your code, but I will try and give feedback.
-* If this project ever becomes too inactive, feel free to ask about taking over as maintainer.
 
 ## License
 
