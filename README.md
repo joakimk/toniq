@@ -258,6 +258,11 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 
 ## TODO and ideas for after 1.0
 
+* [ ] Admin UI
+  - [ ] That shows waiting and failed jobs
+  - [ ] Make data easiliy available for display in the app that uses toniq
+  - [ ] Store/show time of creation
+  - [ ] Store/show retry count
 * [ ] Document JobEvent in readme
 * [ ] Add CI
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
@@ -274,17 +279,11 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 * [ ] Test that RedisConnection shows the nice error message
 * [ ] More logging
 * [ ] Consider starting toniq differently in tests to better isolate unit tests
-* [ ] Be able to run without any persistence if none is needed?
-* [ ] A failed job can be automatically retried a configurable number of times with exponential backoff.
+* [ ] Custom retry stategies per worker
 * [ ] Support different enqueue strategies on a per-worker or per-enqueue basis
   - [ ] Delayed persistence: faster. Run the job right away, and persist the job at the same time. You're likely going to have a list of jobs to resume later if the VM is stopped.
   - [ ] No persistence: fastest. Run the job right away. If the VM is stopped jobs may be lost.
 * [ ] Add timeouts for jobs (if anyone needs it). Should be fairly easy.
-* [ ] Admin UI
-  - [ ] That shows waiting and failed jobs
-  - [ ] Make data easiliy available for display in the app that uses toniq
-  - [ ] Store/show time of creation
-  - [ ] Store/show retry count
 * [ ] Look into cleaning up code using [exactor](https://github.com/sasa1977/exactor)
 * [ ] Look into using [redix](https://github.com/whatyouhide/redix). A native elixir redis client. Explore error handling and usabillity. Benchmark.
 
