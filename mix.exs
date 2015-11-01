@@ -33,6 +33,7 @@ defmodule Toniq.Mixfile do
     [
       {:exredis, ">= 0.1.1"},
       {:uuid, "~> 1.0"},
+      {:inch_ex, only: :docs},
     ]
   end
 
