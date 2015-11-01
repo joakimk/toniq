@@ -185,6 +185,10 @@ You can solve this in two ways:
 
 I tend to prefer the first alternative in whenever possible.
 
+### What happens if the persistence format changes?
+
+There is code in place to automatically [migrate](lib/toniq/job.ex) old versions of jobs.
+
 ## Todo for 1.0
 
 * [x] Review persistence format. Will have to write migrations after 1.0.
