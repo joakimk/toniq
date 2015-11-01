@@ -36,7 +36,7 @@ defmodule Toniq.JobImporter do
   end
 
   def import_job(job) do
-    Toniq.enqueue(job.worker, job.opts)
+    Toniq.enqueue(job.worker, job.arguments)
     Toniq.JobPersistence.remove_from_incoming_jobs(job)
   end
 

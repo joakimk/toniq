@@ -10,13 +10,13 @@ defmodule Toniq do
     |> extract_data
     |> Toniq.enqueue_to(SendEmailWorker)
   """
-  def enqueue_to(opts, worker_module), do: enqueue(worker_module, opts)
+  def enqueue_to(arguments, worker_module), do: enqueue(worker_module, arguments)
 
   @doc """
   Enqueue job to be run in the background as soon as possible
   """
-  def enqueue(worker_module, opts \\ []) do
-    Toniq.JobPersistence.store_job(worker_module, opts)
+  def enqueue(worker_module, arguments \\ []) do
+    Toniq.JobPersistence.store_job(worker_module, arguments)
     |> Toniq.JobRunner.register_job
   end
 

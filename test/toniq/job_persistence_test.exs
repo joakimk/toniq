@@ -33,4 +33,23 @@ defmodule Exredis.JobPersistenceTest do
     job = Toniq.JobPersistence.store_incoming_job(SomeWorker, incoming: "take cover")
     assert Toniq.JobPersistence.incoming_jobs == [job]
   end
+
+  test "can convert version 0 to version 1 jobs" do
+    job = %{id: 1, worker: TestWorker, opts: [:a]}
+    key = Toniq.JobPersistence.jobs_key(Toniq.Keepalive.identifier)
+    Process.whereis(:toniq_redis) |> Exredis.query(["SADD", key, job])
+
+    assert Enum.count(Toniq.JobPersistence.jobs) == 1
+    job = Toniq.JobPersistence.jobs |> hd
+    assert job == %{
+      id: 1,
+      worker: TestWorker,
+      arguments: [:a],
+      version: 1
+    }
+
+    # Also converts the persisted job, so that we can mark jobs as successful, etc.
+    Toniq.JobPersistence.mark_as_successful(job)
+    assert Enum.count(Toniq.JobPersistence.jobs) == 0
+  end
 end

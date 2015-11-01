@@ -20,7 +20,7 @@ defmodule Toniq.JobProcess do
     #IO.inspect "Running #{inspect(job)}"
 
     try do
-      job.worker.perform(job.opts)
+      job.worker.perform(job.arguments)
       :success
     rescue
       error -> {:failed_because_of_an_error, error}

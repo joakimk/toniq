@@ -4,13 +4,13 @@ defmodule Toniq.JobPersistence do
   @doc """
   Stores a job in redis. If it does not succeed it will fail right away.
   """
-  def store_job(worker_module, opts, identifier \\ default_identifier) do
-    store_job_in_key(worker_module, opts, jobs_key(identifier))
+  def store_job(worker_module, arguments, identifier \\ default_identifier) do
+    store_job_in_key(worker_module, arguments, jobs_key(identifier))
   end
 
   # Only used in tests
-  def store_incoming_job(worker_module, opts, identifier \\ default_identifier) do
-    store_job_in_key(worker_module, opts, incoming_jobs_key(identifier))
+  def store_incoming_job(worker_module, arguments, identifier \\ default_identifier) do
+    store_job_in_key(worker_module, arguments, incoming_jobs_key(identifier))
   end
 
   # Only used internally by JobImporter
@@ -92,10 +92,10 @@ defmodule Toniq.JobPersistence do
     identifier_scoped_key :incoming_jobs, identifier
   end
 
-  defp store_job_in_key(worker_module, opts, key) do
+  defp store_job_in_key(worker_module, arguments, key) do
     job_id = redis |> incr(counter_key)
 
-    job = %{ id: job_id, worker: worker_module, opts: opts }
+    job = Toniq.Job.build(job_id, worker_module, arguments)
     redis |> sadd(key, job)
     job
   end
@@ -105,10 +105,27 @@ defmodule Toniq.JobPersistence do
     |> smembers(redis_key)
     |> Enum.map(&build_job/1)
     |> Enum.sort(&first_in_first_out/2)
+    |> Enum.map(fn (job) -> convert_to_latest_job_format(job, redis_key) end)
   end
 
   defp build_job(data) do
     :erlang.binary_to_term(data)
+  end
+
+  defp convert_to_latest_job_format(loaded_job, redis_key) do
+    case Toniq.Job.migrate(loaded_job) do
+      {:unchanged, job} ->
+        job
+      {:changed, old, new} ->
+        redis |> Exredis.query_pipe([
+          ["MULTI"],
+          ["SREM", redis_key, old],
+          ["SADD", redis_key, new],
+          ["EXEC"],
+        ])
+
+        new
+    end
   end
 
   defp first_in_first_out(first, second) do
