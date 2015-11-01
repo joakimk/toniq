@@ -229,6 +229,7 @@ I tend to prefer the first alternative in whenever possible.
 * [x] Verify that errors are only reported to honeybadger when a job is moved into failed_jobs
 * [x] Custom max\_concurrency
   - [x] Fix bug: count can become negative? breaks the limiter
+* [ ] Raise an error for unknown options to avoid typos like "max_concurrenc"
 * [ ] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
 * [ ] Review persistence format. Will have to write migrations after 1.0.
 * [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?
