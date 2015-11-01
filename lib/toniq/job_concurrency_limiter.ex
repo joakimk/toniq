@@ -63,10 +63,10 @@ defmodule Toniq.JobConcurrencyLimiter do
     {:noreply, state}
   end
 
-  defp run_next_pending_job(state, job),     do: run_next_pending_job(state, job, pending_jobs(state, job))
-  defp run_next_pending_job(state, job, []), do: state
-  defp run_next_pending_job(state, job, pending_jobs_by_worker) do
-    [ first_pending_job | pending_jobs ] = pending_jobs_by_worker
+  defp run_next_pending_job(state, job),      do: run_next_pending_job(state, job, pending_jobs(state, job))
+  defp run_next_pending_job(state, _job, []), do: state
+  defp run_next_pending_job(state, job, pending_jobs) do
+    [ first_pending_job | pending_jobs ] = pending_jobs
 
     state = run_now(state, first_pending_job)
 
