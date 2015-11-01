@@ -217,11 +217,11 @@ You can solve this in two ways:
 
 I tend to prefer the first alternative in whenever possible.
 
-### Notes
+## Notes
 
 I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
 
-### Versioning
+## Versioning
 
 This library uses [semver](http://semver.org/) for versioning. The API won't change in incompatible ways within the same major version, etc. The version is specified in [mix.exs](mix.exs).
 
