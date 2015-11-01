@@ -191,13 +191,13 @@ I tend to prefer the first alternative in whenever possible.
 
 ## Todo for 1.0
 
-* [ ] Remove JobEvent from 1.0 (does not handle multiple listeners and haven't been used as I would have thought)
 * [ ] Hex package
 * [ ] Add installation instructions
   - Make a note about multiple apps using the same redis server and the config for that (e.g namespacing on toniq keys).
 
 ### Later
 
+* [ ] Document JobEvent in readme
 * [ ] Add CI
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
