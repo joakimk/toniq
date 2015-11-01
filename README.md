@@ -26,11 +26,13 @@ If **anything is unclear** about how this library works or what an error message
 
 Add as a dependency in your mix.exs file:
 
-    defp deps do
-      [
-        {:toniq, "~> 1.0"}
-      ]
-    end
+```elixir
+defp deps do
+  [
+    {:toniq, "~> 1.0"}
+  ]
+end
+```
 
 And run:
 
@@ -40,7 +42,9 @@ Then add `:toniq` to the list of applications in mix.exs.
 
 And configure toniq in different environments:
 
-    config :toniq, redis_url: "redis://localhost:6379/0"
+```elixir
+config :toniq, redis_url: "redis://localhost:6379/0"
+```
 
 If you have multiple apps using the same redis server, then don't forget to also configure `redis_key_prefix`.
 
