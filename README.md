@@ -1,4 +1,4 @@
-**Status**: Close to 1.0. See the todo list. The core parts are there, failover works, error handling works, jobs are run, automatically retried and concurrency can be limited. Used in at least one small production app.
+**Status**: Relatively new, but ready for production use and used in at least one small production app.
 
 Toniq
 =======
@@ -28,7 +28,7 @@ Add as a dependency in your mix.exs file:
 
     defp deps do
       [
-        {:toniq, "~> 1.0.rc1"}
+        {:toniq, "~> 1.0"}
       ]
     end
 
