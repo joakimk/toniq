@@ -1,5 +1,3 @@
-┃ [![Inline docs](http://inch-ci.org/github/joakimk/toniq.svg)](http://inch-ci.org/github/joakimk/toniq)
-
 Toniq
 =======
 
