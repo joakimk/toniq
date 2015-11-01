@@ -4,7 +4,7 @@ defmodule Toniq.JobEvent do
   """
 
   def start_link do
-    {:ok, pid} = GenEvent.start_link(name: __MODULE__)
+    {:ok, _pid} = GenEvent.start_link(name: __MODULE__)
   end
 
   defmodule MessageForwarder do
