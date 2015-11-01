@@ -153,6 +153,28 @@ I would like to know how using this tool works out for you. Any problems? Anythi
 
 Ping [@joakimk](https://twitter.com/joakimk) or open an issue.
 
+## Installation
+
+Add as a dependency in your mix.exs file:
+
+    defp deps do
+      [
+        {:toniq, "~> 1.0.rc1"}
+      ]
+    end
+
+And run:
+
+    mix deps.get
+
+Then add `:toniq` to the list of applications in mix.exs.
+
+And configure toniq in different environments:
+
+    config :toniq, redis_url: "redis://localhost:6379/0"
+
+If you have multiple apps using the same redis server, then don't forget to also configure `redis_key_prefix`.
+
 ## FAQ
 
 ### Why have a job queue at all?
@@ -189,13 +211,7 @@ You can solve this in two ways:
 
 I tend to prefer the first alternative in whenever possible.
 
-## Todo for 1.0
-
-* [ ] Hex package
-* [ ] Add installation instructions
-  - Make a note about multiple apps using the same redis server and the config for that (e.g namespacing on toniq keys).
-
-### Later
+### After 1.0
 
 * [ ] Document JobEvent in readme
 * [ ] Add CI
