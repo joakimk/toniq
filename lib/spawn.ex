@@ -14,7 +14,7 @@ defmodule Spawn do
 
   # Spawn without name if it's spawned more than once, for example
   # once by OTP and once by tests.
-  defp spawn_link_with_name(pid, name, function) do
+  defp spawn_link_with_name(_pid, _name, function) do
     spawn_link(function)
   end
 end

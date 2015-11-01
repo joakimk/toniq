@@ -8,7 +8,7 @@ defmodule Toniq.RetryWithIncreasingDelayStrategy do
 
   # NOTE: Update README, docs and tests if you change this
   def retry?(attempt) when attempt < 6, do: true
-  def retry?(attempt), do: false
+  def retry?(_attempt), do: false
 
   # NOTE: Update README, docs and tests if you change this
   def ms_to_sleep_before(attempt), do: :math.pow(attempt, 4) * 250
