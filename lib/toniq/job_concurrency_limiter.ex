@@ -70,9 +70,8 @@ defmodule Toniq.JobConcurrencyLimiter do
 
     state = run_now(state, first_pending_job)
 
-    worker_state = worker_state(state, job)
     update_worker_state(state, job,
-      %{ worker_state | pending_jobs: pending_jobs }
+      %{ worker_state(state, job) | pending_jobs: pending_jobs }
     )
   end
 
@@ -103,9 +102,8 @@ defmodule Toniq.JobConcurrencyLimiter do
   defp update_running_count(state, job, difference) do
     running_count = running_count(state, job) + difference
 
-    worker_state = worker_state(state, job)
     state = update_worker_state(state, job,
-      %{ worker_state | running_count: running_count }
+      %{ worker_state(state, job) | running_count: running_count }
     )
 
     if running_count < 0 do
@@ -115,14 +113,8 @@ defmodule Toniq.JobConcurrencyLimiter do
     state
   end
 
-  defp update_worker_state(state, job, worker_state) do
-    Map.put(state, job.worker, worker_state)
-  end
-
-  defp running_count(state, job), do: worker_state(state, job).running_count
-  defp pending_jobs(state, job), do: worker_state(state, job).pending_jobs
-
-  defp worker_state(state, job) do
-    Map.get(state, job.worker, %{ pending_jobs: [], running_count: 0 })
-  end
+  defp update_worker_state(state, job, worker_state), do: Map.put(state, job.worker, worker_state)
+  defp running_count(state, job),                     do: worker_state(state, job).running_count
+  defp pending_jobs(state, job),                      do: worker_state(state, job).pending_jobs
+  defp worker_state(state, job),                      do: Map.get(state, job.worker, %{ pending_jobs: [], running_count: 0 })
 end
