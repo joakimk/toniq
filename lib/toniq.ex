@@ -10,9 +10,7 @@ defmodule Toniq do
     |> extract_data
     |> Toniq.enqueue_to(SendEmailWorker)
   """
-  def enqueue_to(opts, worker_module) do
-    enqueue(worker_module, opts)
-  end
+  def enqueue_to(opts, worker_module), do: enqueue(worker_module, opts)
 
   @doc """
   Enqueue job to be run in the background as soon as possible
@@ -38,9 +36,7 @@ defmodule Toniq do
   @doc """
   Delete a failed job
   """
-  def delete(job) do
-    Toniq.JobPersistence.delete_failed_job(job)
-  end
+  def delete(job), do: Toniq.JobPersistence.delete_failed_job(job)
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
