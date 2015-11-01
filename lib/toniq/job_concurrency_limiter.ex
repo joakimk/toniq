@@ -87,18 +87,10 @@ defmodule Toniq.JobConcurrencyLimiter do
     )
   end
 
-  defp below_max_concurrency?(state, job) do
-    running_count(state, job) < job.worker.max_concurrency
-  end
-
-  defp increase_running_count(state, job) do
-    update_running_count(state, job, +1)
-  end
-
-  defp decrease_running_count(state, job) do
-    update_running_count(state, job, -1)
-  end
-
+  # Running jobs count
+  defp below_max_concurrency?(state, job), do: running_count(state, job) < job.worker.max_concurrency
+  defp increase_running_count(state, job), do: update_running_count(state, job, +1)
+  defp decrease_running_count(state, job), do: update_running_count(state, job, -1)
   defp update_running_count(state, job, difference) do
     running_count = running_count(state, job) + difference
 
@@ -113,6 +105,7 @@ defmodule Toniq.JobConcurrencyLimiter do
     state
   end
 
+  # Worker state helpers
   defp update_worker_state(state, job, worker_state), do: Map.put(state, job.worker, worker_state)
   defp running_count(state, job),                     do: worker_state(state, job).running_count
   defp pending_jobs(state, job),                      do: worker_state(state, job).pending_jobs
