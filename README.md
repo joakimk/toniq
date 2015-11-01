@@ -194,7 +194,7 @@ I tend to prefer the first alternative in whenever possible.
 * [x] Review persistence format. Will have to write migrations after 1.0.
   - [x] See if it makes sense to store the reason for a failed job before 1.0 (e.g. changes in persistence format)
   - [x] Review redis key names, etc.
-  - [ ] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs?
+  - [x] Review the data available to the worker. Would it make sense to make the id available? Maybe to be able to do serial jobs? Would only exist for persisted jobs? **wont do this now, can be added without breaking the API if the need exists later**
 * [ ] Remove all old todos from the readme.
 * [ ] Make a note about API stability and semver
 * [ ] Add installation instructions
