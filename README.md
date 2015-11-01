@@ -1,5 +1,3 @@
-**Status**: Relatively new, but ready for production use and used in at least one small production app.
-
 Toniq
 =======
 
@@ -21,6 +19,8 @@ Designed to:
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq). You can run both Exq and Toniq in the same app for different workers.
 
 If **anything is unclear** about how this library works or what an error message means **that's considered a bug**, please file an issue (or a pull request)!
+
+**Status**: Relatively new, but ready for production use and used in at least one small production app.
 
 ## Installation
 
