@@ -191,7 +191,6 @@ I tend to prefer the first alternative in whenever possible.
 
 ## Todo for 1.0
 
-* [ ] Raise an error for unknown options to avoid typos like "max_concurrenc"
 * [ ] Remove JobEvent from 1.0 (does not handle multiple listeners and haven't been used as I would have thought)
 * [ ] Hex package
 * [ ] Add installation instructions
