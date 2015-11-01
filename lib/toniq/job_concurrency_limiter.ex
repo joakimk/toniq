@@ -2,12 +2,7 @@ defmodule Toniq.JobConcurrencyLimiter do
   use GenServer
 
   def start_link do
-    initial_state = %{
-      job_count_by_worker: %{},
-      pending_jobs: [],
-    }
-
-    GenServer.start_link(__MODULE__, initial_state, name: __MODULE__)
+    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
   @doc """
@@ -60,7 +55,7 @@ defmodule Toniq.JobConcurrencyLimiter do
 
     state =
       if below_max_concurrency?(state, job) do
-        run_next_pending_job(state)
+        run_next_pending_job(state, job)
       else
         state
       end
@@ -68,12 +63,17 @@ defmodule Toniq.JobConcurrencyLimiter do
     {:noreply, state}
   end
 
-  defp run_next_pending_job(state),     do: run_next_pending_job(state, Map.get(state, :pending_jobs))
-  defp run_next_pending_job(state, []), do: state
-  defp run_next_pending_job(state, pending_jobs) do
-    [ first_pending_job | pending_jobs ] = pending_jobs
+  defp run_next_pending_job(state, job),     do: run_next_pending_job(state, job, pending_jobs(state, job))
+  defp run_next_pending_job(state, job, []), do: state
+  defp run_next_pending_job(state, job, pending_jobs_by_worker) do
+    [ first_pending_job | pending_jobs ] = pending_jobs_by_worker
+
     state = run_now(state, first_pending_job)
-    Map.put(state, :pending_jobs, pending_jobs)
+
+    worker_state = worker_state(state, job)
+    update_worker_state(state, job,
+      %{ worker_state | pending_jobs: pending_jobs }
+    )
   end
 
   defp run_now(state, {job, caller}) do
@@ -82,7 +82,10 @@ defmodule Toniq.JobConcurrencyLimiter do
   end
 
   defp run_later(state, {job, caller}) do
-    Map.put(state, :pending_jobs, state.pending_jobs ++ [ {job, caller} ])
+    worker_state = worker_state(state, job)
+    update_worker_state(state, job,
+      %{ worker_state | pending_jobs: worker_state.pending_jobs ++ [ {job, caller} ] }
+    )
   end
 
   defp below_max_concurrency?(state, job) do
@@ -99,9 +102,11 @@ defmodule Toniq.JobConcurrencyLimiter do
 
   defp update_running_count(state, job, difference) do
     running_count = running_count(state, job) + difference
-    job_count_by_worker = Map.put(state.job_count_by_worker, job.worker, running_count)
 
-    state = %{state | job_count_by_worker: job_count_by_worker}
+    worker_state = worker_state(state, job)
+    state = update_worker_state(state, job,
+      %{ worker_state | running_count: running_count }
+    )
 
     if running_count < 0 do
       raise "Job count should never be able to be less than zero, state is: #{inspect(state)}"
@@ -110,5 +115,18 @@ defmodule Toniq.JobConcurrencyLimiter do
     state
   end
 
-  defp running_count(state, job), do: Map.get(state.job_count_by_worker, job.worker, 0)
+  defp update_worker_state(state, job, worker_state) do
+    Map.put(state, job.worker, worker_state)
+  end
+
+  defp running_count(state, job), do: worker_state(state, job).running_count
+  defp pending_jobs(state, job), do: worker_state(state, job).pending_jobs
+
+  defp worker_state(state, job) do
+    init_worker_state_if_needed(state, job)
+  end
+
+  defp init_worker_state_if_needed(state, job) do
+    Map.get(state, job.worker, %{ pending_jobs: [], running_count: 0 })
+  end
 end
