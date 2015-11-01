@@ -1,6 +1,5 @@
 defmodule Toniq do
   use Application
-  require Logger
 
   @doc """
   Enqueue for use in pipelines
