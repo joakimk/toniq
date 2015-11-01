@@ -250,6 +250,12 @@ This library uses [semver](http://semver.org/) for versioning. The API won't cha
     mix deps.get
     mix test
 
+You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex).
+
+    iex -S mix
+    iex> Toniq.enqueue(Toniq.TestWorker)
+    iex> Toniq.enqueue(Toniq.TestWorker, :fail_once)
+
 ## TODO and ideas for after 1.0
 
 * [ ] Document JobEvent in readme
