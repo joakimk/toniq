@@ -123,10 +123,6 @@ defmodule Toniq.JobConcurrencyLimiter do
   defp pending_jobs(state, job), do: worker_state(state, job).pending_jobs
 
   defp worker_state(state, job) do
-    init_worker_state_if_needed(state, job)
-  end
-
-  defp init_worker_state_if_needed(state, job) do
     Map.get(state, job.worker, %{ pending_jobs: [], running_count: 0 })
   end
 end
