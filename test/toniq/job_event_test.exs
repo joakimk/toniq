@@ -32,11 +32,11 @@ defmodule Toniq.JobEventTest do
 
     job = %{}
     Toniq.JobEvent.finished(job)
-    assert_receive {:finished, job}
+    assert_receive {:finished, ^job}
 
     Toniq.JobEvent.unsubscribe
 
     Toniq.JobEvent.finished(job)
-    refute_receive {:finished, job}
+    refute_receive {:finished, ^job}
   end
 end

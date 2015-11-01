@@ -5,7 +5,7 @@ defmodule Toniq.Worker do
     unknown_option = Enum.find(opts, fn ({k, v}) -> !Enum.member?(known_options, k) end)
 
     if unknown_option do
-      {k, v} = unknown_option
+      {k, _v} = unknown_option
       raise "Unknown option #{inspect(k)}. Known options are #{inspect(known_options)}"
     end
 
