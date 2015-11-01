@@ -169,7 +169,7 @@ This is a first-in-first-out queue but due to retries and concurrency, ordering 
 
 Jobs are serialized using [erlang serialization](http://www.erlang.org/doc/apps/erts/erl_ext_dist.html). It's the same format that is used when distributed nodes communicate. This means you can pass almost anything to jobs.
 
-### What happens if the persistence format changes?
+### What happens if the serialization format changes?
 
 There is code in place to automatically [migrate](lib/toniq/job.ex) old versions of jobs.
 
