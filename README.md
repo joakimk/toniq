@@ -191,16 +191,15 @@ I tend to prefer the first alternative in whenever possible.
 
 ## Todo for 1.0
 
-* [ ] Make a note about API stability and semver
-* [ ] Add installation instructions
-  - Make a note about multiple apps using the same redis server and the config for that (e.g namespacing on toniq keys).
 * [ ] Raise an error for unknown options to avoid typos like "max_concurrenc"
 * [ ] Remove JobEvent from 1.0 (does not handle multiple listeners and haven't been used as I would have thought)
-* [ ] Add CI
 * [ ] Hex package
+* [ ] Add installation instructions
+  - Make a note about multiple apps using the same redis server and the config for that (e.g namespacing on toniq keys).
 
 ### Later
 
+* [ ] Add CI
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
@@ -232,6 +231,10 @@ I tend to prefer the first alternative in whenever possible.
 ### Notes
 
 I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
+
+### Versioning
+
+This library uses [semver](http://semver.org/) for versioning. The API won't change in incompatible ways within the same major version, etc. The version is specified in [mix.exs](mix.exs).
 
 ## Credits
 
