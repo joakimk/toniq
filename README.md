@@ -156,14 +156,6 @@ config :toniq, retry_strategy: Toniq.RetryWithoutDelayStrategy
 # config :toniq, retry_strategy: YourCustomStrategy
 ```
 
-## Designed to avoid complexity
-
-Instead of using redis as a messaging queue, toniq uses it for backup.
-
-Jobs are run within the VM where they are enqueued. If a VM is stopped or crashes, unprocessed jobs are recovered from redis once another VM is running.
-
-By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
-
 ## Load balancing
 
 As toniq only runs jobs within the VM that enqueued them, it's up to you to enqueue jobs in different VMs if you want to run more of them concurrently than a single Erlang VM can handle.
@@ -176,6 +168,14 @@ Alternatively you can use [Toniq.JobImporter](lib/toniq/job_importer.ex) to pass
 identifier = Toniq.KeepalivePersistence.registered_vms |> Enum.shuffle |> hd
 Toniq.JobPersistence.store_incoming_job(Toniq.TestWorker, [], identifier)
 ```
+
+## Designed to avoid complexity
+
+Instead of using redis as a messaging queue, toniq uses it for backup.
+
+Jobs are run within the VM where they are enqueued. If a VM is stopped or crashes, unprocessed jobs are recovered from redis once another VM is running.
+
+By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
 
 ## Request for feedback
 
