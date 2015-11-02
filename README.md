@@ -256,6 +256,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 
 ## TODO and ideas for after 1.0
 
+* [ ] Change retry to use job imports so that a UI can retry jobs from a specific identifier (or solve it a different way)
 * [ ] Document how to test an app using Toniq. E.g. use Toniq.JobEvent.subscribe, etc.
 * [ ] Admin UI
   - [ ] That shows waiting and failed jobs
