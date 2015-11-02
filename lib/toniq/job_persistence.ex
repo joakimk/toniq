@@ -1,5 +1,5 @@
 defmodule Toniq.JobPersistence do
-  use Exredis.Api
+  import Exredis.Api
 
   @doc """
   Stores a job in redis. If it does not succeed it will fail right away.
