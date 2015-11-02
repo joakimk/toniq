@@ -10,8 +10,9 @@ Simple and reliable background job library for [Elixir](http://elixir-lang.org/)
 * Passes arguments to the worker exactly as they where enqueued, no JSON conversion.
 * Fails on the side of running a job too many times rather than not at all. See more on this below.
 * Works well on limited environments like Heroku where you can't connect multiple Erlang nodes directly or do hot code updates.
-
-Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq). You can run both Exq and Toniq in the same app for different workers.
+* Uses redis to persist jobs but is **not** resque/sidekiq compatible.
+  - If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq).
+  - You can run both Exq and Toniq in the same app for different workers.
 
 If anything is unclear about how this library works or what an error message means **that's considered a bug**, please file an issue (or a pull request)!
 
