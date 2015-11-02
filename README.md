@@ -5,7 +5,8 @@ Simple and reliable background job library for [Elixir](http://elixir-lang.org/)
 
 * Focuses on being easy to use and handling errors well.
 * Will automatically retry failing jobs a few times.
-* It has practically no limits on concurrent jobs, though you can specify a max concurrency for a worker.
+* It has practically no limits on concurrent jobs.
+* You can specify a max concurrency for a worker.
 * Passes arguments to the worker exactly as they where enqueued, no JSON conversion.
 * Fails on the side of running a job too many times rather than not at all. See more on this below.
 * Works well on limited environments like Heroku where you can't connect multiple Erlang nodes directly or do hot code updates.
