@@ -256,6 +256,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 
 ## TODO and ideas for after 1.0
 
+* [ ] Document how to test an app using Toniq. E.g. use Toniq.JobEvent.subscribe, etc.
 * [ ] Admin UI
   - [ ] That shows waiting and failed jobs
   - [ ] Make data easiliy available for display in the app that uses toniq
