@@ -3,19 +3,12 @@ Toniq
 
 Simple and reliable background job library for [Elixir](http://elixir-lang.org/).
 
-Designed to:
-
-* Be very easy to use. Just define a worker and enqueue jobs!
-* Focus on error handling before features
-* Pass arguments to the worker exactly as they where enqueued, no JSON conversion
-* Automatically retry jobs that fail
-* Be able to limit concurrency when requested
-* Play to Erlang's strengths by using processes well
-  - Practically no limits on concurrent jobs
-  - Uses all available CPU cores
-* Fail on the side of running a job too many times rather than not at all. See more on this below.
-* Work well on limited environments like Heroku where you can't connect multiple Erlang nodes directly or do hot code updates
-* Have helpful error messages
+* Focuses on being easy to use and handling errors well.
+* Will automatically retry failing jobs a few times.
+* It has practically no limits on concurrent jobs, though you can specify a max concurrency for a worker.
+* Passes arguments to the worker exactly as they where enqueued, no JSON conversion.
+* Fails on the side of running a job too many times rather than not at all. See more on this below.
+* Works well on limited environments like Heroku where you can't connect multiple Erlang nodes directly or do hot code updates.
 
 Uses redis to persist jobs but is **not** resque/sidekiq compatible. If you need that then I'd recommend you look at [Exq](https://github.com/akira/exq). You can run both Exq and Toniq in the same app for different workers.
 
