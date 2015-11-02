@@ -23,15 +23,15 @@ defmodule Toniq do
   @doc """
   List failed jobs
   """
-  def failed_jobs, do: Toniq.JobPersistence.failed_jobs
+  def failed_jobs do
+    Toniq.KeepalivePersistence.registered_vms
+    |> Enum.flat_map(&Toniq.JobPersistence.failed_jobs/1)
+  end
 
   @doc """
   Retry a failed job
   """
-  def retry(job) do
-    Toniq.JobPersistence.move_failed_job_to_jobs(job)
-    |> Toniq.JobRunner.register_job
-  end
+  def retry(job), do: Toniq.JobPersistence.move_failed_job_to_incomming_jobs(job)
 
   @doc """
   Delete a failed job

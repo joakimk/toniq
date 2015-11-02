@@ -55,6 +55,7 @@ defmodule ToniqTest do
 
   setup do
     Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
+    Toniq.KeepalivePersistence.register_vm(Toniq.Keepalive.identifier)
     :ok
   end
 
@@ -97,12 +98,13 @@ defmodule ToniqTest do
   test "failed jobs can be retried" do
     job = Toniq.enqueue(TestErrorWorker, data: 10)
     assert_receive { :failed, ^job }
-    assert Enum.map(Toniq.failed_jobs, &(&1.id)) == [job.id]
+    assert Enum.count(Toniq.failed_jobs) == 1
 
+    job = Toniq.failed_jobs |> hd
     assert Toniq.retry(job)
 
-    assert_receive { :failed, ^job }
-    assert Enum.map(Toniq.failed_jobs, &(&1.id)) == [job.id]
+    assert_receive { :failed, _job }
+    assert Enum.count(Toniq.failed_jobs) == 1
   end
 
   @tag :capture_log
@@ -114,6 +116,20 @@ defmodule ToniqTest do
     job = Toniq.failed_jobs |> hd
     assert Toniq.delete(job)
 
+    assert Toniq.failed_jobs == []
+  end
+
+  test "can handle jobs from another VM for some actions (for easy administration of failed jobs)" do
+    Toniq.KeepalivePersistence.register_vm("other")
+    Toniq.KeepalivePersistence.update_alive_key("other", 1000)
+    job = Toniq.JobPersistence.store_job(TestWorker, [], "other")
+    Toniq.JobPersistence.mark_as_failed(job, "error", "other")
+
+    assert Enum.count(Toniq.failed_jobs) == 1
+    job = Toniq.failed_jobs |> hd
+    assert job.vm == "other"
+
+    Toniq.delete(job)
     assert Toniq.failed_jobs == []
   end
 

@@ -24,8 +24,8 @@ defmodule Exredis.JobPersistenceTest do
     assert Toniq.JobPersistence.jobs == []
     assert Toniq.JobPersistence.failed_jobs == [job1_with_error]
 
-    Toniq.JobPersistence.move_failed_job_to_jobs(job1_with_error)
-    assert Toniq.JobPersistence.jobs == [job1]
+    Toniq.JobPersistence.move_failed_job_to_incomming_jobs(job1_with_error)
+    assert Toniq.JobPersistence.incoming_jobs == [job1]
     assert Toniq.JobPersistence.failed_jobs == []
   end
 
@@ -45,7 +45,8 @@ defmodule Exredis.JobPersistenceTest do
       id: 1,
       worker: TestWorker,
       arguments: [:a],
-      version: 1
+      version: 1,
+      vm: Toniq.Keepalive.identifier
     }
 
     # Also converts the persisted job, so that we can mark jobs as successful, etc.

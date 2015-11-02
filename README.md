@@ -107,7 +107,7 @@ You can set this by specifying the `max_concurrency` option on a worker.
 defmodule RegisterInvoiceWorker do
   use Toniq.Worker, max_concurrency: 10
 
-  def perform(invoice_attributes) do
+  def perform(invoice\_attributes) do
     # do work
   end
 end
@@ -116,8 +116,6 @@ end
 ## Retrying failed jobs
 
 An admin web UI is planned, but until then (and after that) you can use the console.
-
-**NOTE**: failed_jobs won't list jobs from another VM (e.g. iex prompt to debug, phoenix app with failed jobs) unless you pass in an identifier to it that you can get from `Toniq.KeepalivePersistence.registered_vms`. Retry won't work cross-vms as the code is written right now. Will look into this soon.
 
 Retrying all failed jobs:
 
@@ -258,7 +256,6 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 
 ## TODO and ideas for after 1.0
 
-* [ ] Make the failed_jobs / retry flow work from another VM, and then update docs
 * [ ] Document how to test an app using Toniq. E.g. use Toniq.JobEvent.subscribe, etc.
 * [ ] Admin UI
   - [ ] That shows waiting and failed jobs
