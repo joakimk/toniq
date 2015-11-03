@@ -107,7 +107,7 @@ You can set this by specifying the `max_concurrency` option on a worker.
 defmodule RegisterInvoiceWorker do
   use Toniq.Worker, max_concurrency: 10
 
-  def perform(invoice\_attributes) do
+  def perform(attributes) do
     # do work
   end
 end
