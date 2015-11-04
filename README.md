@@ -264,6 +264,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
   - [ ] Store/show retry count
 * [ ] Document JobEvent in readme
 * [ ] Add CI
+  - Run tests in R17 as people still use that
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
