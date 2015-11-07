@@ -1,7 +1,7 @@
 Toniq
 =======
 
-Simple and reliable background job library for [Elixir](http://elixir-lang.org/).
+Simple and reliable background job processing library for [Elixir](http://elixir-lang.org/).
 
 * Focuses on being easy to use and handling errors well.
 * Will automatically retry failing jobs a few times.

@@ -38,7 +38,9 @@ defmodule Toniq.Mixfile do
 
   defp description do
     """
-    Simple and reliable background job library for Elixir.
+    Simple and reliable background job processing library for Elixir.
+
+    Has persistence, retries, concurrency limiting, error handling and is heroku friendly.
     """
   end
 
