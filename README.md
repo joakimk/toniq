@@ -257,11 +257,13 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 ## TODO and ideas for after 1.0
 
 * [ ] Document how to test an app using Toniq. E.g. use Toniq.JobEvent.subscribe, etc.
-* [ ] Admin UI
+* [ ] Admin UI (being worked on by [kimfransman](https://twitter.com/kimfransman/status/661126637061332992))
   - [ ] That shows waiting and failed jobs
   - [ ] Make data easiliy available for display in the app that uses toniq
   - [ ] Store/show time of creation
   - [ ] Store/show retry count
+* [ ] A feature to schedule jobs or documentation on how to use other libraries with toniq to do that.
+  - [related tweet](https://twitter.com/zensavona/status/662987468912926721)
 * [ ] Document JobEvent in readme
 * [ ] Add CI
   - Run tests in R17 as people still use that
