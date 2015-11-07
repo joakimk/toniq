@@ -264,6 +264,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
   - [ ] Store/show retry count
 * [ ] A feature to schedule jobs or documentation on how to use other libraries with toniq to do that.
   - [related tweet](https://twitter.com/zensavona/status/662987468912926721)
+* [ ] A tiny web page instead of just a redirect at <http://toniq.elixir.pm>.
 * [ ] Document JobEvent in readme
 * [ ] Add CI
   - Run tests in R17 as people still use that
