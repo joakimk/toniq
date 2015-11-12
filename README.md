@@ -214,6 +214,17 @@ You can solve this in two ways:
 
 I tend to prefer the first alternative in whenever possible.
 
+### How do I run scheduled or recurring jobs?
+
+There is no built-in support yet, but you can use tools like <https://github.com/c-rack/quantum-elixir> to schedule toniq jobs.
+
+```elixir
+config :quantum, cron: [
+  # Every 15 minutes
+  "*/15 * * * *":   fn -> Toniq.enqueue(SomeWorker) end
+]
+```
+
 ## Notes
 
 I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
