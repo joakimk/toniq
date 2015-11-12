@@ -221,7 +221,7 @@ There is no built-in support yet, but you can use tools like <https://github.com
 ```elixir
 config :quantum, cron: [
   # Every 15 minutes
-  "*/15 * * * *":   fn -> Toniq.enqueue(SomeWorker) end
+  "*/15 * * * *": fn -> Toniq.enqueue(SomeWorker) end
 ]
 ```
 
