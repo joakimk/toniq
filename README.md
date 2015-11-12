@@ -276,6 +276,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 * [ ] A feature to schedule jobs or documentation on how to use other libraries with toniq to do that.
   - [related tweet](https://twitter.com/zensavona/status/662987468912926721)
 * [ ] A tiny web page instead of just a redirect at <http://toniq.elixir.pm>.
+  - A phoenix app using toniq with regularly scheduled jobs, and ways to trigger jobs would be fun. Especially if the Admin UI exists so you can see them run, retry, etc.
 * [ ] Document JobEvent in readme
 * [ ] Add CI
   - Run tests in R17 as people still use that
