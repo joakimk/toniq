@@ -273,6 +273,8 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
   - [ ] Make data easiliy available for display in the app that uses toniq
   - [ ] Store/show time of creation
   - [ ] Store/show retry count
+  - [ ] MAYBE: JSON API for current job stats
+  - [ ] MAYBE: Webhook to push job stats updates
 * [ ] Test job scheduling tools to know what to recommend
 * [ ] A tiny web page instead of just a redirect at <http://toniq.elixir.pm>.
   - A phoenix app using toniq with regularly scheduled jobs, and ways to trigger jobs would be fun. Especially if the Admin UI exists so you can see them run, retry, etc.
