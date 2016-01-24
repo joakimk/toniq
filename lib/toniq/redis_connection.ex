@@ -46,5 +46,13 @@ defmodule Toniq.RedisConnection do
     |> Process.register(:toniq_redis)
   end
 
-  defp redis_url, do: Application.get_env(:toniq, :redis_url)
+  defp redis_url do
+    redis_url_provider = Application.get_env(:toniq, :redis_url_provider)
+
+    if redis_url_provider do
+      redis_url_provider.()
+    else
+      Application.get_env(:toniq, :redis_url)
+    end
+  end
 end
