@@ -19,7 +19,7 @@ defmodule Toniq.JobImporter do
   defp import_jobs(enabled: true) do
     incoming_jobs
     |> log_import
-    |> Enum.each &import_job/1
+    |> Enum.each(&import_job/1)
   end
 
   defp incoming_jobs do

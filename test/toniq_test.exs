@@ -42,8 +42,8 @@ defmodule ToniqTest do
 
     def currently_running_job_names, do: Agent.get(agent, fn (names) -> names end)
 
-    defp add_to_list(process_name),      do: agent |> Agent.update fn (list) -> list ++ [ process_name ] end
-    defp remove_from_list(process_name), do: agent |> Agent.update fn (list) -> list -- [ process_name ] end
+    defp add_to_list(process_name),      do: Agent.update agent, fn (list) -> list ++ [ process_name ] end
+    defp remove_from_list(process_name), do: Agent.update agent, fn (list) -> list -- [ process_name ] end
     defp agent, do: Process.whereis(:job_list)
   end
 
