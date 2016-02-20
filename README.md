@@ -43,6 +43,10 @@ And configure toniq in different environments:
 ```elixir
 config :toniq, redis_url: "redis://localhost:6379/0"
 # config :toniq, redis_url: System.get_env("REDIS_PROVIDER")
+
+# If you need to configure redis dynamically after the application starts,
+# you can use redis_url_provider to block until a redis_url is available.
+# config :toniq, redis_url_provider: fn -> wait_for_redis_url_to_be_available end
 ```
 
 If you have multiple apps using the same redis server, then don't forget to also configure `redis_key_prefix`.
