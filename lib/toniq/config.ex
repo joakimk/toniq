@@ -17,7 +17,7 @@ defmodule Toniq.Config do
   end
 
   defp default(scope, options) do
-    options |> Enum.each fn ({key, value}) ->
+    Enum.each options, fn ({key, value}) ->
       #IO.inspect key: key, value: value
       unless Application.get_env(scope, key) do
         #IO.inspect "using default"

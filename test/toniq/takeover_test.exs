@@ -89,7 +89,7 @@ defmodule Exredis.TakeoverTest do
 
   defp registered?(identifier) do
     Toniq.KeepalivePersistence.registered_vms
-    |> Enum.member? identifier
+    |> Enum.member?(identifier)
   end
 
   defp unlink_process(pid) do

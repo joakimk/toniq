@@ -31,7 +31,7 @@ defmodule Toniq.Takeover do
 
   defp select_first_missing(vms) do
     vms
-    |> Enum.find fn(identifier) -> missing?(identifier) end
+    |> Enum.find(fn(identifier) -> missing?(identifier) end)
   end
 
   defp missing?(identifier) do

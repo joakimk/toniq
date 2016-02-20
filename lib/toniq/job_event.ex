@@ -34,8 +34,7 @@ defmodule Toniq.JobEvent do
   end
 
   def handle_cast({:notify, event}, state) do
-    state.listeners
-    |> Enum.each fn (pid) ->
+    Enum.each state.listeners, fn (pid) ->
       send pid, event
     end
 
