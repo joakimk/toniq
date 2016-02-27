@@ -13,6 +13,7 @@ defmodule Exredis.TakeoverTest do
     :ok
   end
 
+  @tag :capture_log
   test "takes over orphaned jobs" do
     current_vm = Toniq.Keepalive.identifier
     other_vm = start_keepalive(:other_vm)

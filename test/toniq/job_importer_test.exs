@@ -14,6 +14,7 @@ defmodule Exredis.JobImporterTest do
     :ok
   end
 
+  @tag :capture_log
   test "imports jobs from the incoming_jobs queue" do
     Process.register self, :toniq_job_importer_test
     Toniq.JobPersistence.store_incoming_job(TestWorker, data: 10)

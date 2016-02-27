@@ -19,6 +19,7 @@ defmodule Toniq.FailoverTest do
   # leads to unreliable tests). Instead of multiple VMs we simply persist a job as-if
   # there was another VM (different key names in redis) and then stop the keepalive for
   # that fake VM and ensure the job is taken over by the test VM.
+  @tag :capture_log
   test "orphaned jobs are taken over and run" do
     Process.register self, :failover_test
 

@@ -28,9 +28,7 @@ defmodule Toniq.JobImporter do
 
   defp log_import([]), do: []
   defp log_import(jobs) do
-    if Mix.env != :test do
-      Logger.log(:info, "#{__MODULE__}: Importing #{Enum.count(jobs)} jobs from incoming_jobs")
-    end
+    Logger.log(:info, "#{__MODULE__}: Importing #{Enum.count(jobs)} jobs from incoming_jobs")
 
     jobs
   end
