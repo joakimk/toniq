@@ -40,7 +40,7 @@ defmodule Toniq.Takeover do
 
   defp handle_missing_vm(nil, _state), do: nil
   defp handle_missing_vm(identifier, state) do
-    if Mix.env != :test do
+    if Application.get_env(:toniq, :log_debug) do
       Logger.log(:info, "#{__MODULE__}: Taking over all jobs from missing vm #{identifier}")
     end
 
