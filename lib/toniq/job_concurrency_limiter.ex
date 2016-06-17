@@ -63,17 +63,19 @@ defmodule Toniq.JobConcurrencyLimiter do
     {:noreply, state}
   end
 
-  defp run_next_pending_job(state, job),      do: run_next_pending_job(state, job, pending_jobs(state, job))
-  defp run_next_pending_job(state, job, pending_jobs) do
-    case :queue.out(pending_jobs) do
-      {:empty, _pending_jobs} ->
-        state
-      {{:value, first_pending_job}, pending_jobs} ->
-        state = run_now(state, first_pending_job)
-        update_worker_state(state, job,
-          %{ worker_state(state, job) | pending_jobs: pending_jobs }
-        )
-    end
+  defp run_next_pending_job(state, job) do
+    pending_jobs_queue(state, job)
+    |> next_job_in_queue
+    |> run_job_from_queue(state, job)
+  end
+
+  defp run_job_from_queue(:queue_empty, state, _previous_job), do: state
+  defp run_job_from_queue({first_pending_job, pending_jobs_queue}, state, previous_job) do
+    state = run_now(state, first_pending_job)
+
+    update_worker_state(state, previous_job,
+      %{ worker_state(state, previous_job) | pending_jobs_queue: pending_jobs_queue }
+    )
   end
 
   defp run_now(state, {job, caller}) do
@@ -84,7 +86,7 @@ defmodule Toniq.JobConcurrencyLimiter do
   defp run_later(state, {job, caller}) do
     worker_state = worker_state(state, job)
     update_worker_state(state, job,
-      %{ worker_state | pending_jobs: :queue.in({job, caller}, worker_state.pending_jobs) }
+      %{ worker_state | pending_jobs_queue: put_job_in_queue({job, caller}, worker_state.pending_jobs_queue) }
     )
   end
 
@@ -106,9 +108,24 @@ defmodule Toniq.JobConcurrencyLimiter do
     state
   end
 
+  # Queue helpers
+  defp build_queue, do: :queue.new()
+  defp next_job_in_queue(pending_jobs_queue) do
+    case :queue.out(pending_jobs_queue) do
+      {:empty, _pending_jobs_queue} ->
+        :queue_empty
+
+      {{:value, first_pending_job}, pending_jobs_queue} ->
+        {first_pending_job, pending_jobs_queue}
+    end
+  end
+  defp put_job_in_queue({job, caller}, pending_jobs_queue) do
+    :queue.in({job, caller}, pending_jobs_queue)
+  end
+
   # Worker state helpers
   defp update_worker_state(state, job, worker_state), do: Map.put(state, job.worker, worker_state)
   defp running_count(state, job),                     do: worker_state(state, job).running_count
-  defp pending_jobs(state, job),                      do: worker_state(state, job).pending_jobs
-  defp worker_state(state, job),                      do: Map.get(state, job.worker, %{ pending_jobs: :queue.new(), running_count: 0 })
+  defp pending_jobs_queue(state, job),                do: worker_state(state, job).pending_jobs_queue
+  defp worker_state(state, job),                      do: Map.get(state, job.worker, %{ pending_jobs_queue: build_queue, running_count: 0 })
 end
