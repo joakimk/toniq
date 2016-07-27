@@ -27,6 +27,7 @@ Add as a dependency in your mix.exs file:
 ```elixir
 defp deps do
   [
+    {:exredis, ">= 0.1.1"},
     {:toniq, "~> 1.0"}
   ]
 end
@@ -36,7 +37,7 @@ And run:
 
     mix deps.get
 
-Then add `:toniq` and `:uuid` to the list of applications in mix.exs.
+Then add `exredis`, `:toniq` and `:uuid` to the list of applications in mix.exs.
 
 And configure toniq in different environments:
 
