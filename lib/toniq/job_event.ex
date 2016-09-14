@@ -49,6 +49,11 @@ defmodule Toniq.JobEvent do
     notify {:failed, job}
   end
 
+  def error(job, error) do
+    job_with_error = Map.put(job, :error, error)
+    notify {:error, job_with_error}
+  end
+
   defp notify(event) do
     GenServer.cast(__MODULE__, {:notify, event})
   end
