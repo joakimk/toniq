@@ -1,8 +1,10 @@
 defmodule Toniq.JobProcess do
   def run(job) do
     case run_job(job) do
-      :ok   -> {:job_was_successful, job}
-      error -> {:job_has_failed, job, error}
+      :ok ->
+        {:job_was_successful, job}
+      {error, stack} ->
+        {:job_has_failed, job, error, stack}
     end
   end
 
@@ -23,7 +25,8 @@ defmodule Toniq.JobProcess do
       job.worker.perform(job.arguments)
       :success
     rescue
-      error -> {:failed_because_of_an_error, error}
+      error ->
+        {:failed_because_of_an_error, error, System.stacktrace}
     end
   end
 
@@ -33,10 +36,13 @@ defmodule Toniq.JobProcess do
         # both errors and successes result in a normal exit, wait for more information
         wait_for_result
       {:DOWN, _ref, :process, _pid, error} -> # Failed beause the process crashed
-        "The job runner crashed. The reason that was given is: #{error}"
-        |> wrap_in_crash_error
-      {:failed_because_of_an_error, error} ->
-        error
+        crash_error =
+          "The job runner crashed. The reason that was given is: #{error}"
+          |> wrap_in_crash_error
+
+        {crash_error, []}
+      {:failed_because_of_an_error, error, stack} ->
+        {error, stack}
       :success ->
         :ok
     end
