@@ -37,7 +37,7 @@ And run:
 
     mix deps.get
 
-Then add `exredis`, `:toniq` and `:uuid` to the list of applications in mix.exs.
+Then add `:toniq` to the list of applications in mix.exs.
 
 And configure toniq in different environments:
 
