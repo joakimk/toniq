@@ -18,7 +18,7 @@ If anything is unclear about how this library works or what an error message mea
 
 --
 
-**Status**: Relatively new. Used in at least one small production app for months. If you like, ping [@joakimk](https://twitter.com/joakimk) about how you use toniq and for what size/type of app.
+**Status**: Relatively new. Used quite a lot of apps since 1.0 (nov, 2015). If you like, ping [@joakimk](https://twitter.com/joakimk) about how you use toniq and for what size/type of app.
 
 ## Installation
 
