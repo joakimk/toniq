@@ -3,6 +3,8 @@ Toniq
 
 Simple and reliable background job processing library for [Elixir](http://elixir-lang.org/).
 
+[![asciicast](https://asciinema.org/a/4d81ntu7max782kgfslw4pbym.png)](https://asciinema.org/a/4d81ntu7max782kgfslw4pbym)
+
 * Focuses on being easy to use and handling errors well.
 * Will automatically retry failing jobs a few times.
 * It has practically no limits on concurrent jobs.
