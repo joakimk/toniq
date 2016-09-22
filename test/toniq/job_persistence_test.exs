@@ -29,6 +29,15 @@ defmodule Exredis.JobPersistenceTest do
     assert Toniq.JobPersistence.failed_jobs == []
   end
 
+  test "can store and move a suspended a job" do
+    job = Toniq.JobPersistence.store_suspended_job(SomeWorker, some: "data")
+    assert Toniq.JobPersistence.suspended_jobs == [job]
+
+    Toniq.JobPersistence.move_suspended_job_to_incoming_jobs(job)
+    assert Toniq.JobPersistence.incoming_jobs == [job]
+    assert Toniq.JobPersistence.suspended_jobs == []
+  end
+
   test "can store and retrieve incoming jobs" do
     job = Toniq.JobPersistence.store_incoming_job(SomeWorker, incoming: "take cover")
     assert Toniq.JobPersistence.incoming_jobs == [job]

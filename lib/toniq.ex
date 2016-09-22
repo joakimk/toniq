@@ -21,6 +21,14 @@ defmodule Toniq do
   end
 
   @doc """
+  Stores job in the suspended queue.
+  """
+  def suspend_to(arguments, worker_module) do
+    worker_module
+    |> Toniq.JobPersistence.store_suspended_job(arguments)
+  end
+
+  @doc """
   List failed jobs
   """
   def failed_jobs do

@@ -13,6 +13,13 @@ defmodule Toniq.JobPersistence do
     store_job_in_key(worker_module, arguments, incoming_jobs_key(identifier), identifier)
   end
 
+  @doc """
+  Stores a suspended job in redis.
+  """
+  def store_suspended_job(worker_module, arguments, identifier \\ default_identifier) do
+    store_job_in_key(worker_module, arguments, suspended_jobs_key(identifier), identifier)
+  end
+
   # Only used internally by JobImporter
   def remove_from_incoming_jobs(job) do
     redis |> srem(incoming_jobs_key(default_identifier), strip_vm_identifier(job))
@@ -32,6 +39,11 @@ defmodule Toniq.JobPersistence do
   Returns all failed jobs.
   """
   def failed_jobs(identifier \\ default_identifier), do: load_jobs(failed_jobs_key(identifier), identifier)
+
+  @doc """
+  Returns all suspended jobs.
+  """
+  def suspended_jobs(identifier \\ default_identifier), do: load_jobs(suspended_jobs_key(identifier), identifier)
 
   @doc """
   Marks a job as finished. This means that it's deleted from redis.
@@ -76,6 +88,21 @@ defmodule Toniq.JobPersistence do
   end
 
   @doc """
+  Moves a suspended job to the regular jobs list.
+
+  Uses "job.vm" to do the operation in the correct namespace.
+  """
+  def move_suspended_job_to_incoming_jobs(suspended_job) do
+    redis |> Exredis.query_pipe([
+      ["MULTI"],
+      ["SREM", suspended_jobs_key(suspended_job.vm), strip_vm_identifier(suspended_job)],
+      ["SADD", incoming_jobs_key(suspended_job.vm), strip_vm_identifier(suspended_job)],
+      ["EXEC"],
+    ])
+    suspended_job
+  end
+
+  @doc """
   Deletes a failed job.
 
   Uses "job.vm" to do the operation in the correct namespace.
@@ -91,6 +118,10 @@ defmodule Toniq.JobPersistence do
 
   def failed_jobs_key(identifier) do
     identifier_scoped_key :failed_jobs, identifier
+  end
+
+  def suspended_jobs_key(identifier) do
+    identifier_scoped_key :suspended_jobs, identifier
   end
 
   def incoming_jobs_key(identifier) do
