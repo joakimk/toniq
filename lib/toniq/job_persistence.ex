@@ -28,7 +28,7 @@ defmodule Toniq.JobPersistence do
   @doc """
   Returns all incoming jobs (used for failover).
   """
-  def incoming_jobs(identifier \\ default_identifier), do: load_jobs(incoming_jobs_key(identifier), identifier)
+  def incoming_jobs(count, identifier \\ default_identifier), do: load_jobs(count, incoming_jobs_key(identifier), identifier)
 
   @doc """
   Returns all failed jobs.
@@ -107,9 +107,32 @@ defmodule Toniq.JobPersistence do
     job
   end
 
+  defp load_jobs(count, redis_key, identifier) do
+    load_from_redis(redis, redis_key, 0, count, [])
+    |> map_to_job_structs(redis_key, identifier)
+  end
+
+  # NOTE: Don't trust this fetch at all, seems to find duplicates
+  defp load_from_redis(redis, redis_key, previous_cursor, limit, acc) do
+    [ cursor, list ] = redis |> Exredis.query(["SSCAN", redis_key, previous_cursor])
+
+    acc = acc ++ list
+
+    if list == [] || Enum.count(acc) >= limit do
+      acc |> Enum.take(limit)
+    else
+      load_from_redis(redis, redis_key, cursor, limit, acc)
+    end
+  end
+
   defp load_jobs(redis_key, identifier) do
     redis
     |> smembers(redis_key)
+    |> map_to_job_structs(redis_key, identifier)
+  end
+
+  defp map_to_job_structs(jobs, redis_key, identifier) do
+    jobs
     |> Enum.map(&build_job/1)
     |> Enum.sort(&first_in_first_out/2)
     |> Enum.map(fn (job) -> convert_to_latest_job_format(job, redis_key) end)

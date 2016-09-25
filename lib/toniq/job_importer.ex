@@ -18,13 +18,12 @@ defmodule Toniq.JobImporter do
   defp import_jobs(enabled: false), do: nil
   defp import_jobs(enabled: true) do
     incoming_jobs
-    |> Enum.take(jobs_to_import_count)
     |> log_import
     |> Enum.each(&import_job/1)
   end
 
   defp jobs_to_import_count do
-    max_count = 500 # this would be in config
+    max_count = 50 # this would be in config
     diff = max_count - Toniq.JobPersistence.jobs_count
 
     if diff < 0 do
@@ -35,7 +34,7 @@ defmodule Toniq.JobImporter do
   end
 
   defp incoming_jobs do
-    Toniq.JobPersistence.incoming_jobs
+    Toniq.JobPersistence.incoming_jobs(jobs_to_import_count)
   end
 
   defp log_import([]), do: []
