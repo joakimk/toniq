@@ -23,6 +23,8 @@ defmodule Toniq.JobPersistence do
   """
   def jobs(identifier \\ default_identifier), do: load_jobs(jobs_key(identifier), identifier)
 
+  def jobs_count(identifier \\ default_identifier), do: scard(redis, jobs_key(identifier)) |> String.to_integer
+
   @doc """
   Returns all incoming jobs (used for failover).
   """
