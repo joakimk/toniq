@@ -10,6 +10,10 @@ defmodule Toniq.JobImporter do
     {:ok, state}
   end
 
+  def trigger_import do
+    send __MODULE__, :import_jobs
+  end
+
   def handle_info(:import_jobs, state) do
     import_jobs(enabled: enabled?)
     {:noreply, state}
@@ -45,7 +49,9 @@ defmodule Toniq.JobImporter do
   end
 
   def import_job(job) do
-    Toniq.enqueue(job.worker, job.arguments)
+    Toniq.JobPersistence.store_job(job.worker, job.arguments)
+    |> Toniq.JobRunner.register_job
+
     Toniq.JobPersistence.remove_from_incoming_jobs(job)
   end
 

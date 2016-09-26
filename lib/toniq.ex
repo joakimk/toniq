@@ -16,8 +16,8 @@ defmodule Toniq do
   Enqueue job to be run in the background as soon as possible
   """
   def enqueue(worker_module, arguments \\ []) do
-    Toniq.JobPersistence.store_job(worker_module, arguments)
-    |> Toniq.JobRunner.register_job
+    Toniq.JobPersistence.store_incoming_job(worker_module, arguments)
+    Toniq.JobImporter.trigger_import
   end
 
   @doc """
