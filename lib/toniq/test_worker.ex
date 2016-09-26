@@ -1,7 +1,7 @@
 # Used for manual testing of toniq
 # Usage: Toniq.enqueue(Toniq.TestWorker)
 defmodule Toniq.TestWorker do
-  use Toniq.Worker, max_concurrency: 2
+  use Toniq.Worker, max_concurrency: 5
 
   # Usage: Toniq.enqueue(Toniq.TestWorker, :fail)
   #

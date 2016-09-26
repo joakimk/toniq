@@ -23,7 +23,7 @@ defmodule Toniq.JobImporter do
   end
 
   defp jobs_to_import_count do
-    max_count = 50 # this would be in config
+    max_count = 500 # this would be in config
     diff = max_count - Toniq.JobPersistence.jobs_count
 
     if diff < 0 do

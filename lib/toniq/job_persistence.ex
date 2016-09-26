@@ -112,13 +112,13 @@ defmodule Toniq.JobPersistence do
     |> map_to_job_structs(redis_key, identifier)
   end
 
-  # NOTE: Don't trust this fetch at all, seems to find duplicates
   defp load_from_redis(redis, redis_key, previous_cursor, limit, acc) do
     [ cursor, list ] = redis |> Exredis.query(["SSCAN", redis_key, previous_cursor])
 
     acc = acc ++ list
+    reached_end_of_set = (cursor == "0")
 
-    if list == [] || Enum.count(acc) >= limit do
+    if reached_end_of_set || Enum.count(acc) >= limit do
       acc |> Enum.take(limit)
     else
       load_from_redis(redis, redis_key, cursor, limit, acc)
