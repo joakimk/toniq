@@ -21,11 +21,11 @@ defmodule Toniq do
   end
 
   @doc """
-  Stores job in the suspended queue.
+  Stores job in the delayed queue.
   """
-  def suspend_to(arguments, worker_module) do
+  def delay_to(arguments, worker_module) do
     worker_module
-    |> Toniq.JobPersistence.store_suspended_job(arguments)
+    |> Toniq.JobPersistence.store_delayed_job(arguments)
   end
 
   @doc """

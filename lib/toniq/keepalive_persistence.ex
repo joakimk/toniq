@@ -44,15 +44,15 @@ defmodule Toniq.KeepalivePersistence do
         "SUNIONSTORE",
         failed_jobs_key(to_identifier),
         failed_jobs_key(from_identifier),
-        failed_jobs_key(to_identifier),
+        failed_jobs_key(to_identifier)
       ],
 
-      # Move suspended jobs
+      # Move delayed jobs
       [
         "SUNIONSTORE",
-        suspended_jobs_key(to_identifier),
-        suspended_jobs_key(from_identifier),
-        suspended_jobs_key(to_identifier),
+        delayed_jobs_key(to_identifier),
+        delayed_jobs_key(from_identifier),
+        delayed_jobs_key(to_identifier)
       ],
 
       # Remove orphaned job lists
@@ -60,7 +60,7 @@ defmodule Toniq.KeepalivePersistence do
         "DEL",
         jobs_key(from_identifier),
         failed_jobs_key(from_identifier),
-        suspended_jobs_key(from_identifier),
+        delayed_jobs_key(from_identifier),
         incoming_jobs_key(from_identifier)
       ],
 
@@ -91,8 +91,8 @@ defmodule Toniq.KeepalivePersistence do
     Toniq.JobPersistence.failed_jobs_key(identifier)
   end
 
-  defp suspended_jobs_key(identifier) do
-    Toniq.JobPersistence.suspended_jobs_key(identifier)
+  defp delayed_jobs_key(identifier) do
+    Toniq.JobPersistence.delayed_jobs_key(identifier)
   end
 
   defp redis_query(query) do
