@@ -30,7 +30,7 @@ defmodule Exredis.JobPersistenceTest do
   end
 
   test "can store and move a delayed a job" do
-    job = Toniq.JobPersistence.store_delayed_job(SomeWorker, some: "data")
+    job = Toniq.JobPersistence.store_delayed_job(SomeWorker, %{some: "data"}, [delay_for: 500])
     assert Toniq.JobPersistence.delayed_jobs == [job]
 
     Toniq.JobPersistence.move_delayed_job_to_incoming_jobs(job)

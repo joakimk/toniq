@@ -10,7 +10,14 @@ defmodule Toniq do
     |> extract_data
     |> Toniq.enqueue_to(SendEmailWorker)
   """
-  def enqueue_to(arguments, worker_module), do: enqueue(worker_module, arguments)
+  def enqueue_to(arguments, worker_module, options \\ []) do
+    options
+    |> Keyword.get(:delay_for)
+    |> case do
+      nil -> enqueue(worker_module, arguments)
+      _   -> enqueue_with_delay(worker_module, arguments, options)
+    end
+  end
 
   @doc """
   Enqueue job to be run in the background as soon as possible
@@ -21,11 +28,11 @@ defmodule Toniq do
   end
 
   @doc """
-  Stores job in the delayed queue.
+  Enqueue job to be run in the background at a later time
   """
-  def delay_to(arguments, worker_module) do
+  def enqueue_with_delay(worker_module, arguments, options) do
     worker_module
-    |> Toniq.JobPersistence.store_delayed_job(arguments)
+    |> Toniq.JobPersistence.store_delayed_job(arguments, options)
   end
 
   @doc """

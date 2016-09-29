@@ -16,8 +16,8 @@ defmodule Toniq.JobPersistence do
   @doc """
   Stores a delayed job in redis.
   """
-  def store_delayed_job(worker_module, arguments, identifier \\ default_identifier) do
-    store_job_in_key(worker_module, arguments, delayed_jobs_key(identifier), identifier)
+  def store_delayed_job(worker_module, arguments, options, identifier \\ default_identifier) do
+    store_job_in_key(worker_module, arguments, delayed_jobs_key(identifier), identifier, options)
   end
 
   # Only used internally by JobImporter
@@ -128,10 +128,10 @@ defmodule Toniq.JobPersistence do
     identifier_scoped_key :incoming_jobs, identifier
   end
 
-  defp store_job_in_key(worker_module, arguments, key, identifier) do
+  defp store_job_in_key(worker_module, arguments, key, identifier, options \\ []) do
     job_id = redis |> incr(counter_key)
 
-    job = Toniq.Job.build(job_id, worker_module, arguments) |> add_vm_identifier(identifier)
+    job = Toniq.Job.build(job_id, worker_module, arguments, options) |> add_vm_identifier(identifier)
     redis |> sadd(key, strip_vm_identifier(job))
     job
   end
