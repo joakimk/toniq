@@ -33,6 +33,7 @@ defmodule Toniq do
   def enqueue_with_delay(worker_module, arguments, options) do
     worker_module
     |> Toniq.JobPersistence.store_delayed_job(arguments, options)
+    |> Toniq.DelayedJobTracker.register_job
   end
 
   @doc """
@@ -68,6 +69,7 @@ defmodule Toniq do
       worker(Toniq.Keepalive, []),
       worker(Toniq.Takeover, []),
       worker(Toniq.JobImporter, []),
+      worker(Toniq.DelayedJobTracker, [])
     ]
 
     # When one process fails we restart all of them to ensure a valid state. Jobs are then

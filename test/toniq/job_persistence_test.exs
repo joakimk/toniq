@@ -7,6 +7,10 @@ defmodule Exredis.JobPersistenceTest do
   end
 
   defmodule SomeWorker do
+    use Toniq.Worker
+
+    def perform(_) do
+    end
   end
 
   test "can persist job state" do
