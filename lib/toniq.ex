@@ -54,6 +54,11 @@ defmodule Toniq do
   """
   def delete(job), do: Toniq.JobPersistence.delete_failed_job(job)
 
+  @doc """
+  Flush all delayed jobs
+  """
+  def flush_delayed_jobs, do: Toniq.DelayedJobTracker.flush_all_jobs
+
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do

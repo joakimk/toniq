@@ -17,12 +17,23 @@ defmodule Toniq.DelayedJobTracker do
     job
   end
 
+  def flush_all_jobs do
+    GenServer.cast(__MODULE__, {:flush_all_jobs})
+  end
+
   def handle_call(:ping, _from, jobs) do
     {:reply, jobs, jobs}
   end
 
   def handle_cast({:register_job, job}, delayed_jobs) do
     {:noreply, [job | delayed_jobs]}
+  end
+
+  def handle_cast({:flush_all_jobs}, delayed_jobs) do
+    delayed_jobs
+    |> Enum.each(&JobPersistence.move_delayed_job_to_incoming_jobs(&1))
+
+    {:noreply, []}
   end
 
   def handle_info(:flush, delayed_jobs) do
