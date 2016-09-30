@@ -31,7 +31,7 @@ defmodule Toniq.DelayedJobTracker do
 
   def handle_cast({:flush_all_jobs}, delayed_jobs) do
     delayed_jobs
-    |> Enum.each(&JobPersistence.move_delayed_job_to_incoming_jobs(&1))
+    |> Enum.each(&JobPersistence.move_delayed_job_to_incoming_jobs/1)
 
     {:noreply, []}
   end
@@ -51,7 +51,7 @@ defmodule Toniq.DelayedJobTracker do
   defp enqueue_expired_jobs(jobs) do
     jobs
     |> Stream.filter(&has_expired?/1)
-    |> Enum.map(&(JobPersistence.move_delayed_job_to_incoming_jobs(&1)))
+    |> Enum.map(&JobPersistence.move_delayed_job_to_incoming_jobs/1)
   end
 
   defp remaining_jobs_from(expired_jobs, all_jobs) do
