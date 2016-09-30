@@ -4,7 +4,7 @@ defmodule Toniq.DelayedJobTracker do
   alias Toniq.JobPersistence
 
   def start_link(name \\ __MODULE__) do
-    GenServer.start_link(__MODULE__, [], name: name)
+    GenServer.start_link(__MODULE__, JobPersistence.delayed_jobs, name: name)
   end
 
   def init(state) do
