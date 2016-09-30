@@ -9,10 +9,11 @@ defmodule Toniq.Config do
     default :toniq,
       redis_key_prefix: :toniq,
       redis_url: "redis://localhost:6379/0",
-      keepalive_interval: 4000, # ms
-      keepalive_expiration: 10000, # ms
-      takeover_interval: 2000, # ms
-      job_import_interval: 2000, # ms
+      keepalive_interval: 4_000, # ms
+      keepalive_expiration: 10_000, # ms
+      takeover_interval: 2_000, # ms
+      job_import_interval: 2_000, # ms
+      delay_flush_interval: 100, # ms
       retry_strategy: Toniq.RetryWithIncreasingDelayStrategy
   end
 

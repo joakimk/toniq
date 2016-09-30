@@ -45,8 +45,11 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   defp schedule_work do
-    Process.send_after(self(), :flush, 100)
+    self
+    |> Process.send_after(:flush, delay_flush_interval)
   end
+
+  defp delay_flush_interval, do: Application.get_env(:toniq, :delay_flush_interval)
 
   defp enqueue_expired_jobs(jobs) do
     jobs
