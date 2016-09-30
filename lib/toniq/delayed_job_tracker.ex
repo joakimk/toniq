@@ -8,7 +8,7 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   def init(state) do
-    Process.send_after(self(), :flush, 100)
+    schedule_work
     {:ok, state}
   end
 
@@ -26,16 +26,20 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   def handle_info(:flush, delayed_jobs) do
-    Process.send_after(self(), :flush, 100)
+    schedule_work
 
     delayed_jobs
     |> enqueue_expired_jobs
     |> remaining_jobs_from(delayed_jobs)
   end
 
+  defp schedule_work do
+    Process.send_after(self(), :flush, 100)
+  end
+
   defp enqueue_expired_jobs(jobs) do
     jobs
-    |> Stream.filter(&(&1.delayed_until <= :os.system_time(:milli_seconds)))
+    |> Stream.filter(&has_expired?/1)
     |> Enum.map(&(JobPersistence.move_delayed_job_to_incoming_jobs(&1)))
   end
 
@@ -46,5 +50,9 @@ defmodule Toniq.DelayedJobTracker do
       |> MapSet.to_list
 
     {:noreply, remaining_jobs}
+  end
+
+  defp has_expired?(job) do
+    job.delayed_until != :infinity and job.delayed_until <= :os.system_time(:milli_seconds)
   end
 end

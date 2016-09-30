@@ -38,5 +38,6 @@ defmodule Toniq.Job do
     end
   end
 
+  defp to_expiry(:infinity), do: :infinity
   defp to_expiry(delay), do: :os.system_time(:milli_seconds) + delay
 end
