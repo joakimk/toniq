@@ -278,16 +278,16 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 
 ## TODO and ideas for after 1.0
 
+* [ ] Work on and/or help others work on github issues
 * [ ] Report errors in a more standard way, see discussion on [honeybadger-elixir#30](https://github.com/honeybadger-io/honeybadger-elixir/issues/30)
 * [ ] Document how to test an app using Toniq. E.g. use Toniq.JobEvent.subscribe, etc.
-* [ ] Admin UI (being worked on by [kimfransman](https://twitter.com/kimfransman/status/661126637061332992))
+* [ ] Admin UI (idle, was being worked on by [kimfransman](https://twitter.com/kimfransman/status/661126637061332992))
   - [ ] That shows waiting and failed jobs
   - [ ] Make data easiliy available for display in the app that uses toniq
   - [ ] Store/show time of creation
   - [ ] Store/show retry count
   - [ ] MAYBE: JSON API for current job stats
   - [ ] MAYBE: Webhook to push job stats updates
-* [ ] Test job scheduling tools to know what to recommend
 * [ ] A tiny web page instead of just a redirect at <http://toniq.elixir.pm>.
   - A phoenix app using toniq with regularly scheduled jobs, and ways to trigger jobs would be fun. Especially if the Admin UI exists so you can see them run, retry, etc.
 * [ ] Document JobEvent in readme
