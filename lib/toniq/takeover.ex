@@ -43,6 +43,7 @@ defmodule Toniq.Takeover do
     Logger.log(:info, "#{__MODULE__}: Taking over all jobs from missing vm #{identifier}")
 
     Toniq.KeepalivePersistence.takeover_jobs(identifier, Toniq.Keepalive.identifier(state.keepalive_name))
+    Toniq.DelayedJobTracker.reload_job_list
   end
 
   defp takeover_interval, do: Application.get_env(:toniq, :takeover_interval)

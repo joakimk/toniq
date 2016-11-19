@@ -21,6 +21,14 @@ defmodule Toniq.DelayedJobTracker do
     GenServer.cast(__MODULE__, {:flush_all_jobs})
   end
 
+  def reload_job_list do
+    GenServer.cast(__MODULE__, :reload_job_list)
+  end
+
+  def handle_cast(:reload_job_list, _delayed_jobs) do
+    {:noreply, JobPersistence.delayed_jobs}
+  end
+
   def handle_call(:ping, _from, jobs) do
     {:reply, jobs, jobs}
   end
