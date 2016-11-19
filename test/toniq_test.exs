@@ -50,6 +50,7 @@ defmodule ToniqTest do
   setup do
     Toniq.JobEvent.subscribe
     Process.register(self, :toniq_test)
+    Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
     on_exit &Toniq.JobEvent.unsubscribe/0
   end
 

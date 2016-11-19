@@ -10,7 +10,14 @@ defmodule Toniq do
     |> extract_data
     |> Toniq.enqueue_to(SendEmailWorker)
   """
-  def enqueue_to(arguments, worker_module), do: enqueue(worker_module, arguments)
+  def enqueue_to(arguments, worker_module, options \\ []) do
+    options
+    |> Keyword.get(:delay_for)
+    |> case do
+      nil -> enqueue(worker_module, arguments)
+      _   -> enqueue_with_delay(worker_module, arguments, options)
+    end
+  end
 
   @doc """
   Enqueue job to be run in the background as soon as possible
@@ -18,6 +25,15 @@ defmodule Toniq do
   def enqueue(worker_module, arguments \\ []) do
     Toniq.JobPersistence.store_job(worker_module, arguments)
     |> Toniq.JobRunner.register_job
+  end
+
+  @doc """
+  Enqueue job to be run in the background at a later time
+  """
+  def enqueue_with_delay(worker_module, arguments, options) do
+    worker_module
+    |> Toniq.JobPersistence.store_delayed_job(arguments, options)
+    |> Toniq.DelayedJobTracker.register_job
   end
 
   @doc """
@@ -38,6 +54,11 @@ defmodule Toniq do
   """
   def delete(job), do: Toniq.JobPersistence.delete_failed_job(job)
 
+  @doc """
+  Flush all delayed jobs
+  """
+  def flush_delayed_jobs, do: Toniq.DelayedJobTracker.flush_all_jobs
+
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
@@ -53,6 +74,7 @@ defmodule Toniq do
       worker(Toniq.Keepalive, []),
       worker(Toniq.Takeover, []),
       worker(Toniq.JobImporter, []),
+      worker(Toniq.DelayedJobTracker, [])
     ]
 
     # When one process fails we restart all of them to ensure a valid state. Jobs are then

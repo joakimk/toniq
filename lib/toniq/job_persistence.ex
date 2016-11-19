@@ -13,6 +13,13 @@ defmodule Toniq.JobPersistence do
     store_job_in_key(worker_module, arguments, incoming_jobs_key(identifier), identifier)
   end
 
+  @doc """
+  Stores a delayed job in redis.
+  """
+  def store_delayed_job(worker_module, arguments, options, identifier \\ default_identifier) do
+    store_job_in_key(worker_module, arguments, delayed_jobs_key(identifier), identifier, options)
+  end
+
   # Only used internally by JobImporter
   def remove_from_incoming_jobs(job) do
     redis |> srem(incoming_jobs_key(default_identifier), strip_vm_identifier(job))
@@ -32,6 +39,11 @@ defmodule Toniq.JobPersistence do
   Returns all failed jobs.
   """
   def failed_jobs(identifier \\ default_identifier), do: load_jobs(failed_jobs_key(identifier), identifier)
+
+  @doc """
+  Returns all delayed jobs.
+  """
+  def delayed_jobs(identifier \\ default_identifier), do: load_jobs(delayed_jobs_key(identifier), identifier)
 
   @doc """
   Marks a job as finished. This means that it's deleted from redis.
@@ -76,6 +88,21 @@ defmodule Toniq.JobPersistence do
   end
 
   @doc """
+  Moves a delayed job to the regular jobs list.
+
+  Uses "job.vm" to do the operation in the correct namespace.
+  """
+  def move_delayed_job_to_incoming_jobs(delayed_job) do
+    redis |> Exredis.query_pipe([
+      ["MULTI"],
+      ["SREM", delayed_jobs_key(delayed_job.vm), strip_vm_identifier(delayed_job)],
+      ["SADD", incoming_jobs_key(delayed_job.vm), strip_vm_identifier(delayed_job)],
+      ["EXEC"],
+    ])
+    delayed_job
+  end
+
+  @doc """
   Deletes a failed job.
 
   Uses "job.vm" to do the operation in the correct namespace.
@@ -93,14 +120,18 @@ defmodule Toniq.JobPersistence do
     identifier_scoped_key :failed_jobs, identifier
   end
 
+  def delayed_jobs_key(identifier) do
+    identifier_scoped_key :delayed_jobs, identifier
+  end
+
   def incoming_jobs_key(identifier) do
     identifier_scoped_key :incoming_jobs, identifier
   end
 
-  defp store_job_in_key(worker_module, arguments, key, identifier) do
+  defp store_job_in_key(worker_module, arguments, key, identifier, options \\ []) do
     job_id = redis |> incr(counter_key)
 
-    job = Toniq.Job.build(job_id, worker_module, arguments) |> add_vm_identifier(identifier)
+    job = Toniq.Job.build(job_id, worker_module, arguments, options) |> add_vm_identifier(identifier)
     redis |> sadd(key, strip_vm_identifier(job))
     job
   end

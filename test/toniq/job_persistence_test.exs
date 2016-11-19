@@ -7,6 +7,10 @@ defmodule Exredis.JobPersistenceTest do
   end
 
   defmodule SomeWorker do
+    use Toniq.Worker
+
+    def perform(_) do
+    end
   end
 
   test "can persist job state" do
@@ -27,6 +31,15 @@ defmodule Exredis.JobPersistenceTest do
     Toniq.JobPersistence.move_failed_job_to_incomming_jobs(job1_with_error)
     assert Toniq.JobPersistence.incoming_jobs == [job1]
     assert Toniq.JobPersistence.failed_jobs == []
+  end
+
+  test "can store and move a delayed a job" do
+    job = Toniq.JobPersistence.store_delayed_job(SomeWorker, %{some: "data"}, [delay_for: 500])
+    assert Toniq.JobPersistence.delayed_jobs == [job]
+
+    Toniq.JobPersistence.move_delayed_job_to_incoming_jobs(job)
+    assert Toniq.JobPersistence.incoming_jobs == [job]
+    assert Toniq.JobPersistence.delayed_jobs == []
   end
 
   test "can store and retrieve incoming jobs" do
