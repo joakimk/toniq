@@ -42,7 +42,7 @@ defmodule Toniq.Mixfile do
     """
     Simple and reliable background job processing library for Elixir.
 
-    Has persistence, retries, concurrency limiting, error handling and is heroku friendly.
+    Has persistence, retries, delayed jobs, concurrency limiting, error handling and is heroku friendly.
     """
   end
 
