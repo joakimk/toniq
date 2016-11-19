@@ -90,6 +90,21 @@ email
 |> Toniq.enqueue_to(SendEmailWorker)
 ```
 
+## Delayed jobs
+
+And delay jobs.
+
+```elixir
+email = [to: "info@example.com", subject: "Hello", body: "Hello, there!"]
+
+# Using enqueue_to:
+email
+|> Toniq.enqueue_to(SendEmailWorker, delay_for: 1000)
+
+# Using enqueue_with_delay:
+Toniq.enqueue_with_delay(SendEmailWorker, email, delay_for: 1000)
+```
+
 ## Pattern matching
 
 You can pattern match in workers. This can be used to clean up the code, or to handle data from previous versions of the same worker!
@@ -248,6 +263,7 @@ This library uses [semver](http://semver.org/) for versioning. The API won't cha
 
 - The name toniq was thought up by [Henrik Nyh](https://github.com/henrik). The idea was synonym of elixir with a q for queue.
 - [Lennart Fridén](https://github.com/devl) helped out with building the failover system during his [journeyman-tour](http://codecoupled.org/journeyman-tour/) [visit to our office](https://codecoupled.org/2015/10/14/journeyman-auctionet/).
+- [Safwan Kamarrudin](https://github.com/safwank) contributed the delayed jobs feature.
 
 ## Presentations featuring toniq
 
