@@ -32,6 +32,19 @@ defmodule Toniq.DelayedJobTrackerTest do
     end)
   end
 
+  test "imports delayed jobs on takeover (it calls reload_job_list)" do
+    TestWorker
+    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 250)
+
+    assert JobPersistence.delayed_jobs |> Enum.count == 1
+
+    DelayedJobTracker.reload_job_list
+
+    assert (wait with: lin_backoff(100, 1) |> expiry(500) do
+      JobPersistence.delayed_jobs |> Enum.empty?
+    end)
+  end
+
   test "can register and flush delayed jobs" do
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 

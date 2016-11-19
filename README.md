@@ -295,6 +295,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 ## TODO and ideas for after 1.0
 
 * [ ] Work on and/or help others work on github issues
+* [ ] See if delayed jobs could use incomming jobs for importing so it does not need `reload_job_list`.
 * [ ] Report errors in a more standard way, see discussion on [honeybadger-elixir#30](https://github.com/honeybadger-io/honeybadger-elixir/issues/30)
 * [ ] Document how to test an app using Toniq. E.g. use Toniq.JobEvent.subscribe, etc.
 * [ ] Admin UI (idle, was being worked on by [kimfransman](https://twitter.com/kimfransman/status/661126637061332992))
