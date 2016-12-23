@@ -66,11 +66,7 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   defp remaining_jobs_from(expired_jobs, all_jobs) do
-    remaining_jobs = all_jobs
-      |> MapSet.new
-      |> MapSet.difference(MapSet.new(expired_jobs))
-      |> MapSet.to_list
-
+    remaining_jobs = all_jobs -- expired_jobs
     {:noreply, remaining_jobs}
   end
 
