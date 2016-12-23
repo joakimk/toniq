@@ -21,8 +21,8 @@ defmodule Toniq.Job do
         version: @job_format_version,
       }
 
-      if Map.get(map, :error) do
-        v1 = Map.put(v1, :error, map.error)
+      v1 = if Map.get(map, :error) do
+        Map.put(v1, :error, map.error)
       end
 
       {:changed, map, v1}
