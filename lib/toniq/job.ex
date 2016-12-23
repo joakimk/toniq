@@ -18,12 +18,10 @@ defmodule Toniq.Job do
         id: map.id,
         worker: map.worker,
         arguments: map.opts,
-        version: @job_format_version,
+        version: @job_format_version
       }
 
-      v1 = if Map.get(map, :error) do
-        Map.put(v1, :error, map.error)
-      end
+      v1 = if Map.get(map, :error), do: Map.put(v1, :error, map.error), else: v1
 
       {:changed, map, v1}
     end
