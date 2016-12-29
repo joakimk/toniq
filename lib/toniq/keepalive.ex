@@ -1,3 +1,4 @@
+require IEx
 # Responsible for ensuring the erlang vm is connected to the redis server. If
 # the connection fails, this will crash and the supervisor will restart toniq.
 
@@ -32,6 +33,7 @@ defmodule Toniq.Keepalive do
     register_vm(state)
 
     update_alive_key(state)
+
     {:ok, _} = :timer.send_interval keepalive_interval, :update_alive_key
 
     {:noreply, state}
