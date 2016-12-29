@@ -1,4 +1,3 @@
-require IEx
 # Responsible for ensuring the erlang vm is connected to the redis server. If
 # the connection fails, this will crash and the supervisor will restart toniq.
 
