@@ -1,8 +1,8 @@
-defmodule Exredis.TakeoverTest do
+defmodule Redix.TakeoverTest do
   use ExUnit.Case
 
   setup do
-    Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
+    Process.whereis(:toniq_redis) |> Redix.command(["FLUSHDB"])
 
     # Disable import to isolate takeover in this test
     Application.put_env(:toniq, :disable_import, true)

@@ -1,8 +1,8 @@
-defmodule Exredis.JobPersistenceTest do
+defmodule Redix.JobPersistenceTest do
   use ExUnit.Case
 
   setup do
-    Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
+    Process.whereis(:toniq_redis) |> Redix.command([ "FLUSHDB" ])
     :ok
   end
 
@@ -50,7 +50,7 @@ defmodule Exredis.JobPersistenceTest do
   test "can convert version 0 to version 1 jobs" do
     job = %{id: 1, worker: TestWorker, opts: [:a]}
     key = Toniq.JobPersistence.jobs_key(Toniq.Keepalive.identifier)
-    Process.whereis(:toniq_redis) |> Exredis.query(["SADD", key, job])
+    Process.whereis(:toniq_redis) |> Redix.command(["SADD", key, job])
 
     assert Enum.count(Toniq.JobPersistence.jobs) == 1
     job = Toniq.JobPersistence.jobs |> hd

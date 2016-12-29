@@ -1,6 +1,4 @@
 defmodule Toniq.JobPersistence do
-  import Exredis.Api
-
   @doc """
   Stores a job in redis. If it does not succeed it will fail right away.
   """
@@ -129,7 +127,7 @@ defmodule Toniq.JobPersistence do
   end
 
   defp store_job_in_key(worker_module, arguments, key, identifier, options \\ []) do
-    job_id = redis |> incr(counter_key)
+    job_id = redis |> Redix.command!(["INCR", counter_key])
 
     job = Toniq.Job.build(job_id, worker_module, arguments, options) |> add_vm_identifier(identifier)
     redis |> Redix.command(["sadd", key, strip_vm_identifier(job)])

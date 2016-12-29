@@ -6,16 +6,7 @@ defmodule Toniq.KeepalivePersistence do
   def update_alive_key(identifier, keepalive_expiration) do
     # Logger.log(:debug, "Updating keepalive for #{state.identifier} #{inspect(debug_info)}")
     q = ["PSETEX", alive_key(identifier), keepalive_expiration, debug_info]
-
-   {:ok, r} =  Exredis.start_link
-
-    # r |> Exredis.query(q)
-
-
     redis_query(q)
-   # redis 
-   # |> Redix.command!(q)
-
   end
 
   def registered_vms do
