@@ -2,7 +2,7 @@ defmodule Toniq.JobEventTest do
   use ExUnit.Case
 
   test "can send events to multiple subscribers" do
-    test_pid = self
+    test_pid = self()
 
     spawn_link fn ->
       Toniq.JobEvent.subscribe

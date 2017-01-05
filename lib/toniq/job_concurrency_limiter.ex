@@ -32,7 +32,7 @@ defmodule Toniq.JobConcurrencyLimiter do
   defp run_job_process(job), do: Toniq.JobProcess.run(job)
 
   defp request_run(job) do
-    GenServer.cast(__MODULE__, {:request_run, job, self})
+    GenServer.cast(__MODULE__, {:request_run, job, self()})
   end
 
   defp confirm_run(job) do
@@ -127,5 +127,5 @@ defmodule Toniq.JobConcurrencyLimiter do
   defp update_worker_state(state, job, worker_state), do: Map.put(state, job.worker, worker_state)
   defp running_count(state, job),                     do: worker_state(state, job).running_count
   defp pending_jobs_queue(state, job),                do: worker_state(state, job).pending_jobs_queue
-  defp worker_state(state, job),                      do: Map.get(state, job.worker, %{ pending_jobs_queue: build_queue, running_count: 0 })
+  defp worker_state(state, job),                      do: Map.get(state, job.worker, %{ pending_jobs_queue: build_queue(), running_count: 0 })
 end

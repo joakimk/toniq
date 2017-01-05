@@ -13,12 +13,12 @@ defmodule Toniq.Takeover do
   end
 
   def init(state) do
-    {:ok, _} = :timer.send_interval takeover_interval, :check_takeover
+    {:ok, _} = :timer.send_interval takeover_interval(), :check_takeover
     {:ok, state}
   end
 
   def handle_info(:check_takeover, state) do
-    registered_vms
+    registered_vms()
     |> select_first_missing
     |> handle_missing_vm(state)
 

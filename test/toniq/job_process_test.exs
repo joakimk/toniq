@@ -16,7 +16,7 @@ defmodule Toniq.JobProcessTest do
 
   defmodule TestCrashWorker do
     def perform(_arguments) do
-      Process.exit(self, "simulate an unknown error")
+      Process.exit(self(), "simulate an unknown error")
     end
   end
 

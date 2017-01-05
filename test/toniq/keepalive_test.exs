@@ -12,7 +12,7 @@ defmodule Exredis.KeepaliveTest do
 
     identifier = Toniq.Keepalive.identifier(:test_keepalive)
 
-    assert hd(registered_vms) == identifier
+    assert hd(registered_vms()) == identifier
     assert alive?(identifier)
 
     # The alive_vms key gets updated periodically

@@ -20,7 +20,7 @@ defmodule Toniq.Keepalive do
   # private
 
   def init(state) do
-    send self, :register_vm
+    send self(), :register_vm
     {:ok, state}
   end
 
@@ -32,7 +32,7 @@ defmodule Toniq.Keepalive do
     register_vm(state)
 
     update_alive_key(state)
-    {:ok, _} = :timer.send_interval keepalive_interval, :update_alive_key
+    {:ok, _} = :timer.send_interval keepalive_interval(), :update_alive_key
 
     {:noreply, state}
   end
@@ -48,7 +48,7 @@ defmodule Toniq.Keepalive do
   end
 
   defp update_alive_key(state) do
-    Toniq.KeepalivePersistence.update_alive_key(state.identifier, keepalive_expiration)
+    Toniq.KeepalivePersistence.update_alive_key(state.identifier, keepalive_expiration())
   end
 
   defp keepalive_interval,   do: Application.get_env(:toniq, :keepalive_interval)

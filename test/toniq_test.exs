@@ -32,7 +32,7 @@ defmodule ToniqTest do
     def perform(process_name) do
       add_to_list process_name
 
-      Process.register(self, process_name)
+      Process.register(self(), process_name)
       receive do
         :stop -> nil
       end
@@ -40,16 +40,16 @@ defmodule ToniqTest do
       remove_from_list process_name
     end
 
-    def currently_running_job_names, do: Agent.get(agent, fn (names) -> names end)
+    def currently_running_job_names, do: Agent.get(agent(), fn (names) -> names end)
 
-    defp add_to_list(process_name),      do: Agent.update agent, fn (list) -> list ++ [ process_name ] end
-    defp remove_from_list(process_name), do: Agent.update agent, fn (list) -> list -- [ process_name ] end
+    defp add_to_list(process_name),      do: Agent.update agent(), fn (list) -> list ++ [ process_name ] end
+    defp remove_from_list(process_name), do: Agent.update agent(), fn (list) -> list -- [ process_name ] end
     defp agent, do: Process.whereis(:job_list)
   end
 
   setup do
     Toniq.JobEvent.subscribe
-    Process.register(self, :toniq_test)
+    Process.register(self(), :toniq_test)
     Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
     on_exit &Toniq.JobEvent.unsubscribe/0
   end
@@ -160,23 +160,23 @@ defmodule ToniqTest do
     # wait for jobs to boot up
     :timer.sleep 1
 
-    assert currently_running_job_names == [ :job1, :job2 ]
+    assert currently_running_job_names() == [ :job1, :job2 ]
 
     send :job1, :stop
     assert_receive {:finished, ^job1}
-    assert currently_running_job_names == [ :job2, :job3 ]
+    assert currently_running_job_names() == [ :job2, :job3 ]
 
     send :job2, :stop
     assert_receive {:finished, ^job2}
-    assert currently_running_job_names == [ :job3, :job4 ]
+    assert currently_running_job_names() == [ :job3, :job4 ]
 
     send :job3, :stop
     assert_receive {:finished, ^job3}
-    assert currently_running_job_names == [ :job4 ]
+    assert currently_running_job_names() == [ :job4 ]
 
     send :job4, :stop
     assert_receive {:finished, ^job4}
-    assert currently_running_job_names == []
+    assert currently_running_job_names() == []
   end
 
   # regression
@@ -200,7 +200,7 @@ defmodule ToniqTest do
 
     :timer.sleep 1 # wait for jobs to boot up
 
-    assert currently_running_job_names == [ :job4, :job5 ]
+    assert currently_running_job_names() == [ :job4, :job5 ]
 
     # Stop everything before running other tests
     send :job4, :stop

@@ -13,7 +13,7 @@ defmodule Toniq.Worker do
       # Delegate to perform without arguments when arguments are [],
       # you can define a perform with an argument to override this.
       def perform([]) do
-        perform
+        perform()
       end
 
       def max_concurrency do

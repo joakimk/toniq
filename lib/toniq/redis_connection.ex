@@ -8,7 +8,7 @@ defmodule Toniq.RedisConnection do
   def init(state) do
     Process.flag(:trap_exit, true)
 
-    redis_url
+    redis_url()
     |> Exredis.start_using_connection_string
     |> register_redis
 
@@ -34,7 +34,7 @@ defmodule Toniq.RedisConnection do
       Example:
       config :toniq, redis_url: "redis://localhost:6379/0"
 
-    * Is the current redis_url (#{redis_url}) correct?
+    * Is the current redis_url() (#{redis_url()}) correct?
 
     ----------------------------------------------------
 

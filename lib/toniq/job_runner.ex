@@ -27,8 +27,8 @@ defmodule Toniq.JobRunner do
   defp retry_when_failing(status), do: retry_when_failing(status, 1)
   defp retry_when_failing({:job_was_successful, job}, _attempt), do: {:job_was_successful, job}
   defp retry_when_failing({:job_has_failed, job, error, stack}, attempt) do
-    if retry_strategy.retry?(attempt) do
-      :timer.sleep trunc(retry_strategy.ms_to_sleep_before(attempt))
+    if retry_strategy().retry?(attempt) do
+      :timer.sleep trunc(retry_strategy().ms_to_sleep_before(attempt))
 
       result = run_job(job)
       retry_when_failing(result, attempt + 1)
