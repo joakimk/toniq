@@ -25,6 +25,10 @@ defmodule Toniq.DelayedJobTracker do
     GenServer.cast(__MODULE__, :reload_job_list)
   end
 
+  def handle_call(:ping, _from, jobs) do
+    {:reply, jobs, jobs}
+  end
+
   def handle_cast(:reload_job_list, _delayed_jobs) do
     {:noreply, JobPersistence.delayed_jobs}
   end
@@ -38,10 +42,6 @@ defmodule Toniq.DelayedJobTracker do
     |> Enum.each(&JobPersistence.move_delayed_job_to_incoming_jobs/1)
 
     {:noreply, []}
-  end
-
-  def handle_call(:ping, _from, jobs) do
-    {:reply, jobs, jobs}
   end
 
   def handle_info(:flush, delayed_jobs) do
