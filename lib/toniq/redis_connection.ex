@@ -7,17 +7,15 @@ defmodule Toniq.RedisConnection do
 
   def init(state) do
     Process.flag(:trap_exit, true)
-
     redis_url
-    |> Exredis.start_using_connection_string
+    |> Redix.start_link
     |> register_redis
 
     Process.flag(:trap_exit, false)
-
     {:ok, state}
   end
 
-  defp register_redis({:connection_error, error}) do
+  defp register_redis({:error, error}) do
     raise """
     \n
     ----------------------------------------------------
@@ -41,7 +39,7 @@ defmodule Toniq.RedisConnection do
     """
   end
 
-  defp register_redis(pid) do
+  defp register_redis({:ok, pid}) do
     pid
     |> Process.register(:toniq_redis)
   end

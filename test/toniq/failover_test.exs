@@ -3,7 +3,7 @@ defmodule Toniq.FailoverTest do
   use ExUnit.Case
 
   setup do
-    Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
+    Process.whereis(:toniq_redis) |> Redix.command(["FLUSHDB"])
     :ok
   end
 

@@ -32,6 +32,7 @@ defmodule Toniq.Keepalive do
     register_vm(state)
 
     update_alive_key(state)
+
     {:ok, _} = :timer.send_interval keepalive_interval, :update_alive_key
 
     {:noreply, state}

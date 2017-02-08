@@ -1,4 +1,4 @@
-defmodule Exredis.JobImporterTest do
+defmodule Redix.JobImporterTest do
   use ExUnit.Case
 
   defmodule TestWorker do
@@ -10,7 +10,7 @@ defmodule Exredis.JobImporterTest do
   end
 
   setup do
-    Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
+    Process.whereis(:toniq_redis) |> Redix.command(["FLUSHDB"])
     :ok
   end
 
