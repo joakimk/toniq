@@ -8,7 +8,7 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   def init(state) do
-    schedule_work
+    schedule_work()
     {:ok, state}
   end
 
@@ -45,7 +45,7 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   def handle_info(:flush, delayed_jobs) do
-    schedule_work
+    schedule_work()
 
     delayed_jobs
     |> enqueue_expired_jobs
@@ -53,8 +53,8 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   defp schedule_work do
-    self
-    |> Process.send_after(:flush, delay_flush_interval)
+    self()
+    |> Process.send_after(:flush, delay_flush_interval())
   end
 
   defp delay_flush_interval, do: Application.get_env(:toniq, :delay_flush_interval)

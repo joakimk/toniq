@@ -21,7 +21,7 @@ defmodule Toniq.FailoverTest do
   # that fake VM and ensure the job is taken over by the test VM.
   @tag :capture_log
   test "orphaned jobs are taken over and run" do
-    Process.register self, :failover_test
+    Process.register self(), :failover_test
 
     current_vm = Toniq.Keepalive.identifier
     other_vm = start_keepalive(:other_vm)

@@ -6,18 +6,18 @@ defmodule Toniq.JobImporter do
   end
 
   def init(state) do
-    {:ok, _} = :timer.send_interval job_import_interval, :import_jobs
+    {:ok, _} = :timer.send_interval job_import_interval(), :import_jobs
     {:ok, state}
   end
 
   def handle_info(:import_jobs, state) do
-    import_jobs(enabled: enabled?)
+    import_jobs(enabled: enabled?())
     {:noreply, state}
   end
 
   defp import_jobs(enabled: false), do: nil
   defp import_jobs(enabled: true) do
-    incoming_jobs
+    incoming_jobs()
     |> log_import
     |> Enum.each(&import_job/1)
   end

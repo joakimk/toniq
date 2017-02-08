@@ -1,15 +1,15 @@
 defmodule Toniq.KeepalivePersistence do
   def register_vm(identifier) do
-    redis_query(["SADD", registered_vms_key, identifier])
+    redis_query(["SADD", registered_vms_key(), identifier])
   end
 
   def update_alive_key(identifier, keepalive_expiration) do
     # Logger.log(:debug, "Updating keepalive for #{state.identifier} #{inspect(debug_info)}")
-    redis_query(["PSETEX", alive_key(identifier), keepalive_expiration, debug_info])
+    redis_query(["PSETEX", alive_key(identifier), keepalive_expiration, debug_info()])
   end
 
   def registered_vms do
-    redis_query(["SMEMBERS", registered_vms_key])
+    redis_query(["SMEMBERS", registered_vms_key()])
   end
 
   def alive?(identifier) do
@@ -21,7 +21,7 @@ defmodule Toniq.KeepalivePersistence do
   end
 
   def takeover_jobs(from_identifier, to_identifier) do
-    redis
+    redis()
     |> Exredis.query_pipe([
       # Begin transaction
       ["MULTI"],
@@ -67,7 +67,7 @@ defmodule Toniq.KeepalivePersistence do
       # Deregister missing vm
       [
         "SREM",
-        registered_vms_key,
+        registered_vms_key(),
         from_identifier
       ],
 
@@ -96,7 +96,7 @@ defmodule Toniq.KeepalivePersistence do
   end
 
   defp redis_query(query) do
-    redis |> Exredis.query(query)
+    redis() |> Exredis.query(query)
   end
 
   defp redis do
@@ -107,11 +107,11 @@ defmodule Toniq.KeepalivePersistence do
   # This is not a API any production code should rely upon, but could be useful
   # info when debugging or to verify things in tests.
   defp debug_info, do: %{ system_pid: System.get_pid,
-                          last_updated_at: system_time }
+                          last_updated_at: system_time() }
 
   # R17 version of R18's :erlang.system_time
   defp system_time, do: :timer.now_diff(:erlang.now, {0, 0, 0}) * 1000
 
-  defp alive_key(identifier), do: "#{default_scope}:#{identifier}:alive"
-  defp registered_vms_key,    do: "#{default_scope}:registered_vms"
+  defp alive_key(identifier), do: "#{default_scope()}:#{identifier}:alive"
+  defp registered_vms_key,    do: "#{default_scope()}:registered_vms"
 end
