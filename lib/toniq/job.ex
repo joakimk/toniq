@@ -20,10 +20,17 @@ defmodule Toniq.Job do
         arguments: map.opts,
         version: @job_format_version
       }
-
-      v1 = if Map.get(map, :error), do: Map.put(v1, :error, map.error), else: v1
+      |> add_error_if_present_in_source_data(map)
 
       {:changed, map, v1}
+    end
+  end
+
+  defp add_error_if_present_in_source_data(v1, map) do
+    if Map.get(map, :error) do
+      Map.put(v1, :error, map.error)
+    else
+      v1
     end
   end
 
