@@ -9,7 +9,7 @@ defmodule Toniq.Job do
 
   def migrate(job), do: migrate_v0_jobs_to_v1(job)
 
-  # Convert from the pre-1.0 format. Don't need to support this much past januari 2016.
+  # Convert from the pre-1.0 format. Replace this with the migration from 1 to 2 when you add job_format_version 2. We keep it to be able to test format migration.
   defp migrate_v0_jobs_to_v1(map) do
     if Map.has_key?(map, :version) do
       {:unchanged, map}
