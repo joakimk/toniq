@@ -334,7 +334,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 
 ## License
 
-Copyright (c) 2015 [Joakim Kolsjö](https://twitter.com/joakimk)
+Copyright (c) 2015-2017 [Joakim Kolsjö](https://twitter.com/joakimk)
 
 MIT License
 
