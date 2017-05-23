@@ -37,7 +37,7 @@ defmodule Toniq.JobProcess do
         wait_for_result()
       {:DOWN, _ref, :process, _pid, error} -> # Failed beause the process crashed
         crash_error =
-          "The job runner crashed. The reason that was given is: #{error}"
+          "The job runner crashed. The reason that was given is: #{inspect(error)}"
           |> wrap_in_crash_error
 
         {crash_error, []}

@@ -14,9 +14,15 @@ defmodule Toniq.JobProcessTest do
     end
   end
 
-  defmodule TestCrashWorker do
+  defmodule TestCrashWithStringErrorWorker do
     def perform(_arguments) do
       Process.exit(self(), "simulate an unknown error")
+    end
+  end
+
+  defmodule TestCrashWithMapErrorWorker do
+    def perform(_arguments) do
+      Process.exit(self(), %{error: "simulate an unknown error in a map"})
     end
   end
 
@@ -37,9 +43,14 @@ defmodule Toniq.JobProcessTest do
     assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %RuntimeError{message: "fail"}, @stacktrace}
   end
 
-  test "a job that crashes returns {:job_has_failed, job, error, []}" do
-    job = %{worker: TestCrashWorker, arguments: [data: 10]}
-    assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %Toniq.JobProcess.CrashError{message: "The job runner crashed. The reason that was given is: simulate an unknown error"}, []}
+  test "a job that crashes with string error returns {:job_has_failed, job, error, []}" do
+    job = %{worker: TestCrashWithStringErrorWorker, arguments: [data: 10]}
+    assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %Toniq.JobProcess.CrashError{message: ~s(The job runner crashed. The reason that was given is: "simulate an unknown error")}, []}
+  end
+
+  test "a job that crashes with map error returns {:job_has_failed, job, error, []}" do
+    job = %{worker: TestCrashWithMapErrorWorker, arguments: [data: 10]}
+    assert Toniq.JobProcess.run(job) == {:job_has_failed, job, %Toniq.JobProcess.CrashError{message: ~s(The job runner crashed. The reason that was given is: %{error: "simulate an unknown error in a map"})}, []}
   end
 
   # regression
