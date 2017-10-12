@@ -1,6 +1,5 @@
 defmodule Toniq.JobRunner do
   use GenServer
-  require Logger
 
   def start_link do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
@@ -44,18 +43,9 @@ defmodule Toniq.JobRunner do
 
   defp process_result({:job_has_failed, job, error, stack}) do
     Toniq.JobPersistence.mark_as_failed(job, error)
-    log_error(job, error, stack)
+    job.worker.handle_error(job, error, stack)
     Toniq.JobEvent.failed(job)
   end
 
   defp retry_strategy, do: Application.get_env(:toniq, :retry_strategy)
-
-  defp log_error(job, error, stack) do
-    stacktrace = Exception.format_stacktrace(stack)
-    job_details = "##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.arguments)})"
-
-    "Job #{job_details} failed with error: #{inspect(error)}\n\n#{stacktrace}"
-    |> String.trim
-    |> Logger.error
-  end
 end
