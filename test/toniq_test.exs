@@ -22,7 +22,7 @@ defmodule ToniqTest do
   defmodule TestHandleErrorWorker do
     use Toniq.Worker
 
-    def perform(data: number) do
+    def perform(_arg) do
       send :toniq_test, :job_has_been_run
       raise "fail"
     end
@@ -135,7 +135,7 @@ defmodule ToniqTest do
 
   @tag :capture_log
   test "failed jobs can perform error handling" do
-    job = Toniq.enqueue(TestHandleErrorWorker, data: 10)
+    job = Toniq.enqueue(TestHandleErrorWorker)
     assert_receive :error_handled
     assert_receive { :failed, _job }
     assert Enum.count(Toniq.failed_jobs) == 1
