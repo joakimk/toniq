@@ -19,6 +19,19 @@ defmodule ToniqTest do
     end
   end
 
+  defmodule TestHandleErrorWorker do
+    use Toniq.Worker
+
+    def perform(_arg) do
+      send :toniq_test, :job_has_been_run
+      raise "fail"
+    end
+
+    def handle_error(job, error, stack) do
+      send :toniq_test, :error_handled
+    end
+  end
+
   defmodule TestNoArgumentsWorker do
     use Toniq.Worker
 
@@ -118,6 +131,14 @@ defmodule ToniqTest do
     assert Toniq.delete(job)
 
     assert Toniq.failed_jobs == []
+  end
+
+  @tag :capture_log
+  test "failed jobs can perform error handling" do
+    job = Toniq.enqueue(TestHandleErrorWorker)
+    assert_receive :error_handled
+    assert_receive { :failed, _job }
+    assert Enum.count(Toniq.failed_jobs) == 1
   end
 
   test "can handle jobs from another VM for some actions (for easy administration of failed jobs)" do

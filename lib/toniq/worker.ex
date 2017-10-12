@@ -10,17 +10,32 @@ defmodule Toniq.Worker do
     end
 
     quote do
+      require Logger
+
       # Delegate to perform without arguments when arguments are [],
       # you can define a perform with an argument to override this.
       def perform([]) do
         perform()
       end
 
+      def handle_error(job, error, stack) do
+        log_error(job, error, stack)
+      end
+
       def max_concurrency do
         unquote(opts[:max_concurrency] || :unlimited)
       end
 
-      defoverridable [perform: 1]
+      defp log_error(job, error, stack) do
+        stacktrace = Exception.format_stacktrace(stack)
+        job_details = "##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.arguments)})"
+
+        "Job #{job_details} failed with error: #{inspect(error)}\n\n#{stacktrace}"
+        |> String.trim
+        |> Logger.error
+      end
+
+      defoverridable [perform: 1, handle_error: 3]
     end
   end
 end
