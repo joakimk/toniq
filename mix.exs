@@ -9,16 +9,20 @@ defmodule Toniq.Mixfile do
      start_permanent: Mix.env == :prod,
      description: description(),
      package: package(),
-     deps: deps()]
+     deps: deps(),
+     elixirc_paths: elixirc_paths(Mix.env)]
   end
 
   # Configuration for the OTP application
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :uuid, :exredis],
+    [applications: [:logger, :uuid, :exredis, :cowboy],
      mod: {Toniq, []}]
   end
+
+  defp elixirc_paths(:test), do: ["test/support", "lib"]
+  defp elixirc_paths(_),     do: ["lib"]
 
   # Dependencies can be Hex packages:
   #
@@ -33,8 +37,12 @@ defmodule Toniq.Mixfile do
     [
       {:exredis, ">= 0.1.1"},
       {:uuid, "~> 1.0"},
+      {:cowboy, "~> 1.0.0"},
+      {:plug, "~> 1.0"},
+      {:poison, "~> 3.1"},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:retry, "~> 0.5.0", only: :test}
+      {:retry, "~> 0.5.0", only: :test},
+      {:mox, "~> 0.2.0", only: :test}
     ]
   end
 

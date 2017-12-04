@@ -14,7 +14,9 @@ defmodule Toniq.Config do
       takeover_interval: 2_000, # ms
       job_import_interval: 2_000, # ms
       delay_flush_interval: 100, # ms
-      retry_strategy: Toniq.RetryWithIncreasingDelayStrategy
+      retry_strategy: Toniq.RetryWithIncreasingDelayStrategy,
+      http_toniq: Toniq,
+      http_port: 4000
   end
 
   defp default(scope, options) do
