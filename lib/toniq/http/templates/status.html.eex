@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        setInterval(pollForFailedJobs, 5000)
+      })
+
+      function pollForFailedJobs() {
+        $.getJSON( "<%= api_endpoint %>/api/failed_jobs", function(data) {
+          renderFailedJobs(data)
+        });
+      }
+
+      function renderFailedJobs(jobs) {
+        var tableFailedJobs = $('#failed-jobs')
+        tableFailedJobs.empty()
+
+        $.each(jobs, function(index, job) {
+          tableRow = "<tr>"
+          + "<td>" + job.id + "</td>"
+          + "<td>" + job.version + "</td>"
+          + "<td>" + job.worker + "</td>"
+          + "<td>" + job.vm + "</td>"
+          + "<td>" + job.error.message + "</td>"
+          + "</tr>"
+          tableFailedJobs.append(tableRow);
+        });
+      }
+    </script>
+    <title>Toniq Status</title>
+  </head>
+  <body>
+    <h1>Toniq Status</h1>
+    <p>
+      <h2>Failed Jobs:</h2>
+      <quote><i>This data is updated every 5 seconds</i></quote>
+      <table border="1" width="100%">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>version</th>
+            <th>worker</th>
+            <th>vm</th>
+            <th>error message</th>
+          </tr>
+        </thead>
+        <tbody id="failed-jobs"></tbody>
+      </table>
+    </p>
+    <small>Current API endpoint: <%= api_endpoint %></small>
+  </body>
+</html>

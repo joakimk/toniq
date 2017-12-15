@@ -1,4 +1,6 @@
 defmodule Toniq do
+  @behaviour ToniqBehaviour
+
   use Application
 
   @doc """
@@ -74,7 +76,8 @@ defmodule Toniq do
       worker(Toniq.Keepalive, []),
       worker(Toniq.Takeover, []),
       worker(Toniq.JobImporter, []),
-      worker(Toniq.DelayedJobTracker, [])
+      worker(Toniq.DelayedJobTracker, []),
+      Plug.Adapters.Cowboy.child_spec(:http, Toniq.Http.Router, [], [port: Application.get_env(:toniq, :http_port)])
     ]
 
     # When one process fails we restart all of them to ensure a valid state. Jobs are then

@@ -141,7 +141,7 @@ end
 
 ## Retrying failed jobs
 
-An admin web UI is planned, but until then (and after that) you can use the console.
+An admin web UI is available at `http://localhost:4000/status` in order to show the list of all failed jobs. A better admin web UI is planned, but until then (and after that) you can use the console.
 
 Retrying all failed jobs:
 
@@ -197,6 +197,17 @@ Instead of using redis as a messaging queue, toniq uses it for backup.
 Jobs are run within the VM where they are enqueued. If a VM is stopped or crashes, unprocessed jobs are recovered from redis once another VM is running.
 
 By running jobs within the same VM that enqueues them we avoid having to use any locks in redis. Locking is a complex subject and very hard to get right. Toniq should be simple and reliable, so let's avoid locking!
+
+
+## Admin UI page
+
+An admin UI page is available at `http://localhost:4000/status`. At the moment this page will show the list of all failing jobs.
+
+The port used by the admin UI can be configured from the configuration file:
+
+```
+config :toniq, http_port: 8080
+```
 
 ## Request for feedback
 
@@ -283,6 +294,12 @@ This library uses [semver](http://semver.org/) for versioning. The API won't cha
 
 ## Development
 
+A redis instance is needed to run all the tests, you can use docker:
+
+    docker run -it --rm=true -p 6379:6379 --name toniq-redis redis:3-alpine
+
+Then run tests:
+
     mix deps.get
     mix test
 
@@ -298,8 +315,9 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 * [ ] See if delayed jobs could use incomming jobs for importing so it does not need `reload_job_list`.
 * [ ] Report errors in a more standard way, see discussion on [honeybadger-elixir#30](https://github.com/honeybadger-io/honeybadger-elixir/issues/30)
 * [ ] Document how to test an app using Toniq. E.g. use Toniq.JobEvent.subscribe, etc.
-* [ ] Admin UI (idle, was being worked on by [kimfransman](https://twitter.com/kimfransman/status/661126637061332992))
-  - [ ] That shows waiting and failed jobs
+* [ ] Admin UI
+  - [X] That shows failed jobs
+  - [ ] That shows waiting jobs
   - [ ] Make data easiliy available for display in the app that uses toniq
   - [ ] Store/show time of creation
   - [ ] Store/show retry count

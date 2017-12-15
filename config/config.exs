@@ -11,10 +11,15 @@ if Mix.env == :test do
     keepalive_expiration: 70, # ms
     takeover_interval: 100, # ms
     job_import_interval: 100, # ms
-    retry_strategy: Toniq.RetryWithoutDelayStrategy
+    retry_strategy: Toniq.RetryWithoutDelayStrategy,
+    http_toniq: ToniqMock,
+    http_port: 4000
 end
 
 if Mix.env == :dev do
   # Running Toniq.TestWorker with the regular retry strategy is a bit too slow.
-  config :toniq, retry_strategy: Toniq.RetryWithoutDelayStrategy
+  config :toniq,
+    retry_strategy: Toniq.RetryWithoutDelayStrategy,
+    http_toniq: Toniq,
+    http_port: 4000
 end
