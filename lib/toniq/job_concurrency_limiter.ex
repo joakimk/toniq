@@ -5,6 +5,10 @@ defmodule Toniq.JobConcurrencyLimiter do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
+  def init(args) do
+    {:ok, args}
+  end
+
   @doc """
   "run" gets called by all client processes. E.g. if you enqueue 10000 jobs, this
   gets called 10000 times. Each call tells the concurrency limiter about itself and

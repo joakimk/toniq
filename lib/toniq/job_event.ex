@@ -9,6 +9,10 @@ defmodule Toniq.JobEvent do
     {:ok, _pid} = GenServer.start_link(__MODULE__, %{listeners: []}, name: __MODULE__)
   end
 
+  def init(args) do
+    {:ok, args}
+  end
+
   @doc """
   Subscribes the current process to events. Events will be sent by regular messages to the current process.
   """
