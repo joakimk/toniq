@@ -29,7 +29,7 @@ Add as a dependency in your mix.exs file:
 ```elixir
 defp deps do
   [
-    {:exredis, ">= 0.1.1"},
+    {:exredis, ">= 0.2.4"},
     {:toniq, "~> 1.0"}
   ]
 end
