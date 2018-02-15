@@ -10,7 +10,7 @@ defmodule Toniq.Keepalive do
 
   def start_link(name \\ __MODULE__) do
     identifier = UUID.uuid1()
-    GenServer.start_link(__MODULE__, %{ identifier: identifier }, name: name)
+    GenServer.start_link(__MODULE__, %{identifier: identifier}, name: name)
   end
 
   def identifier(name \\ __MODULE__) do
@@ -20,7 +20,7 @@ defmodule Toniq.Keepalive do
   # private
 
   def init(state) do
-    send self(), :register_vm
+    send(self(), :register_vm)
     {:ok, state}
   end
 
@@ -32,7 +32,7 @@ defmodule Toniq.Keepalive do
     register_vm(state)
 
     update_alive_key(state)
-    {:ok, _} = :timer.send_interval keepalive_interval(), :update_alive_key
+    {:ok, _} = :timer.send_interval(keepalive_interval(), :update_alive_key)
 
     {:noreply, state}
   end
@@ -51,6 +51,6 @@ defmodule Toniq.Keepalive do
     Toniq.KeepalivePersistence.update_alive_key(state.identifier, keepalive_expiration())
   end
 
-  defp keepalive_interval,   do: Application.get_env(:toniq, :keepalive_interval)
+  defp keepalive_interval, do: Application.get_env(:toniq, :keepalive_interval)
   defp keepalive_expiration, do: Application.get_env(:toniq, :keepalive_expiration)
 end

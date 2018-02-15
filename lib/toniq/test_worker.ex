@@ -8,7 +8,7 @@ defmodule Toniq.TestWorker do
   # To make this fail right away:
   # Application.put_env(:toniq, :retry_strategy, Toniq.RetryWithoutDelayStrategy)
   def perform(:fail) do
-    IO.inspect "Running fail-every-time job"
+    IO.inspect("Running fail-every-time job")
     raise "failing every time"
   end
 
@@ -18,12 +18,12 @@ defmodule Toniq.TestWorker do
       raise "failing once"
     end
 
-    IO.inspect "fail once job succeeded"
+    IO.inspect("fail once job succeeded")
   end
 
   def perform([]) do
-    IO.puts "Job started in #{Toniq.Keepalive.identifier}"
-    :timer.sleep 3000
-    IO.puts "Job finished in #{Toniq.Keepalive.identifier}"
+    IO.puts("Job started in #{Toniq.Keepalive.identifier()}")
+    :timer.sleep(3000)
+    IO.puts("Job finished in #{Toniq.Keepalive.identifier()}")
   end
 end

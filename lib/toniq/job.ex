@@ -14,13 +14,14 @@ defmodule Toniq.Job do
     if Map.has_key?(map, :version) do
       {:unchanged, map}
     else
-      v1 = %{
-        id: map.id,
-        worker: map.worker,
-        arguments: map.opts,
-        version: @job_format_version
-      }
-      |> add_error_if_present_in_source_data(map)
+      v1 =
+        %{
+          id: map.id,
+          worker: map.worker,
+          arguments: map.opts,
+          version: @job_format_version
+        }
+        |> add_error_if_present_in_source_data(map)
 
       {:changed, map, v1}
     end
@@ -38,7 +39,7 @@ defmodule Toniq.Job do
     options
     |> Keyword.get(:delay_for)
     |> case do
-      nil   -> job
+      nil -> job
       delay -> job |> Map.put(:delayed_until, delay |> to_expiry)
     end
   end

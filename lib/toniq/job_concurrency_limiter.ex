@@ -16,8 +16,9 @@ defmodule Toniq.JobConcurrencyLimiter do
   When a job is done this function tells the limiter about it by calling
   "confirm_run" which updates the current state and allows another job to run.
   """
-  def run(job),                       do: run(job, job.worker.max_concurrency)
-  defp run(job, :unlimited),          do: run_job_process(job)
+  def run(job), do: run(job, job.worker.max_concurrency)
+  defp run(job, :unlimited), do: run_job_process(job)
+
   defp run(job, _has_max_concurrency) do
     request_run(job)
 
@@ -70,36 +71,42 @@ defmodule Toniq.JobConcurrencyLimiter do
   end
 
   defp run_job_from_queue(:queue_empty, state, _previous_job), do: state
+
   defp run_job_from_queue({first_pending_job, pending_jobs_queue}, state, previous_job) do
     state = run_now(state, first_pending_job)
 
-    update_worker_state(state, previous_job,
-      %{ worker_state(state, previous_job) | pending_jobs_queue: pending_jobs_queue }
-    )
+    update_worker_state(state, previous_job, %{
+      worker_state(state, previous_job)
+      | pending_jobs_queue: pending_jobs_queue
+    })
   end
 
   defp run_now(state, {job, caller}) do
-    send caller, {:run, job}
+    send(caller, {:run, job})
     increase_running_count(state, job)
   end
 
   defp run_later(state, {job, caller}) do
     worker_state = worker_state(state, job)
-    update_worker_state(state, job,
-      %{ worker_state | pending_jobs_queue: put_job_in_queue({job, caller}, worker_state.pending_jobs_queue) }
-    )
+
+    update_worker_state(state, job, %{
+      worker_state
+      | pending_jobs_queue: put_job_in_queue({job, caller}, worker_state.pending_jobs_queue)
+    })
   end
 
   # Running jobs count
-  defp below_max_concurrency?(state, job), do: running_count(state, job) < job.worker.max_concurrency
+  defp below_max_concurrency?(state, job),
+    do: running_count(state, job) < job.worker.max_concurrency
+
   defp increase_running_count(state, job), do: update_running_count(state, job, +1)
   defp decrease_running_count(state, job), do: update_running_count(state, job, -1)
+
   defp update_running_count(state, job, difference) do
     running_count = running_count(state, job) + difference
 
-    state = update_worker_state(state, job,
-      %{ worker_state(state, job) | running_count: running_count }
-    )
+    state =
+      update_worker_state(state, job, %{worker_state(state, job) | running_count: running_count})
 
     if running_count < 0 do
       raise "Job count should never be able to be less than zero, state is: #{inspect(state)}"
@@ -110,6 +117,7 @@ defmodule Toniq.JobConcurrencyLimiter do
 
   # Queue helpers
   defp build_queue, do: :queue.new()
+
   defp next_job_in_queue(pending_jobs_queue) do
     case :queue.out(pending_jobs_queue) do
       {:empty, _pending_jobs_queue} ->
@@ -119,13 +127,16 @@ defmodule Toniq.JobConcurrencyLimiter do
         {first_pending_job, pending_jobs_queue}
     end
   end
+
   defp put_job_in_queue({job, caller}, pending_jobs_queue) do
     :queue.in({job, caller}, pending_jobs_queue)
   end
 
   # Worker state helpers
   defp update_worker_state(state, job, worker_state), do: Map.put(state, job.worker, worker_state)
-  defp running_count(state, job),                     do: worker_state(state, job).running_count
-  defp pending_jobs_queue(state, job),                do: worker_state(state, job).pending_jobs_queue
-  defp worker_state(state, job),                      do: Map.get(state, job.worker, %{ pending_jobs_queue: build_queue(), running_count: 0 })
+  defp running_count(state, job), do: worker_state(state, job).running_count
+  defp pending_jobs_queue(state, job), do: worker_state(state, job).pending_jobs_queue
+
+  defp worker_state(state, job),
+    do: Map.get(state, job.worker, %{pending_jobs_queue: build_queue(), running_count: 0})
 end

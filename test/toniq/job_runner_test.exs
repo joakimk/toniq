@@ -13,12 +13,12 @@ defmodule Toniq.JobRunnerTest do
   end
 
   setup do
-    Toniq.JobEvent.subscribe
-    on_exit &Toniq.JobEvent.unsubscribe/0
+    Toniq.JobEvent.subscribe()
+    on_exit(&Toniq.JobEvent.unsubscribe/0)
   end
 
   test "can run a job and report it as successful" do
-    job = %{ id: 1, worker: TestWorker, arguments: :succeed }
+    job = %{id: 1, worker: TestWorker, arguments: :succeed}
 
     Toniq.JobRunner.register_job(job)
 
@@ -27,7 +27,7 @@ defmodule Toniq.JobRunnerTest do
 
   @tag :capture_log
   test "can run a job and report it as failed" do
-    job = %{ id: 1, worker: TestWorker, arguments: :fail }
+    job = %{id: 1, worker: TestWorker, arguments: :fail}
 
     Toniq.JobRunner.register_job(job)
 
@@ -37,8 +37,8 @@ defmodule Toniq.JobRunnerTest do
   # The job processor caught a gen_server message, didn't
   # seem like a problem at the time. Don't do that :)
   test "regression: can run two jobs in a row" do
-    job1 = %{ id: 1, worker: TestWorker, arguments: :succeed }
-    job2 = %{ id: 2, worker: TestWorker, arguments: :succeed }
+    job1 = %{id: 1, worker: TestWorker, arguments: :succeed}
+    job2 = %{id: 2, worker: TestWorker, arguments: :succeed}
 
     Toniq.JobRunner.register_job(job1)
     Toniq.JobRunner.register_job(job2)

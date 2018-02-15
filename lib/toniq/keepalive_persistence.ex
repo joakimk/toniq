@@ -101,17 +101,16 @@ defmodule Toniq.KeepalivePersistence do
 
   defp redis do
     :toniq_redis
-    |> Process.whereis
+    |> Process.whereis()
   end
 
   # This is not a API any production code should rely upon, but could be useful
   # info when debugging or to verify things in tests.
-  defp debug_info, do: %{ system_pid: System.get_pid,
-                          last_updated_at: system_time() }
+  defp debug_info, do: %{system_pid: System.get_pid(), last_updated_at: system_time()}
 
   # R17 version of R18's :erlang.system_time
-  defp system_time, do: :timer.now_diff(:erlang.now, {0, 0, 0}) * 1000
+  defp system_time, do: :timer.now_diff(:erlang.now(), {0, 0, 0}) * 1000
 
   defp alive_key(identifier), do: "#{default_scope()}:#{identifier}:alive"
-  defp registered_vms_key,    do: "#{default_scope()}:registered_vms"
+  defp registered_vms_key, do: "#{default_scope()}:registered_vms"
 end

@@ -12,7 +12,7 @@ defmodule Toniq.DelayedJobTrackerTest do
   end
 
   setup do
-    Process.whereis(:toniq_redis) |> Exredis.query([ "FLUSHDB" ])
+    Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
     :ok
   end
 
@@ -23,26 +23,26 @@ defmodule Toniq.DelayedJobTrackerTest do
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 500)
 
-    assert JobPersistence.delayed_jobs |> Enum.count == 2
+    assert JobPersistence.delayed_jobs() |> Enum.count() == 2
 
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 
     assert (wait with: lin_backoff(100, 1) |> expiry(1_000) do
-      JobPersistence.delayed_jobs |> Enum.empty?
-    end)
+              JobPersistence.delayed_jobs() |> Enum.empty?()
+            end)
   end
 
   test "imports delayed jobs on takeover (it calls reload_job_list)" do
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 250)
 
-    assert JobPersistence.delayed_jobs |> Enum.count == 1
+    assert JobPersistence.delayed_jobs() |> Enum.count() == 1
 
-    DelayedJobTracker.reload_job_list
+    DelayedJobTracker.reload_job_list()
 
     assert (wait with: lin_backoff(100, 1) |> expiry(500) do
-      JobPersistence.delayed_jobs |> Enum.empty?
-    end)
+              JobPersistence.delayed_jobs() |> Enum.empty?()
+            end)
   end
 
   test "can register and flush delayed jobs" do
@@ -50,16 +50,17 @@ defmodule Toniq.DelayedJobTrackerTest do
 
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 250)
-    |> DelayedJobTracker.register_job
+    |> DelayedJobTracker.register_job()
 
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 500)
-    |> DelayedJobTracker.register_job
+    |> DelayedJobTracker.register_job()
 
-    assert JobPersistence.delayed_jobs |> Enum.count == 2
+    assert JobPersistence.delayed_jobs() |> Enum.count() == 2
+
     assert (wait with: lin_backoff(100, 1) |> expiry(1_000) do
-      JobPersistence.delayed_jobs |> Enum.empty?
-    end)
+              JobPersistence.delayed_jobs() |> Enum.empty?()
+            end)
   end
 
   test "doesn't flush jobs that are delayed indefinitely" do
@@ -67,17 +68,17 @@ defmodule Toniq.DelayedJobTrackerTest do
 
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: :infinity)
-    |> DelayedJobTracker.register_job
+    |> DelayedJobTracker.register_job()
 
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: :infinity)
-    |> DelayedJobTracker.register_job
+    |> DelayedJobTracker.register_job()
 
-    assert JobPersistence.delayed_jobs |> Enum.count == 2
+    assert JobPersistence.delayed_jobs() |> Enum.count() == 2
 
     :timer.sleep(1_000)
 
-    assert JobPersistence.delayed_jobs |> Enum.count == 2
+    assert JobPersistence.delayed_jobs() |> Enum.count() == 2
   end
 
   test "optionally flushes all jobs regardless of delay" do
@@ -85,18 +86,18 @@ defmodule Toniq.DelayedJobTrackerTest do
 
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: :infinity)
-    |> DelayedJobTracker.register_job
+    |> DelayedJobTracker.register_job()
 
     TestWorker
     |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 10_000)
-    |> DelayedJobTracker.register_job
+    |> DelayedJobTracker.register_job()
 
-    assert JobPersistence.delayed_jobs |> Enum.count == 2
+    assert JobPersistence.delayed_jobs() |> Enum.count() == 2
 
-    DelayedJobTracker.flush_all_jobs
+    DelayedJobTracker.flush_all_jobs()
 
     assert (wait with: lin_backoff(100, 1) |> expiry(1_000) do
-      JobPersistence.delayed_jobs |> Enum.empty?
-    end)
+              JobPersistence.delayed_jobs() |> Enum.empty?()
+            end)
   end
 end

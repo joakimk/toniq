@@ -6,7 +6,7 @@ defmodule Toniq.JobEvent do
   """
 
   def start_link do
-    {:ok, _pid} = GenServer.start_link(__MODULE__, %{ listeners: [] }, name: __MODULE__)
+    {:ok, _pid} = GenServer.start_link(__MODULE__, %{listeners: []}, name: __MODULE__)
   end
 
   @doc """
@@ -24,29 +24,29 @@ defmodule Toniq.JobEvent do
   end
 
   def handle_call(:subscribe, {caller, _ref}, state) do
-    state = Map.put(state, :listeners, state.listeners ++ [ caller ])
+    state = Map.put(state, :listeners, state.listeners ++ [caller])
     {:reply, :ok, state}
   end
 
   def handle_call(:unsubscribe, {caller, _ref}, state) do
-    state = Map.put(state, :listeners, state.listeners -- [ caller ])
+    state = Map.put(state, :listeners, state.listeners -- [caller])
     {:reply, :ok, state}
   end
 
   def handle_cast({:notify, event}, state) do
-    Enum.each state.listeners, fn (pid) ->
-      send pid, event
-    end
+    Enum.each(state.listeners, fn pid ->
+      send(pid, event)
+    end)
 
     {:noreply, state}
   end
 
   def finished(job) do
-    notify {:finished, job}
+    notify({:finished, job})
   end
 
   def failed(job) do
-    notify {:failed, job}
+    notify({:failed, job})
   end
 
   defp notify(event) do

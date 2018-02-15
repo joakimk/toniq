@@ -11,10 +11,15 @@ defmodule Toniq.RetryWithIncreasingDelayTest do
   end
 
   test "increases sleep time for each retry" do
-    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(1) == 250     # 0.25 seconds
-    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(2) == 4000    # 4 seconds
-    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(3) == 20250   # 20 seconds
-    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(4) == 64000   # 1 minute
-    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(5) == 156250  # 2.5 minutes
+    # 0.25 seconds
+    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(1) == 250
+    # 4 seconds
+    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(2) == 4000
+    # 20 seconds
+    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(3) == 20250
+    # 1 minute
+    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(4) == 64000
+    # 2.5 minutes
+    assert Toniq.RetryWithIncreasingDelayStrategy.ms_to_sleep_before(5) == 156_250
   end
 end

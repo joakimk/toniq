@@ -11,7 +11,7 @@ defmodule Toniq.FailoverTest do
     use Toniq.Worker
 
     def perform do
-      send :failover_test, :inherited_job_was_run
+      send(:failover_test, :inherited_job_was_run)
     end
   end
 
@@ -21,9 +21,9 @@ defmodule Toniq.FailoverTest do
   # that fake VM and ensure the job is taken over by the test VM.
   @tag :capture_log
   test "orphaned jobs are taken over and run" do
-    Process.register self(), :failover_test
+    Process.register(self(), :failover_test)
 
-    current_vm = Toniq.Keepalive.identifier
+    current_vm = Toniq.Keepalive.identifier()
     other_vm = start_keepalive(:other_vm)
 
     # Add job to other_vm and check that it only exists there
@@ -34,7 +34,8 @@ defmodule Toniq.FailoverTest do
     # Stop keepalive for other_vm and sure the job is picked up and run.
     # We assume it's run in current_vm here since there is no easy way to check.
     stop_keepalive(:other_vm)
-    timeout = 500 # ms
+    # ms
+    timeout = 500
     assert_receive :inherited_job_was_run, timeout
   end
 
@@ -49,7 +50,7 @@ defmodule Toniq.FailoverTest do
 
   defp stop_keepalive(name) do
     name
-    |> Process.whereis
+    |> Process.whereis()
     |> unlink_process
     |> Process.exit(:kill)
   end

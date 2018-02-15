@@ -6,6 +6,7 @@ defmodule CaptureLog do
   # Borrowed from elixir test helper, is built into elixir in master
   def capture_log(level \\ :debug, fun) do
     Logger.configure(level: level)
+
     capture_io(:user, fn ->
       fun.()
       Logger.flush()

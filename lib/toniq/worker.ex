@@ -2,7 +2,7 @@ defmodule Toniq.Worker do
   defmacro __using__(opts \\ []) do
     known_options = [:max_concurrency]
 
-    unknown_option = Enum.find(opts, fn ({k, _v}) -> !Enum.member?(known_options, k) end)
+    unknown_option = Enum.find(opts, fn {k, _v} -> !Enum.member?(known_options, k) end)
 
     if unknown_option do
       {k, _v} = unknown_option
@@ -20,7 +20,7 @@ defmodule Toniq.Worker do
         unquote(opts[:max_concurrency] || :unlimited)
       end
 
-      defoverridable [perform: 1]
+      defoverridable perform: 1
     end
   end
 end

@@ -8,5 +8,6 @@ defmodule Toniq.RetryWithoutDelayStrategy do
   def retry?(attempt) when attempt <= 2, do: true
   def retry?(_attempt), do: false
 
-  def ms_to_sleep_before(_attempt), do: 0 # no waiting between attempts
+  # no waiting between attempts
+  def ms_to_sleep_before(_attempt), do: 0
 end

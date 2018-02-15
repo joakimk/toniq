@@ -253,7 +253,7 @@ config :quantum, cron: [
 
 ## Notes
 
-I'm trying to follow the default elixir style when writing elixir. That means less space between things, like `["foo"]` instead of `[ "foo" ]` like I write most other code. Because of this, spacing may be a bit inconsistent.
+This project uses `mix format` to format the code. Ensure that you run that when you make changes. One easy way is to have an editor plugin run it for you when you save.
 
 ## Versioning
 

@@ -6,23 +6,24 @@ defmodule Exredis.TakeoverTest do
 
     # Disable import to isolate takeover in this test
     Application.put_env(:toniq, :disable_import, true)
-    on_exit fn ->
+
+    on_exit(fn ->
       Application.put_env(:toniq, :disable_import, false)
-    end
+    end)
 
     :ok
   end
 
   @tag :capture_log
   test "takes over orphaned jobs" do
-    current_vm = Toniq.Keepalive.identifier
+    current_vm = Toniq.Keepalive.identifier()
     other_vm = start_keepalive(:other_vm)
 
     # Jobs are not taken over while :other_vm is still reporting in
     add_incoming_job(other_vm)
     add_failed_job(other_vm)
     add_job(other_vm)
-    :timer.sleep 150
+    :timer.sleep(150)
     assert Enum.count(jobs(other_vm)) == 1
     assert Enum.count(failed_jobs(other_vm)) == 1
     assert Enum.count(incoming_jobs(other_vm)) == 1
@@ -34,7 +35,7 @@ defmodule Exredis.TakeoverTest do
     # When :other_vm is stopped, :current_vm moves the jobs to the incoming jobs list
     assert registered?(other_vm)
     stop_keepalive(:other_vm)
-    :timer.sleep 200
+    :timer.sleep(200)
     assert Enum.count(jobs(other_vm)) == 0
     assert Enum.count(failed_jobs(other_vm)) == 0
     assert Enum.count(incoming_jobs(other_vm)) == 0
@@ -52,7 +53,7 @@ defmodule Exredis.TakeoverTest do
 
     vm_id
     |> keepalive_name
-    |> Toniq.Keepalive.identifier
+    |> Toniq.Keepalive.identifier()
   end
 
   defp add_incoming_job(identifier) do
@@ -69,27 +70,27 @@ defmodule Exredis.TakeoverTest do
   end
 
   defp jobs(identifier) do
-    identifier |> Toniq.JobPersistence.jobs
+    identifier |> Toniq.JobPersistence.jobs()
   end
 
   defp failed_jobs(identifier) do
-    identifier |> Toniq.JobPersistence.failed_jobs
+    identifier |> Toniq.JobPersistence.failed_jobs()
   end
 
   defp incoming_jobs(identifier) do
-    identifier |> Toniq.JobPersistence.incoming_jobs
+    identifier |> Toniq.JobPersistence.incoming_jobs()
   end
 
   defp stop_keepalive(vm_id) do
     vm_id
     |> keepalive_name
-    |> Process.whereis
+    |> Process.whereis()
     |> unlink_process
     |> Process.exit(:kill)
   end
 
   defp registered?(identifier) do
-    Toniq.KeepalivePersistence.registered_vms
+    Toniq.KeepalivePersistence.registered_vms()
     |> Enum.member?(identifier)
   end
 

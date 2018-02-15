@@ -12,12 +12,12 @@ defmodule Toniq.JobRunner do
   end
 
   def handle_cast({:register_job, job}, state) do
-    spawn_link fn ->
+    spawn_link(fn ->
       job
       |> run_job
       |> retry_when_failing
       |> process_result
-    end
+    end)
 
     {:noreply, state}
   end
@@ -26,9 +26,10 @@ defmodule Toniq.JobRunner do
 
   defp retry_when_failing(status), do: retry_when_failing(status, 1)
   defp retry_when_failing({:job_was_successful, job}, _attempt), do: {:job_was_successful, job}
+
   defp retry_when_failing({:job_has_failed, job, error, stack}, attempt) do
     if retry_strategy().retry?(attempt) do
-      :timer.sleep trunc(retry_strategy().ms_to_sleep_before(attempt))
+      :timer.sleep(trunc(retry_strategy().ms_to_sleep_before(attempt)))
 
       result = run_job(job)
       retry_when_failing(result, attempt + 1)
@@ -55,7 +56,7 @@ defmodule Toniq.JobRunner do
     job_details = "##{job.id}: #{inspect(job.worker)}.perform(#{inspect(job.arguments)})"
 
     "Job #{job_details} failed with error: #{inspect(error)}\n\n#{stacktrace}"
-    |> String.trim
-    |> Logger.error
+    |> String.trim()
+    |> Logger.error()
   end
 end

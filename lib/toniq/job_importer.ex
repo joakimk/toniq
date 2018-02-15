@@ -6,7 +6,7 @@ defmodule Toniq.JobImporter do
   end
 
   def init(state) do
-    {:ok, _} = :timer.send_interval job_import_interval(), :import_jobs
+    {:ok, _} = :timer.send_interval(job_import_interval(), :import_jobs)
     {:ok, state}
   end
 
@@ -16,6 +16,7 @@ defmodule Toniq.JobImporter do
   end
 
   defp import_jobs(enabled: false), do: nil
+
   defp import_jobs(enabled: true) do
     incoming_jobs()
     |> log_import
@@ -23,10 +24,11 @@ defmodule Toniq.JobImporter do
   end
 
   defp incoming_jobs do
-    Toniq.JobPersistence.incoming_jobs
+    Toniq.JobPersistence.incoming_jobs()
   end
 
   defp log_import([]), do: []
+
   defp log_import(jobs) do
     Logger.log(:info, "#{__MODULE__}: Importing #{Enum.count(jobs)} jobs from incoming_jobs")
 

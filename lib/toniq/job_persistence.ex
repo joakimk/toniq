@@ -33,17 +33,20 @@ defmodule Toniq.JobPersistence do
   @doc """
   Returns all incoming jobs (used for failover).
   """
-  def incoming_jobs(identifier \\ default_identifier()), do: load_jobs(incoming_jobs_key(identifier), identifier)
+  def incoming_jobs(identifier \\ default_identifier()),
+    do: load_jobs(incoming_jobs_key(identifier), identifier)
 
   @doc """
   Returns all failed jobs.
   """
-  def failed_jobs(identifier \\ default_identifier()), do: load_jobs(failed_jobs_key(identifier), identifier)
+  def failed_jobs(identifier \\ default_identifier()),
+    do: load_jobs(failed_jobs_key(identifier), identifier)
 
   @doc """
   Returns all delayed jobs.
   """
-  def delayed_jobs(identifier \\ default_identifier()), do: load_jobs(delayed_jobs_key(identifier), identifier)
+  def delayed_jobs(identifier \\ default_identifier()),
+    do: load_jobs(delayed_jobs_key(identifier), identifier)
 
   @doc """
   Marks a job as finished. This means that it's deleted from redis.
@@ -59,11 +62,12 @@ defmodule Toniq.JobPersistence do
   def mark_as_failed(job, error, identifier \\ default_identifier()) do
     job_with_error = Map.put(job, :error, error)
 
-    redis() |> Exredis.query_pipe([
+    redis()
+    |> Exredis.query_pipe([
       ["MULTI"],
       ["SREM", jobs_key(identifier), strip_vm_identifier(job)],
       ["SADD", failed_jobs_key(identifier), strip_vm_identifier(job_with_error)],
-      ["EXEC"],
+      ["EXEC"]
     ])
 
     job_with_error
@@ -77,11 +81,12 @@ defmodule Toniq.JobPersistence do
   def move_failed_job_to_incomming_jobs(job_with_error) do
     job = Map.delete(job_with_error, :error)
 
-    redis() |> Exredis.query_pipe([
+    redis()
+    |> Exredis.query_pipe([
       ["MULTI"],
       ["SREM", failed_jobs_key(job.vm), strip_vm_identifier(job_with_error)],
       ["SADD", incoming_jobs_key(job.vm), strip_vm_identifier(job)],
-      ["EXEC"],
+      ["EXEC"]
     ])
 
     job
@@ -93,12 +98,14 @@ defmodule Toniq.JobPersistence do
   Uses "job.vm" to do the operation in the correct namespace.
   """
   def move_delayed_job_to_incoming_jobs(delayed_job) do
-    redis() |> Exredis.query_pipe([
+    redis()
+    |> Exredis.query_pipe([
       ["MULTI"],
       ["SREM", delayed_jobs_key(delayed_job.vm), strip_vm_identifier(delayed_job)],
       ["SADD", incoming_jobs_key(delayed_job.vm), strip_vm_identifier(delayed_job)],
-      ["EXEC"],
+      ["EXEC"]
     ])
+
     delayed_job
   end
 
@@ -113,25 +120,27 @@ defmodule Toniq.JobPersistence do
   end
 
   def jobs_key(identifier) do
-    identifier_scoped_key :jobs, identifier
+    identifier_scoped_key(:jobs, identifier)
   end
 
   def failed_jobs_key(identifier) do
-    identifier_scoped_key :failed_jobs, identifier
+    identifier_scoped_key(:failed_jobs, identifier)
   end
 
   def delayed_jobs_key(identifier) do
-    identifier_scoped_key :delayed_jobs, identifier
+    identifier_scoped_key(:delayed_jobs, identifier)
   end
 
   def incoming_jobs_key(identifier) do
-    identifier_scoped_key :incoming_jobs, identifier
+    identifier_scoped_key(:incoming_jobs, identifier)
   end
 
   defp store_job_in_key(worker_module, arguments, key, identifier, options \\ []) do
     job_id = redis() |> incr(counter_key())
 
-    job = Toniq.Job.build(job_id, worker_module, arguments, options) |> add_vm_identifier(identifier)
+    job =
+      Toniq.Job.build(job_id, worker_module, arguments, options) |> add_vm_identifier(identifier)
+
     redis() |> sadd(key, strip_vm_identifier(job))
     job
   end
@@ -141,8 +150,8 @@ defmodule Toniq.JobPersistence do
     |> smembers(redis_key)
     |> Enum.map(&build_job/1)
     |> Enum.sort(&first_in_first_out/2)
-    |> Enum.map(fn (job) -> convert_to_latest_job_format(job, redis_key) end)
-    |> Enum.map(fn (job) -> add_vm_identifier(job, identifier) end)
+    |> Enum.map(fn job -> convert_to_latest_job_format(job, redis_key) end)
+    |> Enum.map(fn job -> add_vm_identifier(job, identifier) end)
   end
 
   defp build_job(data) do
@@ -150,18 +159,20 @@ defmodule Toniq.JobPersistence do
   end
 
   def add_vm_identifier(job, identifier), do: job |> Map.put(:vm, identifier)
-  def strip_vm_identifier(job),           do: job |> Map.delete(:vm)
+  def strip_vm_identifier(job), do: job |> Map.delete(:vm)
 
   defp convert_to_latest_job_format(loaded_job, redis_key) do
     case Toniq.Job.migrate(loaded_job) do
       {:unchanged, job} ->
         job
+
       {:changed, old, new} ->
-        redis() |> Exredis.query_pipe([
+        redis()
+        |> Exredis.query_pipe([
           ["MULTI"],
           ["SREM", redis_key, old],
           ["SADD", redis_key, new],
-          ["EXEC"],
+          ["EXEC"]
         ])
 
         new
@@ -173,7 +184,7 @@ defmodule Toniq.JobPersistence do
   end
 
   defp counter_key do
-    global_key :last_job_id
+    global_key(:last_job_id)
   end
 
   defp global_key(key) do
@@ -190,5 +201,5 @@ defmodule Toniq.JobPersistence do
     Process.whereis(:toniq_redis)
   end
 
-  defp default_identifier, do: Toniq.Keepalive.identifier
+  defp default_identifier, do: Toniq.Keepalive.identifier()
 end

@@ -4,7 +4,7 @@ defmodule Toniq.DelayedJobTracker do
   alias Toniq.JobPersistence
 
   def start_link(name \\ __MODULE__) do
-    GenServer.start_link(__MODULE__, JobPersistence.delayed_jobs, name: name)
+    GenServer.start_link(__MODULE__, JobPersistence.delayed_jobs(), name: name)
   end
 
   def init(state) do
@@ -30,7 +30,7 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   def handle_cast(:reload_job_list, _delayed_jobs) do
-    {:noreply, JobPersistence.delayed_jobs}
+    {:noreply, JobPersistence.delayed_jobs()}
   end
 
   def handle_cast({:register_job, job}, delayed_jobs) do

@@ -2,22 +2,23 @@ defmodule Toniq.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :toniq,
-     version: "1.2.2",
-     elixir: "~> 1.0",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: description(),
-     package: package(),
-     deps: deps()]
+    [
+      app: :toniq,
+      version: "1.2.2",
+      elixir: "~> 1.0",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :uuid, :exredis],
-     mod: {Toniq, []}]
+    [applications: [:logger, :uuid, :exredis], mod: {Toniq, []}]
   end
 
   # Dependencies can be Hex packages:
@@ -35,7 +36,7 @@ defmodule Toniq.Mixfile do
       {:uuid, "~> 1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
-      {:retry, "~> 0.5.0", only: :test},
+      {:retry, "~> 0.5.0", only: :test}
     ]
   end
 

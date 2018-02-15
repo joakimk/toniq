@@ -15,7 +15,7 @@ defmodule Toniq do
     |> Keyword.get(:delay_for)
     |> case do
       nil -> enqueue(worker_module, arguments)
-      _   -> enqueue_with_delay(worker_module, arguments, options)
+      _ -> enqueue_with_delay(worker_module, arguments, options)
     end
   end
 
@@ -24,7 +24,7 @@ defmodule Toniq do
   """
   def enqueue(worker_module, arguments \\ []) do
     Toniq.JobPersistence.store_job(worker_module, arguments)
-    |> Toniq.JobRunner.register_job
+    |> Toniq.JobRunner.register_job()
   end
 
   @doc """
@@ -33,14 +33,14 @@ defmodule Toniq do
   def enqueue_with_delay(worker_module, arguments, options) do
     worker_module
     |> Toniq.JobPersistence.store_delayed_job(arguments, options)
-    |> Toniq.DelayedJobTracker.register_job
+    |> Toniq.DelayedJobTracker.register_job()
   end
 
   @doc """
   List failed jobs
   """
   def failed_jobs do
-    Toniq.KeepalivePersistence.registered_vms
+    Toniq.KeepalivePersistence.registered_vms()
     |> Enum.flat_map(&Toniq.JobPersistence.failed_jobs/1)
   end
 
@@ -57,14 +57,14 @@ defmodule Toniq do
   @doc """
   Flush all delayed jobs
   """
-  def flush_delayed_jobs, do: Toniq.DelayedJobTracker.flush_all_jobs
+  def flush_delayed_jobs, do: Toniq.DelayedJobTracker.flush_all_jobs()
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    Toniq.Config.init
+    Toniq.Config.init()
 
     children = [
       worker(Toniq.RedisConnection, []),
@@ -85,6 +85,7 @@ defmodule Toniq do
       max_seconds: 15,
       max_restarts: 3
     ]
+
     Supervisor.start_link(children, opts)
   end
 end

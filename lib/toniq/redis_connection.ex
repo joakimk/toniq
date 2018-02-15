@@ -9,7 +9,7 @@ defmodule Toniq.RedisConnection do
     Process.flag(:trap_exit, true)
 
     redis_url()
-    |> Exredis.start_using_connection_string
+    |> Exredis.start_using_connection_string()
     |> register_redis
 
     Process.flag(:trap_exit, false)
