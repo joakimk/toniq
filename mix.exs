@@ -4,7 +4,7 @@ defmodule Toniq.Mixfile do
   def project do
     [
       app: :toniq,
-      version: "1.2.2",
+      version: "1.2.3",
       elixir: "~> 1.0",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
