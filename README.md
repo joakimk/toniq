@@ -286,6 +286,8 @@ This library uses [semver](http://semver.org/) for versioning. The API won't cha
     mix deps.get
     mix test
 
+While developing you can use `mix test.watch --stale` to run tests as you save files.
+
 You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex).
 
     iex -S mix

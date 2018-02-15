@@ -34,7 +34,8 @@ defmodule Toniq.Mixfile do
       {:exredis, ">= 0.1.1"},
       {:uuid, "~> 1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:retry, "~> 0.5.0", only: :test}
+      {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
+      {:retry, "~> 0.5.0", only: :test},
     ]
   end
 
