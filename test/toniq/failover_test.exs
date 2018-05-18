@@ -1,6 +1,7 @@
 # Ensure we can failover jobs from one VM to another when it exits or crashes
 defmodule Toniq.FailoverTest do
   use ExUnit.Case
+  alias Toniq.Job
 
   setup do
     Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
@@ -40,7 +41,9 @@ defmodule Toniq.FailoverTest do
   end
 
   defp add_job(identifier) do
-    Toniq.JobPersistence.store_job(FakeWorker, [], identifier)
+    FakeWorker
+    |> Job.new([])
+    |> Toniq.JobPersistence.store_job(identifier)
   end
 
   defp start_keepalive(name) do

@@ -2,7 +2,7 @@ defmodule Toniq.DelayedJobTrackerTest do
   use ExUnit.Case
   use Retry
 
-  alias Toniq.{DelayedJobTracker, JobPersistence}
+  alias Toniq.{DelayedJobTracker, JobPersistence, Job}
 
   defmodule TestWorker do
     use Toniq.Worker
@@ -18,10 +18,12 @@ defmodule Toniq.DelayedJobTrackerTest do
 
   test "imports delayed jobs on start" do
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 250)
+    |> Job.new(%{some: "data"}, delay_for: 250)
+    |> JobPersistence.store_delayed_job()
 
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 500)
+    |> Job.new([some: "data"], [delay_for: 500])
+    |> JobPersistence.store_delayed_job()
 
     assert JobPersistence.delayed_jobs() |> Enum.count() == 2
 
@@ -34,7 +36,8 @@ defmodule Toniq.DelayedJobTrackerTest do
 
   test "imports delayed jobs on takeover (it calls reload_job_list)" do
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 250)
+    |> Job.new([some: "data"],  [delay_for: 250])
+    |> JobPersistence.store_delayed_job()
 
     assert JobPersistence.delayed_jobs() |> Enum.count() == 1
 
@@ -49,11 +52,13 @@ defmodule Toniq.DelayedJobTrackerTest do
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 250)
+    |> Job.new([some: "data"], [delay_for: 250])
+    |> JobPersistence.store_delayed_job()
     |> DelayedJobTracker.register_job()
 
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 500)
+    |> Job.new([some: "data"], [delay_for: 500])
+    |> JobPersistence.store_delayed_job()
     |> DelayedJobTracker.register_job()
 
     assert JobPersistence.delayed_jobs() |> Enum.count() == 2
@@ -67,11 +72,13 @@ defmodule Toniq.DelayedJobTrackerTest do
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: :infinity)
+    |> Job.new([some: "data"], [delay_for: :infinity])
+    |> JobPersistence.store_delayed_job()
     |> DelayedJobTracker.register_job()
 
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: :infinity)
+    |> Job.new([some: "data"], [delay_for: :infinity])
+    |> JobPersistence.store_delayed_job()
     |> DelayedJobTracker.register_job()
 
     assert JobPersistence.delayed_jobs() |> Enum.count() == 2
@@ -85,11 +92,13 @@ defmodule Toniq.DelayedJobTrackerTest do
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: :infinity)
+    |> Job.new([some: "data"], [delay_for: :infinity])
+    |> JobPersistence.store_delayed_job()
     |> DelayedJobTracker.register_job()
 
     TestWorker
-    |> JobPersistence.store_delayed_job(%{some: "data"}, delay_for: 10_000)
+    |> Job.new(%{some: "data"}, delay_for: 10_000)
+    |> JobPersistence.store_delayed_job()
     |> DelayedJobTracker.register_job()
 
     assert JobPersistence.delayed_jobs() |> Enum.count() == 2
