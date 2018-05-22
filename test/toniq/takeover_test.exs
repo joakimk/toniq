@@ -2,6 +2,13 @@ defmodule Exredis.TakeoverTest do
   use ExUnit.Case
   alias Toniq.Job
 
+  defmodule TestWorker do
+    use Toniq.Worker
+
+    def perform do
+    end
+  end
+
   setup do
     Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
 
@@ -58,13 +65,13 @@ defmodule Exredis.TakeoverTest do
   end
 
   defp add_incoming_job(identifier) do
-    FakeWorker
+    TestWorker
     |> Job.new([])
     |> Toniq.JobPersistence.store_incoming_job(identifier)
   end
 
   defp add_job(identifier) do
-    FakeWorker
+    TestWorker
     |> Job.new([])
     |> Toniq.JobPersistence.store_job(identifier)
   end

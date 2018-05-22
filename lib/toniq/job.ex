@@ -15,6 +15,8 @@ defmodule Toniq.Job do
   ]
 
   def new(worker_module, arguments, options \\ nil) do
+    unless Code.ensure_loaded?(worker_module), do: raise "Worker not exists"
+
     %Job{
       worker: worker_module,
       arguments: arguments,
