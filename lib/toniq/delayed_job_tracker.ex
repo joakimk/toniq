@@ -70,7 +70,12 @@ defmodule Toniq.DelayedJobTracker do
     {:noreply, remaining_jobs}
   end
 
+  defp has_expired?(%{options: nil}), do: true
   defp has_expired?(job) do
-    job.delayed_until != :infinity and job.delayed_until <= :os.system_time(:milli_seconds)
+    delayed_until = Keyword.get(job.options, :delayed_until)
+
+    delayed_until != nil
+    and delayed_until != :infinity
+    and delayed_until <= :os.system_time(:milli_seconds)
   end
 end

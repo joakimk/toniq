@@ -23,7 +23,9 @@ defmodule Toniq do
   Enqueue job to be run in the background as soon as possible
   """
   def enqueue(worker_module, arguments \\ []) do
-    Toniq.JobPersistence.store_job(worker_module, arguments)
+    worker_module
+    |> Toniq.Job.new(arguments)
+    |> Toniq.JobPersistence.store_job()
     |> Toniq.JobRunner.register_job()
   end
 
@@ -32,7 +34,8 @@ defmodule Toniq do
   """
   def enqueue_with_delay(worker_module, arguments, options) do
     worker_module
-    |> Toniq.JobPersistence.store_delayed_job(arguments, options)
+    |> Toniq.Job.new(arguments, options)
+    |> Toniq.JobPersistence.store_delayed_job()
     |> Toniq.DelayedJobTracker.register_job()
   end
 

@@ -1,5 +1,6 @@
 defmodule Exredis.JobImporterTest do
   use ExUnit.Case
+  alias Toniq.Job
 
   defmodule TestWorker do
     use Toniq.Worker
@@ -17,7 +18,9 @@ defmodule Exredis.JobImporterTest do
   @tag :capture_log
   test "imports jobs from the incoming_jobs queue" do
     Process.register(self(), :toniq_job_importer_test)
-    Toniq.JobPersistence.store_incoming_job(TestWorker, data: 10)
+    TestWorker
+    |> Job.new([])
+    |> Toniq.JobPersistence.store_incoming_job()
 
     assert_receive :job_has_been_run, 1000
     # wait for job to be removed

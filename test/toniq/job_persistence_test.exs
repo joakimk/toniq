@@ -1,5 +1,6 @@
 defmodule Exredis.JobPersistenceTest do
   use ExUnit.Case
+  alias Toniq.Job
 
   setup do
     Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
@@ -14,8 +15,15 @@ defmodule Exredis.JobPersistenceTest do
   end
 
   test "can persist job state" do
-    job1 = Toniq.JobPersistence.store_job(SomeWorker, some: "data")
-    job2 = Toniq.JobPersistence.store_job(SomeWorker, other: "data")
+    job1 =
+      SomeWorker
+      |> Job.new([some: "data"])
+      |> Toniq.JobPersistence.store_job()
+
+    job2 =
+      SomeWorker
+      |> Job.new([other: "data"])
+      |> Toniq.JobPersistence.store_job()
 
     assert Toniq.JobPersistence.jobs() == [job1, job2]
 
@@ -34,7 +42,10 @@ defmodule Exredis.JobPersistenceTest do
   end
 
   test "can store and move a delayed a job" do
-    job = Toniq.JobPersistence.store_delayed_job(SomeWorker, %{some: "data"}, delay_for: 500)
+    job =
+      SomeWorker
+      |> Job.new(%{some: "data"}, delay_for: 500)
+      |> Toniq.JobPersistence.store_delayed_job()
     assert Toniq.JobPersistence.delayed_jobs() == [job]
 
     Toniq.JobPersistence.move_delayed_job_to_incoming_jobs(job)
@@ -43,7 +54,10 @@ defmodule Exredis.JobPersistenceTest do
   end
 
   test "can store and retrieve incoming jobs" do
-    job = Toniq.JobPersistence.store_incoming_job(SomeWorker, incoming: "take cover")
+    job =
+      SomeWorker
+      |> Job.new(%{some: "data"}, delay_for: 500)
+      |> Toniq.JobPersistence.store_incoming_job()
     assert Toniq.JobPersistence.incoming_jobs() == [job]
   end
 
@@ -62,7 +76,7 @@ defmodule Exredis.JobPersistenceTest do
     assert Enum.count(Toniq.JobPersistence.jobs()) == 2
     [job, job_with_error] = Toniq.JobPersistence.jobs()
 
-    assert job == %{
+    assert job == %Job{
              id: 1,
              worker: TestWorker,
              arguments: [:a],
@@ -70,12 +84,12 @@ defmodule Exredis.JobPersistenceTest do
              vm: Toniq.Keepalive.identifier()
            }
 
-    assert job[:error] == nil
-    assert job_with_error[:error] == "foo"
+    assert job.error == nil
+    assert job_with_error.error == "foo"
 
     # Also converts the persisted job, so that we can mark jobs as successful, etc.
-    Toniq.JobPersistence.mark_as_successful(job)
-    Toniq.JobPersistence.mark_as_successful(job_with_error)
+    assert Toniq.JobPersistence.mark_as_successful(job) == "1"
+    assert Toniq.JobPersistence.mark_as_successful(job_with_error) == "1"
     assert Enum.count(Toniq.JobPersistence.jobs()) == 0
   end
 end
