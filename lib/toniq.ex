@@ -25,7 +25,7 @@ defmodule Toniq do
   def enqueue(worker_module, arguments \\ []) do
     worker_module
     |> Toniq.Job.new(arguments)
-    |> Toniq.JobPersistence.store_job()
+    |> Toniq.JobPersistence.adapter().store(:jobs)
     |> Toniq.JobRunner.register_job()
   end
 
@@ -35,7 +35,7 @@ defmodule Toniq do
   def enqueue_with_delay(worker_module, arguments, options) do
     worker_module
     |> Toniq.Job.new(arguments, options)
-    |> Toniq.JobPersistence.store_delayed_job()
+    |> Toniq.JobPersistence.adapter().store(:delayed_jobs)
     |> Toniq.DelayedJobTracker.register_job()
   end
 
@@ -43,19 +43,19 @@ defmodule Toniq do
   List failed jobs
   """
   def failed_jobs do
-    Toniq.KeepalivePersistence.registered_vms()
-    |> Enum.flat_map(&Toniq.JobPersistence.failed_jobs/1)
+    Toniq.JobPersistence.adapter().registered_vms()
+    |> Enum.flat_map(&Toniq.JobPersistence.adapter().fetch(:failed_jobs, &1))
   end
 
   @doc """
   Retry a failed job
   """
-  def retry(job), do: Toniq.JobPersistence.move_failed_job_to_incomming_jobs(job)
+  def retry(job), do: Toniq.JobPersistence.adapter().move_failed_job_to_incoming_jobs(job)
 
   @doc """
   Delete a failed job
   """
-  def delete(job), do: Toniq.JobPersistence.delete_failed_job(job)
+  def delete(job), do: Toniq.JobPersistence.adapter().delete_failed_job(job)
 
   @doc """
   Flush all delayed jobs

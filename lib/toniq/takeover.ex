@@ -1,6 +1,7 @@
 defmodule Toniq.Takeover do
   @moduledoc """
-  Checks redis for orphaned jobs from other vms and moves them into a incoming jobs list.
+  Checks redis for orphaned jobs from other vms and moves them into a incoming
+  jobs list.
 
   This list is then imported by Toniq.JobImporter.
   """
@@ -8,8 +9,8 @@ defmodule Toniq.Takeover do
   use GenServer
   require Logger
 
-  def start_link(name \\ __MODULE__, keepalive_name \\ Toniq.Keepalive) do
-    GenServer.start_link(__MODULE__, %{keepalive_name: keepalive_name}, name: name)
+  def start_link do
+    GenServer.start_link(__MODULE__, %{keepalive_name: Toniq.Keepalive}, name: __MODULE__)
   end
 
   def init(state) do
@@ -26,7 +27,7 @@ defmodule Toniq.Takeover do
   end
 
   defp registered_vms do
-    Toniq.KeepalivePersistence.registered_vms()
+    Toniq.JobPersistence.adapter().registered_vms()
   end
 
   defp select_first_missing(vms) do
@@ -35,7 +36,7 @@ defmodule Toniq.Takeover do
   end
 
   defp missing?(identifier) do
-    !Toniq.KeepalivePersistence.alive?(identifier)
+    !Toniq.JobPersistence.adapter().alive?(identifier)
   end
 
   defp handle_missing_vm(nil, _state), do: nil
@@ -43,7 +44,7 @@ defmodule Toniq.Takeover do
   defp handle_missing_vm(identifier, state) do
     Logger.log(:info, "#{__MODULE__}: Taking over all jobs from missing vm #{identifier}")
 
-    Toniq.KeepalivePersistence.takeover_jobs(
+    Toniq.JobPersistence.adapter().takeover_jobs(
       identifier,
       Toniq.Keepalive.identifier(state.keepalive_name)
     )

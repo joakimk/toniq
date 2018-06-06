@@ -60,30 +60,30 @@ defmodule Exredis.TakeoverTest do
   defp add_incoming_job(identifier) do
     FakeWorker
     |> Job.new([])
-    |> Toniq.JobPersistence.store_incoming_job(identifier)
+    |> Toniq.RedisJobPersistence.store(:incoming_jobs, identifier)
   end
 
   defp add_job(identifier) do
     FakeWorker
     |> Job.new([])
-    |> Toniq.JobPersistence.store_job(identifier)
+    |> Toniq.RedisJobPersistence.store(:jobs, identifier)
   end
 
   defp add_failed_job(identifier) do
     job = add_job(identifier)
-    Toniq.JobPersistence.mark_as_failed(job, "error", identifier)
+    Toniq.RedisJobPersistence.mark_as_failed(job, "error", identifier)
   end
 
   defp jobs(identifier) do
-    identifier |> Toniq.JobPersistence.jobs()
+    Toniq.RedisJobPersistence.fetch(:jobs, identifier)
   end
 
   defp failed_jobs(identifier) do
-    identifier |> Toniq.JobPersistence.failed_jobs()
+    Toniq.RedisJobPersistence.fetch(:failed_jobs, identifier)
   end
 
   defp incoming_jobs(identifier) do
-    identifier |> Toniq.JobPersistence.incoming_jobs()
+    Toniq.RedisJobPersistence.fetch(:incoming_jobs, identifier)
   end
 
   defp stop_keepalive(vm_id) do
@@ -95,7 +95,7 @@ defmodule Exredis.TakeoverTest do
   end
 
   defp registered?(identifier) do
-    Toniq.KeepalivePersistence.registered_vms()
+    Toniq.RedisJobPersistence.registered_vms()
     |> Enum.member?(identifier)
   end
 

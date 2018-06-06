@@ -32,7 +32,7 @@ defmodule Exredis.KeepaliveTest do
   end
 
   defp registered_vms do
-    Toniq.KeepalivePersistence.registered_vms()
+    Toniq.RedisJobPersistence.registered_vms()
   end
 
   defp alive_vm_last_updated_at(identifier) do
@@ -47,6 +47,6 @@ defmodule Exredis.KeepaliveTest do
   end
 
   defp alive_vm_debug_info(identifier) do
-    Toniq.KeepalivePersistence.alive_vm_debug_info(identifier)
+    Toniq.RedisJobPersistence.alive_vm_debug_info(identifier)
   end
 end

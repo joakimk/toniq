@@ -43,12 +43,12 @@ defmodule Toniq.JobRunner do
   end
 
   defp process_result({:job_was_successful, job}) do
-    Toniq.JobPersistence.mark_as_successful(job)
+    Toniq.JobPersistence.adapter().mark_as_successful(job)
     Toniq.JobEvent.finished(job)
   end
 
   defp process_result({:job_has_failed, job, error, stack}) do
-    Toniq.JobPersistence.mark_as_failed(job, error)
+    Toniq.JobPersistence.adapter().mark_as_failed(job, error)
     log_error(job, error, stack)
     Toniq.JobEvent.failed(job)
   end
