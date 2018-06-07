@@ -19,12 +19,12 @@ defmodule Exredis.JobPersistenceTest do
   test "can persist job state" do
     job1 =
       SomeWorker
-      |> Job.new([some: "data"])
+      |> Job.new(some: "data")
       |> RedisJobPersistence.store(:jobs)
 
     job2 =
       SomeWorker
-      |> Job.new([other: "data"])
+      |> Job.new(other: "data")
       |> RedisJobPersistence.store(:jobs)
 
     assert RedisJobPersistence.fetch(:jobs) == [job1, job2]
@@ -48,6 +48,7 @@ defmodule Exredis.JobPersistenceTest do
       SomeWorker
       |> Job.new(%{some: "data"}, delay_for: 500)
       |> RedisJobPersistence.store(:delayed_jobs)
+
     assert RedisJobPersistence.fetch(:delayed_jobs) == [job]
 
     RedisJobPersistence.move_delayed_job_to_incoming_jobs(job)
@@ -60,6 +61,7 @@ defmodule Exredis.JobPersistenceTest do
       SomeWorker
       |> Job.new(%{some: "data"}, delay_for: 500)
       |> RedisJobPersistence.store(:incoming_jobs)
+
     assert RedisJobPersistence.fetch(:incoming_jobs) == [job]
   end
 

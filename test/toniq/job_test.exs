@@ -9,11 +9,11 @@ defmodule Toniq.JobTest do
     job = Job.new(SomeWorker, %{some: "data"})
 
     assert job == %Job{
-      worker: SomeWorker,
-      arguments: %{some: "data"},
-      version: 1,
-      options: nil
-    }
+             worker: SomeWorker,
+             arguments: %{some: "data"},
+             version: 1,
+             options: nil
+           }
   end
 
   test "builds a job with a delay" do

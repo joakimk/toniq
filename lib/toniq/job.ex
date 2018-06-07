@@ -58,6 +58,7 @@ defmodule Toniq.Job do
   end
 
   defp add_delay(nil), do: nil
+
   defp add_delay(options) do
     options
     |> Keyword.get(:delay_for)

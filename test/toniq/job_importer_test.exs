@@ -19,6 +19,7 @@ defmodule Exredis.JobImporterTest do
   @tag :capture_log
   test "imports jobs from the incoming_jobs queue" do
     Process.register(self(), :toniq_job_importer_test)
+
     TestWorker
     |> Job.new([])
     |> RedisJobPersistence.store(:incoming_jobs)

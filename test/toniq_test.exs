@@ -132,10 +132,12 @@ defmodule ToniqTest do
   test "can handle jobs from another VM for some actions (for easy administration of failed jobs)" do
     Toniq.RedisJobPersistence.register_vm("other")
     Toniq.RedisJobPersistence.update_alive_key("other", 1000)
+
     job =
       TestWorker
       |> Job.new([])
       |> Toniq.RedisJobPersistence.store(:jobs)
+
     Toniq.RedisJobPersistence.mark_as_failed(job, "error", "other")
 
     assert Enum.count(Toniq.failed_jobs()) == 1

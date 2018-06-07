@@ -22,7 +22,7 @@ defmodule Toniq.DelayedJobTrackerTest do
     |> RedisJobPersistence.store(:delayed_jobs)
 
     TestWorker
-    |> Job.new([some: "data"], [delay_for: 500])
+    |> Job.new([some: "data"], delay_for: 500)
     |> RedisJobPersistence.store(:delayed_jobs)
 
     assert RedisJobPersistence.fetch(:delayed_jobs) |> Enum.count() == 2
@@ -36,7 +36,7 @@ defmodule Toniq.DelayedJobTrackerTest do
 
   test "imports delayed jobs on takeover (it calls reload_job_list)" do
     TestWorker
-    |> Job.new([some: "data"],  [delay_for: 250])
+    |> Job.new([some: "data"], delay_for: 250)
     |> RedisJobPersistence.store(:delayed_jobs)
 
     assert RedisJobPersistence.fetch(:delayed_jobs) |> Enum.count() == 1
@@ -52,12 +52,12 @@ defmodule Toniq.DelayedJobTrackerTest do
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 
     TestWorker
-    |> Job.new([some: "data"], [delay_for: 250])
+    |> Job.new([some: "data"], delay_for: 250)
     |> RedisJobPersistence.store(:delayed_jobs)
     |> DelayedJobTracker.register_job()
 
     TestWorker
-    |> Job.new([some: "data"], [delay_for: 500])
+    |> Job.new([some: "data"], delay_for: 500)
     |> RedisJobPersistence.store(:delayed_jobs)
     |> DelayedJobTracker.register_job()
 
@@ -72,12 +72,12 @@ defmodule Toniq.DelayedJobTrackerTest do
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 
     TestWorker
-    |> Job.new([some: "data"], [delay_for: :infinity])
+    |> Job.new([some: "data"], delay_for: :infinity)
     |> RedisJobPersistence.store(:delayed_jobs)
     |> DelayedJobTracker.register_job()
 
     TestWorker
-    |> Job.new([some: "data"], [delay_for: :infinity])
+    |> Job.new([some: "data"], delay_for: :infinity)
     |> RedisJobPersistence.store(:delayed_jobs)
     |> DelayedJobTracker.register_job()
 
@@ -92,7 +92,7 @@ defmodule Toniq.DelayedJobTrackerTest do
     DelayedJobTracker.start_link(:test_delayed_job_tracker)
 
     TestWorker
-    |> Job.new([some: "data"], [delay_for: :infinity])
+    |> Job.new([some: "data"], delay_for: :infinity)
     |> RedisJobPersistence.store(:delayed_jobs)
     |> DelayedJobTracker.register_job()
 

@@ -66,7 +66,6 @@ defmodule Toniq.SkipAdapter do
   end
 
   def takeover_jobs(from_identifier, to_identifier) do
-
   end
 
   # Added so we could use it to default scope further out when we want to allow custom persistance scopes in testing.
@@ -97,7 +96,6 @@ defmodule Toniq.SkipAdapter do
 
   defp alive_key(identifier), do: "#{default_scope()}:#{identifier}:alive"
   defp registered_vms_key, do: "#{default_scope()}:registered_vms"
-
 
   defp identifier_scoped_key(key, identifier) do
     prefix = Application.get_env(:toniq, :redis_key_prefix)

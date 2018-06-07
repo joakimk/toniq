@@ -215,7 +215,6 @@ defmodule Toniq.RedisAdapter do
   defp alive_key(identifier), do: "#{default_scope()}:#{identifier}:alive"
   defp registered_vms_key, do: "#{default_scope()}:registered_vms"
 
-
   defp identifier_scoped_key(key, identifier) do
     prefix = Application.get_env(:toniq, :redis_key_prefix)
     "#{prefix}:#{identifier}:#{key}"
@@ -240,8 +239,8 @@ defmodule Toniq.RedisAdapter do
     |> Enum.sort(&first_in_first_out/2)
     |> Enum.map(fn job -> convert_to_latest_job_format(job, redis_key) end)
     |> Enum.map(fn job ->
-      error = Map.has_key?(job, :error) && job.error || nil
-      options = Map.has_key?(job, :options) && job.options || nil
+      error = (Map.has_key?(job, :error) && job.error) || nil
+      options = (Map.has_key?(job, :options) && job.options) || nil
 
       %Job{
         id: job.id,
@@ -263,7 +262,7 @@ defmodule Toniq.RedisAdapter do
     job
     |> Map.from_struct()
     |> Map.to_list()
-    |> Enum.filter(fn {_,v} -> v != nil end)
+    |> Enum.filter(fn {_, v} -> v != nil end)
     |> Enum.into(%{})
     |> Map.delete(:vm)
   end

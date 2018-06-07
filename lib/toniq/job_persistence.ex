@@ -74,4 +74,3 @@ defmodule Toniq.JobPersistence do
 
   def adapter, do: Application.get_env(:toniq, :persistence)
 end
-
