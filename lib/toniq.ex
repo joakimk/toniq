@@ -70,7 +70,6 @@ defmodule Toniq do
     Toniq.Config.init()
 
     children = [
-      worker(Toniq.RedisConnection, []),
       worker(Toniq.JobRunner, []),
       worker(Toniq.JobEvent, []),
       worker(Toniq.JobConcurrencyLimiter, []),
@@ -79,6 +78,13 @@ defmodule Toniq do
       worker(Toniq.JobImporter, []),
       worker(Toniq.DelayedJobTracker, [])
     ]
+
+    if Application.get_env(:toniq, :persistence) == Toniq.RedisJobPersistence do
+      children = [
+        worker(Toniq.RedisConnection, [])
+      ] ++ children
+    end
+
 
     # When one process fails we restart all of them to ensure a valid state. Jobs are then
     # re-loaded from redis. Supervisor docs: http://elixir-lang.org/docs/stable/elixir/Supervisor.html

@@ -72,6 +72,6 @@ defmodule Toniq.JobPersistence do
     end
   end
 
-  def adapter, do: Application.get_env(:toniq, :job_persistence) || Toniq.RedisJobPersistence
+  def adapter, do: Application.get_env(:toniq, :persistence)
 end
 
