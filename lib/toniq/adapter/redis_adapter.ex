@@ -5,7 +5,7 @@ defmodule Toniq.RedisAdapter do
   ## Example config
       # In config/config.exs, or config.prod.exs, etc.
       config :toniq,
-        persistence: Toniq.RedisAdapter,
+        persistence: Toniq.RedisJobPersistence
   """
 
   @behaviour Toniq.JobPersistenceAdapter
