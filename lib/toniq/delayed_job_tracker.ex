@@ -4,7 +4,7 @@ defmodule Toniq.DelayedJobTracker do
   alias Toniq.JobPersistence
 
   def start_link(name \\ __MODULE__) do
-    GenServer.start_link(__MODULE__, JobPersistence.delayed_jobs(), name: name)
+    GenServer.start_link(__MODULE__, JobPersistence.adapter().fetch(:delayed_jobs), name: name)
   end
 
   def init(state) do
@@ -30,7 +30,7 @@ defmodule Toniq.DelayedJobTracker do
   end
 
   def handle_cast(:reload_job_list, _delayed_jobs) do
-    {:noreply, JobPersistence.delayed_jobs()}
+    {:noreply, JobPersistence.adapter().fetch(:delayed_jobs)}
   end
 
   def handle_cast({:register_job, job}, delayed_jobs) do
@@ -39,7 +39,7 @@ defmodule Toniq.DelayedJobTracker do
 
   def handle_cast({:flush_all_jobs}, delayed_jobs) do
     delayed_jobs
-    |> Enum.each(&JobPersistence.move_delayed_job_to_incoming_jobs/1)
+    |> Enum.each(fn job -> JobPersistence.adapter().move_delayed_job_to_incoming_jobs(job) end)
 
     {:noreply, []}
   end
@@ -62,7 +62,7 @@ defmodule Toniq.DelayedJobTracker do
   defp enqueue_expired_jobs(jobs) do
     jobs
     |> Stream.filter(&has_expired?/1)
-    |> Enum.map(&JobPersistence.move_delayed_job_to_incoming_jobs/1)
+    |> Enum.map(fn job -> JobPersistence.adapter().move_delayed_job_to_incoming_jobs(job) end)
   end
 
   defp remaining_jobs_from(expired_jobs, all_jobs) do
@@ -70,7 +70,12 @@ defmodule Toniq.DelayedJobTracker do
     {:noreply, remaining_jobs}
   end
 
+  defp has_expired?(%{options: nil}), do: true
+
   defp has_expired?(job) do
-    job.delayed_until != :infinity and job.delayed_until <= :os.system_time(:milli_seconds)
+    delayed_until = Keyword.get(job.options, :delayed_until)
+
+    delayed_until != nil and delayed_until != :infinity and
+      delayed_until <= :os.system_time(:milli_seconds)
   end
 end

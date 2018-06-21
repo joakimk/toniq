@@ -44,11 +44,11 @@ defmodule Toniq.Keepalive do
   end
 
   def register_vm(state) do
-    Toniq.KeepalivePersistence.register_vm(state.identifier)
+    Toniq.JobPersistence.adapter().register_vm(state.identifier)
   end
 
   defp update_alive_key(state) do
-    Toniq.KeepalivePersistence.update_alive_key(state.identifier, keepalive_expiration())
+    Toniq.JobPersistence.adapter().update_alive_key(state.identifier, keepalive_expiration())
   end
 
   defp keepalive_interval, do: Application.get_env(:toniq, :keepalive_interval)

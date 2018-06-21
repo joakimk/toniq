@@ -1,6 +1,7 @@
 defmodule ToniqTest do
   use ExUnit.Case
   import CaptureLog
+  alias Toniq.Job
 
   defmodule TestWorker do
     use Toniq.Worker
@@ -61,7 +62,7 @@ defmodule ToniqTest do
 
   setup do
     Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
-    Toniq.KeepalivePersistence.register_vm(Toniq.Keepalive.identifier())
+    Toniq.RedisJobPersistence.register_vm(Toniq.Keepalive.identifier())
     :ok
   end
 
@@ -73,7 +74,7 @@ defmodule ToniqTest do
 
     # allow persistence some time to remove the job
     :timer.sleep(1)
-    assert Toniq.JobPersistence.jobs() == []
+    assert Toniq.RedisJobPersistence.fetch(:jobs) == []
   end
 
   test "failing jobs are removed from the regular job list and stored in a failed jobs list" do
@@ -82,9 +83,9 @@ defmodule ToniqTest do
         job = Toniq.enqueue(TestErrorWorker, data: 10)
 
         assert_receive {:failed, ^job}
-        assert Toniq.JobPersistence.jobs() == []
-        assert Enum.count(Toniq.JobPersistence.failed_jobs()) == 1
-        assert (Toniq.JobPersistence.failed_jobs() |> hd).worker == TestErrorWorker
+        assert Toniq.RedisJobPersistence.fetch(:jobs) == []
+        assert Enum.count(Toniq.RedisJobPersistence.fetch(:failed_jobs)) == 1
+        assert (Toniq.RedisJobPersistence.fetch(:failed_jobs) |> hd).worker == TestErrorWorker
       end)
 
     assert logs =~
@@ -129,10 +130,15 @@ defmodule ToniqTest do
   end
 
   test "can handle jobs from another VM for some actions (for easy administration of failed jobs)" do
-    Toniq.KeepalivePersistence.register_vm("other")
-    Toniq.KeepalivePersistence.update_alive_key("other", 1000)
-    job = Toniq.JobPersistence.store_job(TestWorker, [], "other")
-    Toniq.JobPersistence.mark_as_failed(job, "error", "other")
+    Toniq.RedisJobPersistence.register_vm("other")
+    Toniq.RedisJobPersistence.update_alive_key("other", 1000)
+
+    job =
+      TestWorker
+      |> Job.new([])
+      |> Toniq.RedisJobPersistence.store(:jobs)
+
+    Toniq.RedisJobPersistence.mark_as_failed(job, "error", "other")
 
     assert Enum.count(Toniq.failed_jobs()) == 1
     job = Toniq.failed_jobs() |> hd

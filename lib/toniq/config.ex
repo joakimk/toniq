@@ -10,6 +10,7 @@ defmodule Toniq.Config do
       :toniq,
       redis_key_prefix: :toniq,
       redis_url: "redis://localhost:6379/0",
+      persistence: Toniq.RedisJobPersistence,
       retry_strategy: Toniq.RetryWithIncreasingDelayStrategy,
 
       # time in milliseconds

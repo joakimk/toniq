@@ -2,6 +2,9 @@
 defmodule Toniq.FailoverTest do
   use ExUnit.Case
 
+  alias Toniq.Job
+  alias Toniq.RedisJobPersistence
+
   setup do
     Process.whereis(:toniq_redis) |> Exredis.query(["FLUSHDB"])
     :ok
@@ -28,8 +31,8 @@ defmodule Toniq.FailoverTest do
 
     # Add job to other_vm and check that it only exists there
     add_job(other_vm)
-    assert Enum.count(Toniq.JobPersistence.jobs(current_vm)) == 0
-    assert Enum.count(Toniq.JobPersistence.jobs(other_vm)) == 1
+    assert Enum.count(RedisJobPersistence.fetch(:jobs, current_vm)) == 0
+    assert Enum.count(RedisJobPersistence.fetch(:jobs, other_vm)) == 1
 
     # Stop keepalive for other_vm and sure the job is picked up and run.
     # We assume it's run in current_vm here since there is no easy way to check.
@@ -40,7 +43,9 @@ defmodule Toniq.FailoverTest do
   end
 
   defp add_job(identifier) do
-    Toniq.JobPersistence.store_job(FakeWorker, [], identifier)
+    FakeWorker
+    |> Job.new([])
+    |> RedisJobPersistence.store(:jobs, identifier)
   end
 
   defp start_keepalive(name) do

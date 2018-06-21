@@ -9,6 +9,7 @@ if Mix.env == :test do
     redis_url: "redis://localhost:6379/1",
     keepalive_interval: 50, # ms
     keepalive_expiration: 70, # ms
+    persistence: Toniq.RedisJobPersistence,
     takeover_interval: 100, # ms
     job_import_interval: 100, # ms
     retry_strategy: Toniq.RetryWithoutDelayStrategy
@@ -16,5 +17,7 @@ end
 
 if Mix.env == :dev do
   # Running Toniq.TestWorker with the regular retry strategy is a bit too slow.
-  config :toniq, retry_strategy: Toniq.RetryWithoutDelayStrategy
+  config :toniq,
+    retry_strategy: Toniq.RetryWithoutDelayStrategy,
+    persistence: Toniq.RedisJobPersistence
 end

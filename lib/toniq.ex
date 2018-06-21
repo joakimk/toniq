@@ -23,7 +23,9 @@ defmodule Toniq do
   Enqueue job to be run in the background as soon as possible
   """
   def enqueue(worker_module, arguments \\ []) do
-    Toniq.JobPersistence.store_job(worker_module, arguments)
+    worker_module
+    |> Toniq.Job.new(arguments)
+    |> Toniq.JobPersistence.adapter().store(:jobs)
     |> Toniq.JobRunner.register_job()
   end
 
@@ -32,7 +34,8 @@ defmodule Toniq do
   """
   def enqueue_with_delay(worker_module, arguments, options) do
     worker_module
-    |> Toniq.JobPersistence.store_delayed_job(arguments, options)
+    |> Toniq.Job.new(arguments, options)
+    |> Toniq.JobPersistence.adapter().store(:delayed_jobs)
     |> Toniq.DelayedJobTracker.register_job()
   end
 
@@ -40,19 +43,19 @@ defmodule Toniq do
   List failed jobs
   """
   def failed_jobs do
-    Toniq.KeepalivePersistence.registered_vms()
-    |> Enum.flat_map(&Toniq.JobPersistence.failed_jobs/1)
+    Toniq.JobPersistence.adapter().registered_vms()
+    |> Enum.flat_map(&Toniq.JobPersistence.adapter().fetch(:failed_jobs, &1))
   end
 
   @doc """
   Retry a failed job
   """
-  def retry(job), do: Toniq.JobPersistence.move_failed_job_to_incomming_jobs(job)
+  def retry(job), do: Toniq.JobPersistence.adapter().move_failed_job_to_incoming_jobs(job)
 
   @doc """
   Delete a failed job
   """
-  def delete(job), do: Toniq.JobPersistence.delete_failed_job(job)
+  def delete(job), do: Toniq.JobPersistence.adapter().delete_failed_job(job)
 
   @doc """
   Flush all delayed jobs
@@ -67,7 +70,6 @@ defmodule Toniq do
     Toniq.Config.init()
 
     children = [
-      worker(Toniq.RedisConnection, []),
       worker(Toniq.JobRunner, []),
       worker(Toniq.JobEvent, []),
       worker(Toniq.JobConcurrencyLimiter, []),
@@ -76,6 +78,13 @@ defmodule Toniq do
       worker(Toniq.JobImporter, []),
       worker(Toniq.DelayedJobTracker, [])
     ]
+
+    if Application.get_env(:toniq, :persistence) == Toniq.RedisJobPersistence do
+      children =
+        [
+          worker(Toniq.RedisConnection, [])
+        ] ++ children
+    end
 
     # When one process fails we restart all of them to ensure a valid state. Jobs are then
     # re-loaded from redis. Supervisor docs: http://elixir-lang.org/docs/stable/elixir/Supervisor.html

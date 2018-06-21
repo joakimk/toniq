@@ -2,10 +2,32 @@ defmodule Toniq.Job do
   # NOTE: If the format changes: add migration code for older formats
   @job_format_version 1
 
-  def build(id, worker_module, arguments, options \\ []) do
-    %{id: id, worker: worker_module, arguments: arguments, version: @job_format_version}
-    |> add_delay(options)
+  alias Toniq.Job
+
+  defstruct [
+    :id,
+    :worker,
+    :arguments,
+    :version,
+    :options,
+    :vm,
+    :error
+  ]
+
+  def new(worker_module, arguments, options \\ nil) do
+    %Job{
+      worker: worker_module,
+      arguments: arguments,
+      version: @job_format_version,
+      options: add_delay(options)
+    }
   end
+
+  def set_id(job, id), do: %{job | id: id}
+
+  def add_vm_identifier(job, identifier), do: %{job | vm: identifier}
+
+  def set_error(job, error), do: %{job | error: error}
 
   def migrate(job), do: migrate_v0_jobs_to_v1(job)
 
@@ -35,12 +57,14 @@ defmodule Toniq.Job do
     end
   end
 
-  defp add_delay(job, options) do
+  defp add_delay(nil), do: nil
+
+  defp add_delay(options) do
     options
     |> Keyword.get(:delay_for)
     |> case do
-      nil -> job
-      delay -> job |> Map.put(:delayed_until, delay |> to_expiry)
+      nil -> options
+      delay -> Keyword.put(options, :delayed_until, delay |> to_expiry)
     end
   end
 

@@ -58,6 +58,14 @@ If you need to configure redis dynamically after the application starts, you can
 config :toniq, redis_url_provider: fn -> wait_for_redis_url_to_be_available end
 ```
 
+## Adapters
+
+The default persistence is Toniq.RedisJobPersistence. To swap the adapter:
+
+```
+config :toniq, persistence: Toniq.SkipJobPersistence
+```
+
 ## Usage
 
 Define a worker:
@@ -315,7 +323,7 @@ You can also try toniq in dev using [Toniq.TestWorker](lib/toniq/test_worker.ex)
 * [ ] Log an error when a job takes "too long" to run, set a sensible default
   - Not detecting this has led to production issues in other apps. A warning is easy to do and can help a lot.
 * [ ] Better error for arity bugs on `perform` since that will be common. Lists need to be ordered, if it's a list, make the user aware of that, etc.
-* [ ] Be able to skip persistence
+* [x] Be able to skip persistence
 * [ ] Simple benchmark to see if it behaves as expected in different modes
    - [ ] write job times in microseconds?
    - [ ] benchmark unpersisted jobs

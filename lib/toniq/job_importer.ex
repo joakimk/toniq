@@ -1,5 +1,8 @@
 defmodule Toniq.JobImporter do
   require Logger
+  use GenServer
+
+  alias Toniq.JobPersistence
 
   def start_link do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
@@ -24,7 +27,7 @@ defmodule Toniq.JobImporter do
   end
 
   defp incoming_jobs do
-    Toniq.JobPersistence.incoming_jobs()
+    JobPersistence.adapter().fetch(:incoming_jobs)
   end
 
   defp log_import([]), do: []
@@ -37,7 +40,7 @@ defmodule Toniq.JobImporter do
 
   def import_job(job) do
     Toniq.enqueue(job.worker, job.arguments)
-    Toniq.JobPersistence.remove_from_incoming_jobs(job)
+    JobPersistence.adapter().remove_from_incoming_jobs(job)
   end
 
   defp enabled?, do: !Application.get_env(:toniq, :disable_import)
