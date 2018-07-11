@@ -18,7 +18,7 @@ defmodule Toniq.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :uuid, :exredis], mod: {Toniq, []}]
+    [applications: [:logger, :elixir_uuid, :exredis], mod: {Toniq, []}]
   end
 
   # Dependencies can be Hex packages:
@@ -33,7 +33,7 @@ defmodule Toniq.Mixfile do
   defp deps do
     [
       {:exredis, ">= 0.1.1"},
-      {:uuid, "~> 1.0"},
+      {:elixir_uuid, "~> 1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
       {:retry, "~> 0.5.0", only: :test}
